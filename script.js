@@ -134,3 +134,57 @@ document
     observer.observe(el);
 
   });
+
+// ================================
+// 18+ CONTENT WARNING
+// ================================
+
+const ageGate = document.getElementById('ageGate');
+const ageEnter = document.getElementById('ageEnter');
+const ageLeave = document.getElementById('ageLeave');
+
+
+// Check if the visitor already entered
+
+if (sessionStorage.getItem('nanherAgeVerified') === 'true') {
+
+  ageGate.classList.add('hidden');
+
+} else {
+
+  document.body.style.overflow = 'hidden';
+
+}
+
+
+// ENTER SITE
+
+if (ageEnter) {
+
+  ageEnter.addEventListener('click', () => {
+
+    sessionStorage.setItem(
+      'nanherAgeVerified',
+      'true'
+    );
+
+    ageGate.classList.add('hidden');
+
+    document.body.style.overflow = '';
+
+  });
+
+}
+
+
+// LEAVE
+
+if (ageLeave) {
+
+  ageLeave.addEventListener('click', () => {
+
+    window.location.href = 'https://www.google.com';
+
+  });
+
+}
