@@ -1,1251 +1,591 @@
-:root {
-  --bg: #050505;
-  --surface: #0d0d0d;
-  --surface-2: #111111;
-
-  --accent: #ff4d00;
-  --text: #f5f5f5;
-  --muted: #666666;
-  --line: #1d1d1d;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Space Mono", monospace;
-  cursor: crosshair;
-  overflow-x: hidden;
-}
-
-/* ================================
-   NOISE
-================================ */
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.4;
-}
-
-/* ================================
-   NAV
-================================ */
-
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  z-index: 100;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 20px 40px;
-
-  background: linear-gradient(
-    rgba(5, 5, 5, 0.96),
-    transparent
-  );
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
 
-.logo {
-  font-family: Unbounded, sans-serif;
-  font-weight: 900;
-  font-size: 1.25rem;
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-  letter-spacing: -0.04em;
+  <meta name="description"
+        content="Nanher Hew 文 — Furry artist, character designer and digital illustrator.">
 
-  color: var(--text);
-  text-decoration: none;
-}
+  <title>Nanher Hew 文 — Digital Artist</title>
 
-.logo span {
-  color: var(--accent);
-}
+  <link rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-nav ul {
-  list-style: none;
+  <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
-  display: flex;
-  gap: 32px;
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:wght@400;700&family=Unbounded:wght@400;600;700&display=swap"
+        rel="stylesheet">
 
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
+  <link rel="stylesheet" href="style.css">
+</head>
 
-nav ul a {
-  color: var(--muted);
-  text-decoration: none;
+<body>
 
-  transition: color 0.2s;
-}
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
 
-nav ul a:hover {
-  color: var(--accent);
-}
+  <header class="site-header">
 
-/* ================================
-   HERO
-================================ */
+    <a href="#top" class="logo">
+      NANHER <span>HEW</span> 文
+    </a>
 
-.hero {
-  min-height: 100vh;
+    <nav class="main-nav">
 
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+      <a href="#work">WORK</a>
+      <a href="#about">ABOUT</a>
+      <a href="#commissions">COMMISSIONS</a>
+      <a href="#contact">CONTACT</a>
 
-  padding: 40px 40px 80px;
+    </nav>
 
-  position: relative;
-  overflow: hidden;
-}
+    <div class="header-status">
+      <span class="status-dot"></span>
+      AVAILABLE
+    </div>
 
-.hero-bg {
-  position: absolute;
-  inset: 0;
+  </header>
 
-  background:
-    radial-gradient(
-      at 75% 25%,
-      rgba(255, 77, 0, 0.13),
-      transparent 55%
-    ),
-    radial-gradient(
-      at 20% 80%,
-      rgba(255, 77, 0, 0.04),
-      transparent 50%
-    );
-}
 
-.hero::after {
-  content: "文";
+  <main id="top">
 
-  position: absolute;
+    <!-- =========================
+         HERO
+    ========================== -->
 
-  right: 5vw;
-  top: 15vh;
+    <section class="hero">
 
-  font-family: serif;
-  font-size: clamp(12rem, 30vw, 30rem);
+      <div class="hero-index">
+        001 / INTRO
+      </div>
 
-  color: transparent;
+      <div class="hero-symbol">
+        文
+      </div>
 
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.035);
+      <div class="hero-content">
 
-  pointer-events: none;
-}
+        <p class="eyebrow">
+          DIGITAL ARTIST / CHARACTER DESIGN
+        </p>
 
-.hero-tag {
-  font-size: 0.65rem;
+        <h1>
+          NANHER
+          <span>HEW</span>
+        </h1>
 
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+        <p class="hero-description">
+          Furry characters, bara illustration,
+          character design and digital artwork.
+        </p>
 
-  color: var(--accent);
+        <a href="#work" class="hero-link">
+          EXPLORE WORK
+          <span>↘</span>
+        </a>
 
-  margin-bottom: 16px;
+      </div>
 
-  opacity: 0;
+      <div class="hero-side-text">
+        FURRY<br>
+        BARA<br>
+        VISUALS
+      </div>
 
-  animation: fadeUp 0.8s ease 0.2s forwards;
-}
+      <div class="hero-line"></div>
 
-.hero h1 {
-  position: relative;
-  z-index: 2;
+    </section>
 
-  font-family: Unbounded, sans-serif;
-  font-weight: 900;
 
-  font-size: clamp(3.5rem, 10vw, 9rem);
+    <!-- =========================
+         FEATURED WORK
+    ========================== -->
 
-  line-height: 0.9;
+    <section class="featured" id="work">
 
-  letter-spacing: -0.05em;
+      <div class="section-label">
+        <span>002</span>
+        SELECTED WORK
+      </div>
 
-  text-transform: uppercase;
+      <div class="featured-heading">
 
-  opacity: 0;
+        <h2>
+          RECENT<br>
+          <span>WORKS</span>
+        </h2>
 
-  animation: fadeUp 0.8s ease 0.4s forwards;
-}
+        <p>
+          A selection of character illustrations,
+          furry artwork and personal pieces.
+        </p>
 
-.hero h1 .outline {
-  -webkit-text-stroke: 2px var(--text);
-  color: transparent;
-}
+      </div>
 
-.hero h1 .highlight {
-  color: var(--accent);
-}
 
-.hero-sub {
-  position: relative;
-  z-index: 2;
+      <div class="featured-grid">
 
-  margin-top: 28px;
+        <article class="featured-card featured-large art-card">
 
-  font-size: 0.8rem;
+          <img src="arts/01.jpg"
+               alt="Nanher Hew artwork">
 
-  color: var(--muted);
+          <div class="featured-info">
+            <span>01</span>
+            <strong>CHARACTER</strong>
+          </div>
 
-  max-width: 390px;
+        </article>
 
-  line-height: 1.8;
 
-  opacity: 0;
+        <article class="featured-card art-card">
 
-  animation: fadeUp 0.8s ease 0.6s forwards;
-}
+          <img src="arts/02.jpg"
+               alt="Nanher Hew artwork">
 
-.hero-scroll {
-  position: absolute;
+          <div class="featured-info">
+            <span>02</span>
+            <strong>FURRY</strong>
+          </div>
 
-  bottom: 40px;
-  right: 40px;
+        </article>
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
-  gap: 8px;
+        <article class="featured-card art-card">
 
-  font-size: 0.6rem;
+          <img src="arts/03.jpg"
+               alt="Nanher Hew artwork">
 
-  letter-spacing: 0.15em;
+          <div class="featured-info">
+            <span>03</span>
+            <strong>BARA</strong>
+          </div>
 
-  text-transform: uppercase;
+        </article>
 
-  color: var(--muted);
 
-  opacity: 0;
+        <article class="featured-card featured-wide art-card">
 
-  animation: fadeUp 0.8s ease 1s forwards;
-}
+          <img src="arts/04.jpg"
+               alt="Nanher Hew artwork">
 
-.scroll-line {
-  width: 1px;
-  height: 60px;
+          <div class="featured-info">
+            <span>04</span>
+            <strong>ILLUSTRATION</strong>
+          </div>
 
-  background:
-    linear-gradient(
-      to bottom,
-      var(--accent),
-      transparent
-    );
+        </article>
 
-  animation: scrollPulse 2s infinite;
-}
+      </div>
 
-/* ================================
-   MARQUEE
-================================ */
+    </section>
 
-.marquee-wrap {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
 
-  overflow: hidden;
+    <!-- =========================
+         ABOUT
+    ========================== -->
 
-  padding: 12px 0;
+    <section class="about" id="about">
 
-  background: var(--surface);
-}
+      <div class="section-label">
+        <span>003</span>
+        ABOUT
+      </div>
 
-.marquee {
-  display: flex;
+      <div class="about-layout">
 
-  gap: 60px;
+        <div class="about-mark">
+          <span>文</span>
+          <small>NH / 26</small>
+        </div>
 
-  width: max-content;
+        <div class="about-copy">
 
-  animation: marquee 20s linear infinite;
+          <p class="eyebrow">
+            WHO IS NANHER HEW?
+          </p>
 
-  font-family: Unbounded, sans-serif;
+          <h2>
+            CHARACTERS<br>
+            <span>WITH PRESENCE.</span>
+          </h2>
 
-  font-size: 0.65rem;
+          <p>
+            I'm Nanher Hew, a digital artist focused on
+            furry character design, bara illustration
+            and visual storytelling.
+          </p>
 
-  letter-spacing: 0.2em;
+          <p>
+            I like expressive characters, strong silhouettes,
+            unusual designs and artwork that feels personal.
+          </p>
 
-  text-transform: uppercase;
+          <div class="about-meta">
 
-  color: var(--muted);
-}
+            <div>
+              <span>BASED</span>
+              <strong>MEXICO</strong>
+            </div>
 
-.marquee .dot {
-  color: var(--accent);
-}
+            <div>
+              <span>ACTIVE</span>
+              <strong>2026</strong>
+            </div>
 
-/* ================================
-   GALLERY
-================================ */
+            <div>
+              <span>STATUS</span>
+              <strong>INDEPENDENT</strong>
+            </div>
 
-.gallery-section {
-  padding: 60px 40px 80px;
-}
+          </div>
 
-.section-header {
-  display: flex;
+        </div>
 
-  align-items: baseline;
-  justify-content: space-between;
+      </div>
 
-  margin-bottom: 32px;
-}
+    </section>
 
-.section-title {
-  font-family: Unbounded, sans-serif;
 
-  font-weight: 700;
+    <!-- =========================
+         ARCHIVE
+    ========================== -->
 
-  font-size: clamp(1.2rem, 3vw, 2rem);
+    <section class="archive">
 
-  text-transform: uppercase;
+      <div class="section-label">
+        <span>004</span>
+        ART ARCHIVE
+      </div>
 
-  letter-spacing: -0.02em;
-}
+      <div class="archive-heading">
 
-.section-count {
-  font-size: 0.65rem;
+        <h2>
+          THE<br>
+          <span>ARCHIVE</span>
+        </h2>
 
-  color: var(--accent);
+        <p>
+          Browse different parts of my work.
+        </p>
 
-  letter-spacing: 0.1em;
-}
+      </div>
 
-/* ================================
-   TABS
-================================ */
 
-.tab-bar {
-  display: flex;
+      <div class="tabs">
 
-  gap: 0;
+        <button class="tab-btn active" data-tab="latest">
+          ALL
+        </button>
 
-  margin-bottom: 48px;
+        <button class="tab-btn" data-tab="characters">
+          CHARACTERS
+        </button>
 
-  border-bottom: 1px solid var(--line);
+        <button class="tab-btn" data-tab="bara">
+          BARA
+        </button>
 
-  overflow-x: auto;
+        <button class="tab-btn" data-tab="commissions">
+          COMMISSIONS
+        </button>
 
-  scrollbar-width: none;
-}
+        <button class="tab-btn" data-tab="wips">
+          WIPS
+        </button>
 
-.tab-bar::-webkit-scrollbar {
-  display: none;
-}
+      </div>
 
-.tab-btn {
-  padding: 14px 28px;
 
-  font-family: "Space Mono", monospace;
+      <!-- ALL -->
 
-  font-size: 0.7rem;
+      <div class="tab-panel active" id="tab-latest">
 
-  letter-spacing: 0.1em;
+        <div class="archive-grid">
 
-  text-transform: uppercase;
+          <div class="archive-card art-card">
+            <img src="arts/05.jpg" alt="">
+            <span>05 / ARCHIVE</span>
+          </div>
 
-  background: transparent;
+          <div class="archive-card art-card">
+            <img src="arts/06.jpg" alt="">
+            <span>06 / ARCHIVE</span>
+          </div>
 
-  border: none;
+          <div class="archive-card art-card">
+            <img src="arts/07.jpg" alt="">
+            <span>07 / ARCHIVE</span>
+          </div>
 
-  border-bottom: 2px solid transparent;
+          <div class="archive-card art-card">
+            <img src="arts/08.jpg" alt="">
+            <span>08 / ARCHIVE</span>
+          </div>
 
-  color: var(--muted);
+        </div>
 
-  cursor: pointer;
+      </div>
 
-  transition: 0.25s;
 
-  display: flex;
+      <!-- CHARACTERS -->
 
-  align-items: center;
+      <div class="tab-panel" id="tab-characters">
 
-  gap: 8px;
+        <div class="archive-grid">
 
-  white-space: nowrap;
+          <div class="archive-card art-card">
+            <img src="arts/05.jpg" alt="">
+            <span>CHARACTER / 01</span>
+          </div>
 
-  margin-bottom: -1px;
-}
+          <div class="archive-card art-card">
+            <img src="arts/06.jpg" alt="">
+            <span>CHARACTER / 02</span>
+          </div>
 
-.tab-btn:hover {
-  color: var(--text);
-}
+        </div>
 
-.tab-btn.active {
-  color: var(--accent);
+      </div>
 
-  border-bottom-color: var(--accent);
-}
 
-.tab-icon {
-  font-size: 0.9rem;
-}
+      <!-- BARA -->
 
-/* ================================
-   PANELS
-================================ */
+      <div class="tab-panel" id="tab-bara">
 
-.tab-panel {
-  display: none;
-}
+        <div class="archive-grid">
 
-.tab-panel.active {
-  display: block;
+          <div class="archive-card art-card">
+            <img src="arts/07.jpg" alt="">
+            <span>BARA / 01</span>
+          </div>
 
-  animation: fadeIn 0.4s ease;
-}
+          <div class="archive-card art-card">
+            <img src="arts/08.jpg" alt="">
+            <span>BARA / 02</span>
+          </div>
 
-/* ================================
-   MASONRY
-================================ */
+        </div>
 
-.masonry {
-  columns: 200px 5;
+      </div>
 
-  column-gap: 10px;
-}
 
-.art-card {
-  break-inside: avoid;
+      <!-- COMMISSIONS -->
 
-  margin-bottom: 10px;
+      <div class="tab-panel" id="tab-commissions">
 
-  position: relative;
+        <div class="archive-grid">
 
-  overflow: hidden;
+          <div class="archive-card art-card">
+            <img src="arts/09.jpg" alt="">
+            <span>COMMISSION / 01</span>
+          </div>
 
-  border-radius: 3px;
+          <div class="archive-card art-card">
+            <img src="arts/10.jpg" alt="">
+            <span>COMMISSION / 02</span>
+          </div>
 
-  cursor: pointer;
+        </div>
 
-  background: var(--surface);
-}
+      </div>
 
-.art-card::after {
-  content: "";
 
-  position: absolute;
+      <!-- WIPS -->
 
-  inset: 0;
+      <div class="tab-panel" id="tab-wips">
 
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.9),
-      transparent 55%
-    );
+        <div class="archive-grid">
 
-  opacity: 0;
+          <div class="archive-card art-card">
+            <img src="arts/wip01.jpg" alt="">
+            <span>WIP / 01</span>
+          </div>
 
-  transition: opacity 0.3s;
-}
+          <div class="archive-card art-card">
+            <img src="arts/wip02.jpg" alt="">
+            <span>WIP / 02</span>
+          </div>
 
-.art-card:hover::after {
-  opacity: 1;
-}
+        </div>
 
-.art-card img {
-  width: 100%;
-  height: 100%;
+      </div>
 
-  object-fit: cover;
+    </section>
 
-  display: block;
 
-  transition:
-    transform 0.5s
-    cubic-bezier(
-      0.25,
-      0.46,
-      0.45,
-      0.94
-    );
-}
+    <!-- =========================
+         COMMISSIONS
+    ========================== -->
 
-.art-card:hover img {
-  transform: scale(1.05);
-}
+    <section class="commissions" id="commissions">
 
-.art-card:hover {
-  outline: 1px solid var(--accent);
-}
+      <div class="section-label">
+        <span>005</span>
+        COMMISSIONS
+      </div>
 
-/* ================================
-   CARD INFO
-================================ */
+      <div class="commission-layout">
 
-.card-info {
-  position: absolute;
+        <div>
 
-  bottom: 0;
-  left: 0;
-  right: 0;
+          <p class="eyebrow">
+            WANT A CHARACTER?
+          </p>
 
-  padding: 16px;
+          <h2>
+            LET'S MAKE<br>
+            SOMETHING
+            <span>GOOD.</span>
+          </h2>
 
-  z-index: 2;
+        </div>
 
-  opacity: 0;
 
-  transform: translateY(8px);
+        <div class="commission-info">
 
-  transition: 0.3s;
-}
+          <div class="price-row">
+            <span>SKETCH</span>
+            <strong>$15</strong>
+          </div>
 
-.art-card:hover .card-info {
-  opacity: 1;
+          <div class="price-row">
+            <span>HEADSHOT</span>
+            <strong>$20</strong>
+          </div>
 
-  transform: translateY(0);
-}
+          <div class="price-row">
+            <span>BUST</span>
+            <strong>$25</strong>
+          </div>
 
-.card-title {
-  font-family: Unbounded, sans-serif;
+          <div class="price-row">
+            <span>HALF BODY</span>
+            <strong>$35</strong>
+          </div>
 
-  font-size: 0.7rem;
+          <div class="price-row">
+            <span>FULL BODY</span>
+            <strong>$45</strong>
+          </div>
 
-  font-weight: 700;
+          <a href="#contact" class="commission-button">
+            REQUEST COMMISSION
+            <span>↗</span>
+          </a>
 
-  text-transform: uppercase;
+        </div>
 
-  letter-spacing: 0.05em;
-}
+      </div>
 
-.card-tag {
-  font-size: 0.6rem;
+    </section>
 
-  color: var(--accent);
 
-  margin-top: 4px;
+    <!-- =========================
+         CONTACT
+    ========================== -->
 
-  letter-spacing: 0.1em;
-}
+    <section class="contact" id="contact">
 
-.card-badge {
-  position: absolute;
+      <div class="contact-bg">
+        CONTACT
+      </div>
 
-  top: 10px;
-  right: 10px;
+      <div class="section-label">
+        <span>006</span>
+        CONTACT
+      </div>
 
-  background: var(--accent);
+      <div class="contact-content">
 
-  color: #000;
+        <p class="eyebrow">
+          HAVE A PROJECT IN MIND?
+        </p>
 
-  font-family: Unbounded, sans-serif;
+        <h2>
+          SAY
+          <span>HELLO.</span>
+        </h2>
 
-  font-size: 0.5rem;
+        <p>
+          For commissions, collaborations or general inquiries,
+          get in touch.
+        </p>
 
-  font-weight: 700;
+        <a href="mailto:YOUR_EMAIL@example.com"
+           class="contact-email">
+          YOUR_EMAIL@example.com
+        </a>
 
-  letter-spacing: 0.1em;
+        <div class="socials">
 
-  text-transform: uppercase;
+          <a href="#" target="_blank">
+            INSTAGRAM ↗
+          </a>
 
-  padding: 4px 8px;
+          <a href="#" target="_blank">
+            TWITTER / X ↗
+          </a>
 
-  border-radius: 2px;
+          <a href="#" target="_blank">
+            ARTSTATION ↗
+          </a>
 
-  z-index: 3;
-}
+        </div>
 
-/* ================================
-   CARD SIZES
-================================ */
+      </div>
 
-.card-1 {
-  height: 280px;
-}
+    </section>
 
-.card-2 {
-  height: 360px;
-}
+  </main>
 
-.card-3 {
-  height: 220px;
-}
 
-.card-4 {
-  height: 420px;
-}
+  <!-- =========================
+       FOOTER
+  ========================== -->
 
-.card-5 {
-  height: 260px;
-}
+  <footer>
 
-.card-6 {
-  height: 340px;
-}
+    <div>
+      NANHER HEW 文
+    </div>
 
-.card-7 {
-  height: 300px;
-}
+    <div>
+      DIGITAL ART / 2026
+    </div>
 
-.card-8 {
-  height: 240px;
-}
+    <div>
+      ↑ BACK TO TOP
+    </div>
 
-.card-9 {
-  height: 380px;
-}
+  </footer>
 
-.card-10 {
-  height: 290px;
-}
 
-.card-11 {
-  height: 360px;
-}
+  <!-- =========================
+       LIGHTBOX
+  ========================== -->
 
-.card-12 {
-  height: 220px;
-}
+  <div class="lightbox" id="lightbox">
 
-/* ================================
-   ABOUT
-================================ */
+    <button class="lightbox-close"
+            id="lightboxClose">
+      ×
+    </button>
 
-.about-section {
-  padding: 80px 40px;
+    <div class="lightbox-content"
+         id="lightboxContent">
+    </div>
 
-  display: grid;
+  </div>
 
-  grid-template-columns: 1fr 1fr;
 
-  gap: 80px;
+  <script src="script.js"></script>
 
-  align-items: center;
-
-  border-top: 1px solid var(--line);
-}
-
-.about-label {
-  font-size: 0.65rem;
-
-  letter-spacing: 0.2em;
-
-  text-transform: uppercase;
-
-  color: var(--accent);
-
-  margin-bottom: 16px;
-}
-
-.about-title {
-  font-family: Unbounded, sans-serif;
-
-  font-weight: 900;
-
-  font-size: clamp(2rem, 4vw, 3.5rem);
-
-  line-height: 1;
-
-  text-transform: uppercase;
-
-  letter-spacing: -0.03em;
-
-  margin-bottom: 24px;
-}
-
-.about-title .line2 {
-  -webkit-text-stroke: 1.5px var(--text);
-
-  color: transparent;
-}
-
-.about-text {
-  font-size: 0.8rem;
-
-  line-height: 1.9;
-
-  color: #888;
-
-  max-width: 440px;
-
-  margin-bottom: 32px;
-}
-
-.stats {
-  display: flex;
-
-  gap: 40px;
-}
-
-.stat-num {
-  font-family: Unbounded, sans-serif;
-
-  font-weight: 900;
-
-  font-size: 2.5rem;
-
-  color: var(--accent);
-
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.6rem;
-
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
-
-  color: var(--muted);
-
-  margin-top: 4px;
-}
-
-/* ================================
-   ABOUT VISUAL
-================================ */
-
-.about-visual {
-  position: relative;
-
-  height: 500px;
-}
-
-.about-card {
-  position: absolute;
-
-  border-radius: 4px;
-
-  overflow: hidden;
-}
-
-.about-card-main {
-  width: 70%;
-  height: 400px;
-
-  top: 0;
-  right: 0;
-
-  background:
-    linear-gradient(
-      135deg,
-      #0b0b0b,
-      #191919
-    );
-
-  border: 1px solid var(--line);
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-family: serif;
-
-  font-size: 10rem;
-
-  color: rgba(255, 255, 255, 0.08);
-}
-
-.about-card-accent {
-  width: 50%;
-  height: 250px;
-
-  bottom: 0;
-  left: 0;
-
-  background: var(--accent);
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-family: Unbounded, sans-serif;
-
-  font-size: 5rem;
-
-  color: #000;
-}
-
-.about-tag-pill {
-  position: absolute;
-
-  top: 20px;
-  left: 0;
-
-  background: var(--accent);
-
-  color: #000;
-
-  font-family: Unbounded, sans-serif;
-
-  font-size: 0.6rem;
-
-  font-weight: 700;
-
-  letter-spacing: 0.1em;
-
-  text-transform: uppercase;
-
-  padding: 8px 16px;
-
-  border-radius: 2px;
-}
-
-/* ================================
-   CONTACT
-================================ */
-
-.contact-section {
-  padding: 100px 40px;
-
-  text-align: center;
-
-  border-top: 1px solid var(--line);
-
-  position: relative;
-
-  overflow: hidden;
-}
-
-.contact-section::before {
-  content: "NANHER";
-
-  position: absolute;
-
-  inset: 0;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-family: Unbounded, sans-serif;
-
-  font-weight: 900;
-
-  font-size: clamp(5rem, 18vw, 16rem);
-
-  color: transparent;
-
-  -webkit-text-stroke: 1px #1a1a1a;
-
-  pointer-events: none;
-
-  letter-spacing: -0.05em;
-
-  text-transform: uppercase;
-}
-
-.contact-title {
-  font-family: Unbounded, sans-serif;
-
-  font-weight: 900;
-
-  font-size: clamp(2rem, 5vw, 4rem);
-
-  text-transform: uppercase;
-
-  letter-spacing: -0.03em;
-
-  margin-bottom: 16px;
-
-  position: relative;
-}
-
-.contact-title .accent {
-  color: var(--accent);
-}
-
-.contact-sub {
-  font-size: 0.8rem;
-
-  color: var(--muted);
-
-  margin-bottom: 48px;
-
-  position: relative;
-}
-
-.cta-btn {
-  display: inline-block;
-
-  padding: 18px 48px;
-
-  background: var(--accent);
-
-  color: #000;
-
-  font-family: Unbounded, sans-serif;
-
-  font-weight: 700;
-
-  font-size: 0.75rem;
-
-  letter-spacing: 0.1em;
-
-  text-transform: uppercase;
-
-  text-decoration: none;
-
-  border-radius: 2px;
-
-  position: relative;
-
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-
-.cta-btn:hover {
-  transform: translateY(-3px);
-
-  box-shadow:
-    0 12px 40px
-    rgba(255, 77, 0, 0.35);
-}
-
-.social-links {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 32px;
-
-  margin-top: 48px;
-
-  position: relative;
-}
-
-.social-links a {
-  font-size: 0.65rem;
-
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
-
-  color: var(--muted);
-
-  text-decoration: none;
-
-  transition: color 0.2s;
-}
-
-.social-links a:hover {
-  color: var(--accent);
-}
-
-/* ================================
-   FOOTER
-================================ */
-
-footer {
-  padding: 24px 40px;
-
-  border-top: 1px solid var(--line);
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  font-size: 0.6rem;
-
-  letter-spacing: 0.1em;
-
-  text-transform: uppercase;
-
-  color: var(--muted);
-}
-
-/* ================================
-   LIGHTBOX
-================================ */
-
-.lightbox {
-  position: fixed;
-
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.96);
-
-  z-index: 1000;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  opacity: 0;
-
-  pointer-events: none;
-
-  transition: opacity 0.3s;
-}
-
-.lightbox.open {
-  opacity: 1;
-
-  pointer-events: all;
-}
-
-.lightbox-content {
-  max-width: 90vw;
-  max-height: 90vh;
-
-  border-radius: 4px;
-
-  overflow: hidden;
-
-  transform: scale(0.9);
-
-  transition: transform 0.3s;
-}
-
-.lightbox.open .lightbox-content {
-  transform: scale(1);
-}
-
-.lightbox-content img {
-  display: block;
-
-  max-width: 90vw;
-  max-height: 90vh;
-
-  width: auto;
-  height: auto;
-
-  object-fit: contain;
-}
-
-.lightbox-close {
-  position: absolute;
-
-  top: 24px;
-  right: 32px;
-
-  font-size: 2rem;
-
-  color: var(--muted);
-
-  cursor: pointer;
-
-  transition: color 0.2s;
-
-  background: none;
-
-  border: none;
-
-  line-height: 1;
-
-  z-index: 2;
-}
-
-.lightbox-close:hover {
-  color: var(--accent);
-}
-
-/* ================================
-   ANIMATIONS
-================================ */
-
-@keyframes fadeUp {
-
-  0% {
-    opacity: 0;
-
-    transform: translateY(20px);
-  }
-
-  100% {
-    opacity: 1;
-
-    transform: translateY(0);
-  }
-
-}
-
-@keyframes fadeIn {
-
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-
-}
-
-@keyframes marquee {
-
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
-
-}
-
-@keyframes scrollPulse {
-
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-}
-
-/* ================================
-   RESPONSIVE
-================================ */
-
-@media (max-width: 900px) {
-
-  .masonry {
-    columns: 180px 3;
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  nav {
-    padding: 16px 20px;
-  }
-
-  nav ul {
-    gap: 16px;
-  }
-
-  .hero {
-    padding: 20px 20px 60px;
-  }
-
-  .gallery-section,
-  .about-section,
-  .contact-section {
-    padding: 60px 20px;
-  }
-
-  .about-section {
-    grid-template-columns: 1fr;
-
-    gap: 40px;
-  }
-
-  .masonry {
-    columns: 150px 2;
-  }
-
-  .hero-scroll {
-    display: none;
-  }
-
-  footer {
-    flex-direction: column;
-
-    gap: 8px;
-
-    text-align: center;
-  }
-
-  .tab-btn {
-    padding: 12px 16px;
-
-    font-size: 0.6rem;
-  }
-
-  .about-visual {
-    height: 400px;
-  }
-
-  .about-card-main {
-    height: 320px;
-  }
-
-}
-
-@media (max-width: 480px) {
-
-  nav ul {
-    gap: 10px;
-
-    font-size: 0.55rem;
-  }
-
-  .logo {
-    font-size: 0.9rem;
-  }
-
-  .hero h1 {
-    font-size: 15vw;
-  }
-
-  .masonry {
-    columns: 2;
-    column-gap: 6px;
-  }
-
-  .art-card {
-    margin-bottom: 6px;
-  }
-
-  .card-info {
-    padding: 10px;
-  }
-
-  .card-title {
-    font-size: 0.55rem;
-  }
-
-  .card-tag {
-    font-size: 0.5rem;
-  }
-
-  .about-visual {
-    height: 330px;
-  }
-
-  .about-card-main {
-    width: 75%;
-    height: 270px;
-  }
-
-  .about-card-accent {
-    width: 55%;
-    height: 180px;
-  }
-
-  .social-links {
-    flex-wrap: wrap;
-
-    gap: 18px;
-  }
-
-}
+</body>
+</html>
