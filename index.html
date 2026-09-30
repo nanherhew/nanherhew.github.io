@@ -1,1781 +1,1057 @@
-/* =========================================================
-   NANHER HEW 文
-   CYBERDECK INTERFACE
-   ========================================================= */
+<!DOCTYPE html>
+<html lang="en">
 
-:root {
-  --bg: #050505;
-  --panel: #090909;
-  --panel-2: #0d0d0d;
-  --orange: #ff4d00;
-  --orange-light: #ff6a22;
-  --white: #eeeeee;
-  --gray: #777;
-  --dark-gray: #292929;
-  --line: #242424;
+<head>
 
-  --display: "Rajdhani", sans-serif;
-  --mono: "Space Mono", monospace;
-}
+  <meta charset="UTF-8">
 
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-/* =========================================================
-   RESET
-   ========================================================= */
+  <meta
+    name="description"
+    content="Nanher Hew 文 — Furry artist, character designer and digital illustrator."
+  >
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  <title>NANHER HEW 文 // ARCHIVE</title>
 
-html {
-  scroll-behavior: smooth;
-}
+  <link rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-body {
-  background: var(--bg);
-  color: var(--white);
+  <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
-  font-family: var(--mono);
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  >
 
-  cursor: crosshair;
+  <link rel="stylesheet" href="style.css">
 
-  overflow-x: hidden;
-}
+</head>
 
-a,
-button {
-  color: inherit;
-  text-decoration: none;
-  cursor: crosshair;
-}
 
-button {
-  font-family: inherit;
-}
+<body>
 
-img {
-  display: block;
-  max-width: 100%;
-}
+  <!-- ==================================
+       SYSTEM HEADER
+  =================================== -->
 
+  <header class="system-header">
 
-/* =========================================================
-   CRT / NOISE
-   ========================================================= */
+    <div class="brand">
 
-body::before {
-  content: "";
+      <div class="brand-symbol">
+        文
+      </div>
 
-  position: fixed;
-  inset: 0;
+      <div>
+        <strong>NANHER HEW</strong>
+        <span>DIGITAL ART ARCHIVE</span>
+      </div>
 
-  pointer-events: none;
+    </div>
 
-  z-index: 9999;
 
-  opacity: 0.035;
+    <div class="system-info">
 
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+      <span>
+        SYS // 2026
+      </span>
 
+      <span class="online">
+        ● ONLINE
+      </span>
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+    </div>
 
-.system-header {
-  position: fixed;
+  </header>
 
-  top: 0;
-  left: 0;
 
-  width: 100%;
-  height: 64px;
+  <!-- ==================================
+       MAIN INTERFACE
+  =================================== -->
 
-  z-index: 1000;
+  <main class="interface">
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  padding: 0 28px;
+    <!-- ==================================
+         SIDEBAR
+    =================================== -->
 
-  background: rgba(5, 5, 5, 0.94);
+    <aside class="sidebar">
 
-  border-bottom: 1px solid var(--line);
+      <div class="sidebar-title">
+        NAVIGATION
+      </div>
 
-  backdrop-filter: blur(10px);
-}
 
+      <nav>
 
-/* angled orange line */
+        <a href="#home" class="nav-item active">
 
-.system-header::after {
-  content: "";
+          <span class="nav-number">
+            01
+          </span>
 
-  position: absolute;
+          <span>
+            HOME
+          </span>
 
-  bottom: -1px;
-  left: 0;
+        </a>
 
-  width: 180px;
-  height: 2px;
 
-  background: var(--orange);
-}
+        <a href="#archive" class="nav-item">
 
+          <span class="nav-number">
+            02
+          </span>
 
-.brand {
-  display: flex;
+          <span>
+            ARCHIVE
+          </span>
 
-  align-items: center;
+        </a>
 
-  gap: 13px;
-}
 
+        <a href="#characters" class="nav-item">
 
-.brand-symbol {
-  width: 36px;
-  height: 36px;
+          <span class="nav-number">
+            03
+          </span>
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+          <span>
+            CHARACTERS
+          </span>
 
-  border: 1px solid var(--orange);
+        </a>
 
-  color: var(--orange);
 
-  font-family: var(--display);
+        <a href="#commissions" class="nav-item">
 
-  font-size: 21px;
+          <span class="nav-number">
+            04
+          </span>
 
-  font-weight: 700;
-}
+          <span>
+            COMMISSIONS
+          </span>
 
+        </a>
 
-.brand > div:last-child {
-  display: flex;
 
-  flex-direction: column;
+        <a href="#about" class="nav-item">
 
-  gap: 1px;
-}
+          <span class="nav-number">
+            05
+          </span>
 
+          <span>
+            ABOUT
+          </span>
 
-.brand strong {
-  font-family: var(--display);
+        </a>
 
-  font-size: 16px;
 
-  letter-spacing: 0.08em;
-}
+        <a href="#contact" class="nav-item">
 
+          <span class="nav-number">
+            06
+          </span>
 
-.brand span {
-  font-size: 7px;
+          <span>
+            CONTACT
+          </span>
 
-  color: var(--gray);
+        </a>
 
-  letter-spacing: 0.16em;
-}
+      </nav>
 
 
-.system-info {
-  display: flex;
+      <div class="sidebar-bottom">
 
-  gap: 30px;
+        <span>
+          LOCATION
+        </span>
 
-  align-items: center;
+        <strong>
+          MX / TAB
+        </strong>
 
-  font-size: 8px;
+        <span>
+          STATUS
+        </span>
 
-  letter-spacing: 0.13em;
+        <strong class="accent">
+          ACCEPTING WORK
+        </strong>
 
-  color: var(--gray);
-}
+      </div>
 
+    </aside>
 
-.online {
-  color: var(--orange);
-}
 
+    <!-- ==================================
+         CONTENT
+    =================================== -->
 
-/* =========================================================
-   MAIN INTERFACE
-   ========================================================= */
+    <div class="content">
 
-.interface {
-  display: grid;
 
-  grid-template-columns: 220px 1fr;
+      <!-- ==================================
+           HOME
+      =================================== -->
 
-  min-height: 100vh;
+      <section id="home"
+               class="screen home-screen">
 
-  padding-top: 64px;
-}
 
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
 
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
 
-.sidebar {
-  position: fixed;
+        <div class="screen-code">
+          NH_ARCHIVE // 001
+        </div>
 
-  left: 0;
-  top: 64px;
-  bottom: 0;
 
-  width: 220px;
+        <div class="home-main">
 
-  padding: 30px 20px;
+          <div class="home-copy">
 
-  border-right: 1px solid var(--line);
+            <div class="system-tag">
+              INDEPENDENT DIGITAL ARTIST
+            </div>
 
-  background: var(--panel);
 
-  display: flex;
+            <h1>
 
-  flex-direction: column;
+              NANHER
+              <span>HEW</span>
 
-  z-index: 900;
-}
+            </h1>
 
 
-.sidebar-title {
-  margin-bottom: 22px;
+            <div class="home-subtitle">
 
-  color: var(--gray);
+              FURRY
+              <i>/</i>
+              BARA
+              <i>/</i>
+              CHARACTER DESIGN
 
-  font-size: 8px;
+            </div>
 
-  letter-spacing: 0.2em;
-}
 
+            <p>
+              Digital illustrations, original characters,
+              furry artwork and visual experiments.
+            </p>
 
-.sidebar nav {
-  display: flex;
 
-  flex-direction: column;
-}
+            <a href="#archive"
+               class="system-button">
 
+              OPEN ARCHIVE
 
-.nav-item {
-  position: relative;
+              <span>
+                →
+              </span>
 
-  display: flex;
+            </a>
 
-  align-items: center;
+          </div>
 
-  gap: 13px;
 
-  padding: 13px 10px;
+          <div class="home-visual">
 
-  border-bottom: 1px solid #171717;
+            <div class="visual-frame">
 
-  color: #666;
+              <div class="visual-label">
+                FEATURED // 001
+              </div>
 
-  font-size: 9px;
+              <img
+                src="arts/01.jpg"
+                alt="Featured Nanher Hew artwork"
+              >
 
-  letter-spacing: 0.12em;
+              <div class="visual-data">
 
-  transition:
-    color .2s ease,
-    background .2s ease;
-}
+                <span>
+                  ARTWORK
+                </span>
 
+                <span>
+                  NH_001
+                </span>
 
-.nav-item:hover,
-.nav-item.active {
-  color: var(--white);
+              </div>
 
-  background: #111;
-}
+            </div>
 
+          </div>
 
-.nav-item.active::before {
-  content: "";
+        </div>
 
-  position: absolute;
 
-  left: -20px;
+        <div class="home-footer">
 
-  width: 3px;
-  height: 100%;
+          <span>
+            SYSTEM READY
+          </span>
 
-  background: var(--orange);
-}
+          <span>
+            100% HUMAN-MADE
+          </span>
 
+          <span>
+            文 / NH
+          </span>
 
-.nav-number {
-  color: var(--orange);
+        </div>
 
-  font-size: 8px;
-}
+      </section>
 
 
-.sidebar-bottom {
-  margin-top: auto;
 
-  display: flex;
+      <!-- ==================================
+           ARCHIVE
+      =================================== -->
 
-  flex-direction: column;
+      <section id="archive"
+               class="screen archive-screen">
 
-  gap: 7px;
 
-  padding-top: 20px;
+        <div class="screen-header">
 
-  border-top: 1px solid var(--line);
+          <div>
 
-  font-size: 7px;
+            <span class="section-number">
+              02
+            </span>
 
-  letter-spacing: 0.14em;
+            <h2>
+              ART ARCHIVE
+            </h2>
 
-  color: #555;
-}
+          </div>
 
 
-.sidebar-bottom strong {
-  margin-bottom: 12px;
+          <div class="section-description">
 
-  color: #aaa;
+            SELECTED WORKS /
+            PERSONAL PIECES /
+            COMMISSIONS
 
-  font-size: 8px;
-}
+          </div>
 
+        </div>
 
-.sidebar-bottom .accent {
-  color: var(--orange);
-}
 
+        <div class="archive-controls">
 
-/* =========================================================
-   CONTENT
-   ========================================================= */
+          <button class="filter active"
+                  data-filter="all">
 
-.content {
-  grid-column: 2;
+            ALL
 
-  min-width: 0;
-}
+          </button>
 
+          <button class="filter"
+                  data-filter="character">
 
-.screen {
-  position: relative;
+            CHARACTER
 
-  min-height: calc(100vh - 64px);
+          </button>
 
-  padding: 55px;
+          <button class="filter"
+                  data-filter="furry">
 
-  border-bottom: 1px solid var(--line);
+            FURRY
 
-  overflow: hidden;
-}
+          </button>
 
+          <button class="filter"
+                  data-filter="bara">
 
-/* =========================================================
-   HUD CORNERS
-   ========================================================= */
+            BARA
 
-.hud-corner {
-  position: absolute;
+          </button>
 
-  width: 30px;
-  height: 30px;
+          <button class="filter"
+                  data-filter="commission">
 
-  pointer-events: none;
-}
+            COMMISSION
 
+          </button>
 
-.hud-corner::before,
-.hud-corner::after {
-  content: "";
+        </div>
 
-  position: absolute;
 
-  background: var(--orange);
-}
+        <div class="archive-grid">
 
 
-.top-left {
-  top: 28px;
-  left: 28px;
-}
+          <article class="archive-item art-card"
+                   data-category="character">
 
-.top-left::before {
-  width: 30px;
-  height: 1px;
-  top: 0;
-  left: 0;
-}
+            <div class="archive-image">
 
-.top-left::after {
-  width: 1px;
-  height: 30px;
-  top: 0;
-  left: 0;
-}
+              <img
+                src="arts/02.jpg"
+                alt="Character artwork"
+              >
 
+              <span>
+                NH_002
+              </span>
 
-.top-right {
-  top: 28px;
-  right: 28px;
-}
+            </div>
 
-.top-right::before {
-  width: 30px;
-  height: 1px;
-  top: 0;
-  right: 0;
-}
+            <div class="archive-meta">
 
-.top-right::after {
-  width: 1px;
-  height: 30px;
-  top: 0;
-  right: 0;
-}
+              <strong>
+                CHARACTER
+              </strong>
 
+              <span>
+                2026
+              </span>
 
-.bottom-left {
-  bottom: 28px;
-  left: 28px;
-}
+            </div>
 
-.bottom-left::before {
-  width: 30px;
-  height: 1px;
-  bottom: 0;
-  left: 0;
-}
+          </article>
 
-.bottom-left::after {
-  width: 1px;
-  height: 30px;
-  bottom: 0;
-  left: 0;
-}
 
 
-.bottom-right {
-  bottom: 28px;
-  right: 28px;
-}
+          <article class="archive-item art-card"
+                   data-category="furry">
 
-.bottom-right::before {
-  width: 30px;
-  height: 1px;
-  bottom: 0;
-  right: 0;
-}
+            <div class="archive-image">
 
-.bottom-right::after {
-  width: 1px;
-  height: 30px;
-  bottom: 0;
-  right: 0;
-}
+              <img
+                src="arts/03.jpg"
+                alt="Furry artwork"
+              >
 
+              <span>
+                NH_003
+              </span>
 
-/* =========================================================
-   HOME
-   ========================================================= */
+            </div>
 
-.home-screen {
-  min-height: calc(100vh - 64px);
+            <div class="archive-meta">
 
-  display: flex;
+              <strong>
+                FURRY
+              </strong>
 
-  flex-direction: column;
+              <span>
+                2026
+              </span>
 
-  justify-content: space-between;
+            </div>
 
-  background:
-    radial-gradient(
-      circle at 75% 50%,
-      rgba(255, 77, 0, .07),
-      transparent 35%
-    );
-}
+          </article>
 
 
-.screen-code {
-  position: absolute;
 
-  top: 25px;
-  right: 55px;
+          <article class="archive-item art-card"
+                   data-category="bara">
 
-  color: #444;
+            <div class="archive-image">
 
-  font-size: 7px;
+              <img
+                src="arts/04.jpg"
+                alt="Bara artwork"
+              >
 
-  letter-spacing: .16em;
-}
+              <span>
+                NH_004
+              </span>
 
+            </div>
 
-.home-main {
-  display: grid;
+            <div class="archive-meta">
 
-  grid-template-columns: 1fr 0.8fr;
+              <strong>
+                BARA
+              </strong>
 
-  align-items: center;
+              <span>
+                2026
+              </span>
 
-  gap: 50px;
+            </div>
 
-  max-width: 1250px;
+          </article>
 
-  width: 100%;
 
-  margin: auto;
-}
 
+          <article class="archive-item art-card"
+                   data-category="commission">
 
-.home-copy {
-  position: relative;
+            <div class="archive-image">
 
-  z-index: 2;
-}
+              <img
+                src="arts/05.jpg"
+                alt="Commission artwork"
+              >
 
+              <span>
+                NH_005
+              </span>
 
-.system-tag {
-  display: inline-block;
+            </div>
 
-  margin-bottom: 25px;
+            <div class="archive-meta">
 
-  padding: 6px 10px;
+              <strong>
+                COMMISSION
+              </strong>
 
-  border: 1px solid var(--orange);
+              <span>
+                2026
+              </span>
 
-  color: var(--orange);
+            </div>
 
-  font-size: 8px;
+          </article>
 
-  letter-spacing: .16em;
-}
 
 
-.home-copy h1 {
-  font-family: var(--display);
+          <article class="archive-item art-card"
+                   data-category="furry">
 
-  font-size: clamp(80px, 12vw, 170px);
+            <div class="archive-image">
 
-  line-height: .72;
+              <img
+                src="arts/06.jpg"
+                alt="Furry artwork"
+              >
 
-  letter-spacing: -.04em;
+              <span>
+                NH_006
+              </span>
 
-  font-weight: 700;
-}
+            </div>
 
+            <div class="archive-meta">
 
-.home-copy h1 span {
-  display: block;
+              <strong>
+                FURRY
+              </strong>
 
-  color: transparent;
+              <span>
+                2026
+              </span>
 
-  -webkit-text-stroke: 1px var(--white);
-}
+            </div>
 
+          </article>
 
-.home-subtitle {
-  margin-top: 35px;
 
-  color: var(--orange);
 
-  font-size: 10px;
+          <article class="archive-item art-card"
+                   data-category="character">
 
-  letter-spacing: .18em;
-}
+            <div class="archive-image">
 
+              <img
+                src="arts/07.jpg"
+                alt="Character artwork"
+              >
 
-.home-subtitle i {
-  margin: 0 8px;
+              <span>
+                NH_007
+              </span>
 
-  color: #444;
+            </div>
 
-  font-style: normal;
-}
+            <div class="archive-meta">
 
+              <strong>
+                CHARACTER
+              </strong>
 
-.home-copy p {
-  max-width: 440px;
+              <span>
+                2026
+              </span>
 
-  margin-top: 30px;
+            </div>
 
-  color: #777;
+          </article>
 
-  font-size: 10px;
 
-  line-height: 1.9;
-}
+        </div>
 
+      </section>
 
-.system-button {
-  display: inline-flex;
 
-  align-items: center;
 
-  justify-content: space-between;
+      <!-- ==================================
+           CHARACTERS
+      =================================== -->
 
-  gap: 35px;
+      <section id="characters"
+               class="screen character-screen">
 
-  margin-top: 35px;
 
-  padding: 12px 15px;
+        <div class="screen-header">
 
-  border: 1px solid var(--orange);
+          <div>
 
-  background: transparent;
+            <span class="section-number">
+              03
+            </span>
 
-  color: var(--white);
+            <h2>
+              CHARACTER DATABASE
+            </h2>
 
-  font-size: 8px;
+          </div>
 
-  letter-spacing: .15em;
+        </div>
 
-  transition:
-    background .2s ease,
-    color .2s ease,
-    box-shadow .2s ease;
-}
 
+        <div class="character-layout">
 
-.system-button span {
-  color: var(--orange);
-}
 
+          <div class="character-placeholder">
 
-.system-button:hover {
-  background: var(--orange);
+            <div class="scanline"></div>
 
-  color: #000;
+            <div class="character-symbol">
+              文
+            </div>
 
-  box-shadow:
-    0 0 25px rgba(255,77,0,.18);
-}
+            <span>
+              CHARACTER DATA
+            </span>
 
+          </div>
 
-.system-button:hover span {
-  color: #000;
-}
 
+          <div class="character-info">
 
-.system-button.large {
-  width: 100%;
+            <div class="data-block">
 
-  justify-content: space-between;
+              <span>
+                SPECIALIZATION
+              </span>
 
-  padding: 17px;
-}
+              <strong>
+                FURRY / BARA
+              </strong>
 
+            </div>
 
-/* =========================================================
-   HOME VISUAL
-   ========================================================= */
 
-.home-visual {
-  position: relative;
-}
+            <div class="data-block">
 
+              <span>
+                DESIGN FOCUS
+              </span>
 
-.visual-frame {
-  position: relative;
+              <strong>
+                SILHOUETTE /
+                PERSONALITY /
+                EXPRESSION
+              </strong>
 
-  padding: 12px;
+            </div>
 
-  border: 1px solid var(--line);
 
-  background: #080808;
-}
+            <div class="data-block">
 
+              <span>
+                MEDIUM
+              </span>
 
-.visual-frame::before {
-  content: "";
+              <strong>
+                DIGITAL
+              </strong>
 
-  position: absolute;
+            </div>
 
-  inset: 5px;
 
-  border: 1px solid #171717;
+            <div class="data-block">
 
-  pointer-events: none;
+              <span>
+                CREATOR
+              </span>
 
-  z-index: 2;
-}
+              <strong>
+                NANHER HEW 文
+              </strong>
 
+            </div>
 
-.visual-frame img {
-  width: 100%;
 
-  aspect-ratio: 4 / 5;
+          </div>
 
-  object-fit: cover;
+        </div>
 
-  filter: saturate(.85);
+      </section>
 
-  transition:
-    filter .4s ease,
-    transform .4s ease;
-}
 
 
-.visual-frame:hover img {
-  filter: saturate(1);
+      <!-- ==================================
+           COMMISSIONS
+      =================================== -->
 
-  transform: scale(1.015);
-}
+      <section id="commissions"
+               class="screen commissions-screen">
 
 
-.visual-label {
-  position: absolute;
+        <div class="screen-header">
 
-  top: 25px;
-  left: 25px;
+          <div>
 
-  z-index: 3;
+            <span class="section-number">
+              04
+            </span>
 
-  padding: 5px 8px;
+            <h2>
+              COMMISSIONS
+            </h2>
 
-  background: #050505;
+          </div>
 
-  color: var(--orange);
+          <div class="section-description">
+            CURRENTLY ACCEPTING
+          </div>
 
-  font-size: 7px;
+        </div>
 
-  letter-spacing: .14em;
-}
 
+        <div class="commission-terminal">
 
-.visual-data {
-  display: flex;
 
-  justify-content: space-between;
+          <div class="terminal-header">
 
-  padding: 12px 3px 0;
+            <span>
+              COMMISSION_PROTOCOL
+            </span>
 
-  color: #555;
+            <span class="accent">
+              ONLINE
+            </span>
 
-  font-size: 7px;
+          </div>
 
-  letter-spacing: .15em;
-}
 
+          <div class="price-list">
 
-.home-footer {
-  display: flex;
 
-  justify-content: space-between;
+            <div class="price">
 
-  padding-top: 20px;
+              <span>
+                SKETCH
+              </span>
 
-  border-top: 1px solid var(--line);
+              <strong>
+                $15
+              </strong>
 
-  color: #444;
+            </div>
 
-  font-size: 7px;
 
-  letter-spacing: .14em;
-}
+            <div class="price">
 
+              <span>
+                HEADSHOT
+              </span>
 
-.home-footer span:nth-child(2) {
-  color: var(--orange);
-}
+              <strong>
+                $20
+              </strong>
 
+            </div>
 
-/* =========================================================
-   SECTION HEADERS
-   ========================================================= */
 
-.screen-header {
-  display: flex;
+            <div class="price">
 
-  justify-content: space-between;
+              <span>
+                BUST
+              </span>
 
-  align-items: flex-end;
+              <strong>
+                $25
+              </strong>
 
-  margin-bottom: 40px;
+            </div>
 
-  padding-bottom: 18px;
 
-  border-bottom: 1px solid var(--line);
-}
+            <div class="price">
 
+              <span>
+                HALF BODY
+              </span>
 
-.section-number {
-  display: block;
+              <strong>
+                $35
+              </strong>
 
-  margin-bottom: 7px;
+            </div>
 
-  color: var(--orange);
 
-  font-size: 8px;
+            <div class="price">
 
-  letter-spacing: .15em;
-}
+              <span>
+                FULL BODY
+              </span>
 
+              <strong>
+                $45
+              </strong>
 
-.screen-header h2 {
-  font-family: var(--display);
+            </div>
 
-  font-size: clamp(38px, 5vw, 75px);
 
-  line-height: .8;
+          </div>
 
-  letter-spacing: -.03em;
-}
 
+          <div class="terminal-note">
 
-.section-description {
-  max-width: 260px;
+            <span>
+              RENDERING INCLUDED
+            </span>
 
-  color: #555;
+            <span>
+              CHARACTER DESIGN AVAILABLE
+            </span>
 
-  font-size: 7px;
+          </div>
 
-  line-height: 1.7;
 
-  text-align: right;
+          <a href="#contact"
+             class="system-button large">
 
-  letter-spacing: .1em;
-}
+            INITIATE COMMISSION
 
+            <span>
+              →
+            </span>
 
-/* =========================================================
-   ARCHIVE
-   ========================================================= */
+          </a>
 
-.archive-controls {
-  display: flex;
+        </div>
 
-  gap: 6px;
+      </section>
 
-  margin-bottom: 30px;
 
-  flex-wrap: wrap;
-}
 
+      <!-- ==================================
+           ABOUT
+      =================================== -->
 
-.filter {
-  padding: 7px 12px;
+      <section id="about"
+               class="screen about-screen">
 
-  border: 1px solid var(--line);
 
-  background: transparent;
+        <div class="screen-header">
 
-  color: #555;
+          <div>
 
-  font-size: 7px;
+            <span class="section-number">
+              05
+            </span>
 
-  letter-spacing: .12em;
+            <h2>
+              USER PROFILE
+            </h2>
 
-  transition:
-    color .2s ease,
-    border-color .2s ease,
-    background .2s ease;
-}
+          </div>
 
+        </div>
 
-.filter:hover,
-.filter.active {
-  border-color: var(--orange);
 
-  background: var(--orange);
+        <div class="profile-card">
 
-  color: #000;
-}
 
+          <div class="profile-icon">
+            文
+          </div>
 
-.archive-grid {
-  display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+          <div class="profile-data">
 
-  gap: 10px;
-}
+            <div class="profile-row">
 
+              <span>
+                USER
+              </span>
 
-.archive-item {
-  border: 1px solid var(--line);
+              <strong>
+                NANHER HEW
+              </strong>
 
-  background: var(--panel);
+            </div>
 
-  transition:
-    border-color .25s ease,
-    transform .25s ease;
-}
 
+            <div class="profile-row">
 
-.archive-item:hover {
-  border-color: var(--orange);
+              <span>
+                ROLE
+              </span>
 
-  transform: translateY(-3px);
-}
+              <strong>
+                DIGITAL ARTIST
+              </strong>
 
+            </div>
 
-.archive-image {
-  position: relative;
 
-  overflow: hidden;
+            <div class="profile-row">
 
-  background: #080808;
-}
+              <span>
+                SPECIALIZATION
+              </span>
 
+              <strong>
+                FURRY / BARA / CHARACTERS
+              </strong>
 
-.archive-image img {
-  width: 100%;
+            </div>
 
-  aspect-ratio: 4 / 3;
 
-  object-fit: cover;
+            <div class="profile-row">
 
-  transition:
-    transform .45s ease,
-    filter .45s ease;
-}
+              <span>
+                STATUS
+              </span>
 
+              <strong class="accent">
+                ACTIVE
+              </strong>
 
-.archive-item:hover .archive-image img {
-  transform: scale(1.035);
+            </div>
 
-  filter:
-    contrast(1.08)
-    saturate(1.08);
-}
 
+            <div class="profile-description">
 
-.archive-image > span {
-  position: absolute;
+              I'm Nanher Hew, a digital artist focused on
+              furry character design, bara illustration
+              and expressive digital artwork.
 
-  top: 9px;
-  right: 9px;
+            </div>
 
-  padding: 4px 6px;
+          </div>
 
-  background: rgba(0,0,0,.75);
+        </div>
 
-  color: var(--orange);
+      </section>
 
-  font-size: 6px;
 
-  letter-spacing: .1em;
-}
 
+      <!-- ==================================
+           CONTACT
+      =================================== -->
 
-.archive-meta {
-  display: flex;
+      <section id="contact"
+               class="screen contact-screen">
 
-  justify-content: space-between;
 
-  padding: 10px;
+        <div class="contact-center">
 
-  font-size: 7px;
+          <span class="section-number">
+            06
+          </span>
 
-  letter-spacing: .1em;
-}
+          <div class="system-tag">
+            COMMUNICATION CHANNEL
+          </div>
 
 
-.archive-meta strong {
-  color: #aaa;
-}
+          <h2>
+            CONTACT
+          </h2>
 
 
-.archive-meta span {
-  color: #444;
-}
+          <p>
+            COMMISSIONS / COLLABORATIONS /
+            GENERAL INQUIRIES
+          </p>
 
 
-/* =========================================================
-   CHARACTER DATABASE
-   ========================================================= */
+          <a
+            href="mailto:YOUR_EMAIL@example.com"
+            class="contact-link"
+          >
+            YOUR_EMAIL@example.com
+          </a>
 
-.character-screen {
-  background:
-    linear-gradient(
-      90deg,
-      transparent 49.95%,
-      #111 50%,
-      transparent 50.05%
-    );
-}
 
+          <div class="contact-links">
 
-.character-layout {
-  display: grid;
+            <a href="#">
+              INSTAGRAM ↗
+            </a>
 
-  grid-template-columns: 1.2fr .8fr;
+            <a href="#">
+              TELEGRAM ↗
+            </a>
 
-  gap: 25px;
+            <a href="#">
+              DISCORD ↗
+            </a>
 
-  max-width: 1100px;
+          </div>
 
-  margin: auto;
-}
+        </div>
 
 
-.character-placeholder {
-  position: relative;
+      </section>
 
-  min-height: 500px;
 
-  display: flex;
+    </div>
 
-  align-items: center;
+  </main>
 
-  justify-content: center;
 
-  border: 1px solid var(--line);
+  <!-- ==================================
+       FOOTER
+  =================================== -->
 
-  background:
-    repeating-linear-gradient(
-      0deg,
-      #080808 0,
-      #080808 3px,
-      #090909 3px,
-      #090909 4px
-    );
+  <footer class="system-footer">
 
-  overflow: hidden;
-}
+    <span>
+      NANHER HEW 文 // ARCHIVE SYSTEM
+    </span>
 
+    <span>
+      CONNECTION SECURE
+    </span>
 
-.character-placeholder::before {
-  content: "";
+    <span>
+      © 2026
+    </span>
 
-  position: absolute;
+  </footer>
 
-  inset: 20px;
 
-  border: 1px solid #181818;
-}
+  <!-- ==================================
+       LIGHTBOX
+  =================================== -->
 
+  <div class="lightbox"
+       id="lightbox">
 
-.character-symbol {
-  font-family: var(--display);
+    <button id="lightboxClose">
+      ×
+    </button>
 
-  font-size: 280px;
+    <div id="lightboxContent"></div>
 
-  color: transparent;
+  </div>
 
-  -webkit-text-stroke: 1px var(--orange);
 
-  opacity: .8;
-}
+  <script src="script.js"></script>
 
+</body>
 
-.character-placeholder > span {
-  position: absolute;
-
-  bottom: 20px;
-  left: 25px;
-
-  color: #444;
-
-  font-size: 7px;
-
-  letter-spacing: .15em;
-}
-
-
-.scanline {
-  position: absolute;
-
-  left: 0;
-  right: 0;
-
-  top: 40%;
-
-  height: 1px;
-
-  background: var(--orange);
-
-  opacity: .35;
-
-  animation:
-    scan 4s linear infinite;
-}
-
-
-@keyframes scan {
-
-  0% {
-    transform: translateY(-180px);
-  }
-
-  100% {
-    transform: translateY(300px);
-  }
-
-}
-
-
-.character-info {
-  display: flex;
-
-  flex-direction: column;
-
-  justify-content: center;
-}
-
-
-.data-block {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 10px;
-
-  padding: 20px 0;
-
-  border-bottom: 1px solid var(--line);
-}
-
-
-.data-block span {
-  color: #444;
-
-  font-size: 7px;
-
-  letter-spacing: .15em;
-}
-
-
-.data-block strong {
-  color: #bbb;
-
-  font-size: 10px;
-
-  line-height: 1.6;
-
-  letter-spacing: .08em;
-}
-
-
-/* =========================================================
-   COMMISSIONS
-   ========================================================= */
-
-.commissions-screen {
-  background: var(--panel);
-}
-
-
-.commission-terminal {
-  max-width: 800px;
-
-  margin: 70px auto;
-
-  border: 1px solid var(--line);
-
-  background: #070707;
-}
-
-
-.terminal-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  padding: 12px 15px;
-
-  border-bottom: 1px solid var(--line);
-
-  background: #0c0c0c;
-
-  color: #555;
-
-  font-size: 7px;
-
-  letter-spacing: .14em;
-}
-
-
-.accent {
-  color: var(--orange) !important;
-}
-
-
-.price-list {
-  padding: 15px 25px;
-}
-
-
-.price {
-  display: flex;
-
-  justify-content: space-between;
-
-  padding: 17px 0;
-
-  border-bottom: 1px solid #161616;
-
-  font-size: 9px;
-
-  letter-spacing: .12em;
-}
-
-
-.price span {
-  color: #888;
-}
-
-
-.price strong {
-  color: var(--orange);
-
-  font-family: var(--display);
-
-  font-size: 17px;
-}
-
-
-.terminal-note {
-  display: flex;
-
-  gap: 20px;
-
-  padding: 18px 25px;
-
-  color: #444;
-
-  font-size: 6px;
-
-  letter-spacing: .12em;
-}
-
-
-.commission-terminal > .system-button {
-  margin: 10px 25px 25px;
-
-  width: calc(100% - 50px);
-}
-
-
-/* =========================================================
-   ABOUT / PROFILE
-   ========================================================= */
-
-.about-screen {
-  background:
-    radial-gradient(
-      circle at 70% 40%,
-      rgba(255,77,0,.05),
-      transparent 30%
-    );
-}
-
-
-.profile-card {
-  max-width: 900px;
-
-  margin: 100px auto;
-
-  display: grid;
-
-  grid-template-columns: 180px 1fr;
-
-  border: 1px solid var(--line);
-
-  background: #080808;
-}
-
-
-.profile-icon {
-  min-height: 300px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-right: 1px solid var(--line);
-
-  font-family: var(--display);
-
-  font-size: 130px;
-
-  color: transparent;
-
-  -webkit-text-stroke: 1px var(--orange);
-}
-
-
-.profile-data {
-  padding: 30px;
-}
-
-
-.profile-row {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 30px;
-
-  padding: 17px 0;
-
-  border-bottom: 1px solid #181818;
-
-  font-size: 8px;
-
-  letter-spacing: .12em;
-}
-
-
-.profile-row span {
-  color: #444;
-}
-
-
-.profile-row strong {
-  color: #aaa;
-
-  text-align: right;
-}
-
-
-.profile-description {
-  max-width: 550px;
-
-  margin-top: 35px;
-
-  color: #777;
-
-  font-size: 9px;
-
-  line-height: 2;
-}
-
-
-/* =========================================================
-   CONTACT
-   ========================================================= */
-
-.contact-screen {
-  min-height: 650px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  text-align: center;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255,77,0,.08),
-      transparent 35%
-    );
-}
-
-
-.contact-center {
-  max-width: 850px;
-}
-
-
-.contact-center .section-number {
-  margin-bottom: 30px;
-}
-
-
-.contact-center .system-tag {
-  margin-bottom: 25px;
-}
-
-
-.contact-center h2 {
-  font-family: var(--display);
-
-  font-size: clamp(80px, 13vw, 180px);
-
-  line-height: .75;
-
-  letter-spacing: -.05em;
-}
-
-
-.contact-center p {
-  margin-top: 35px;
-
-  color: #555;
-
-  font-size: 8px;
-
-  letter-spacing: .15em;
-}
-
-
-.contact-link {
-  display: inline-block;
-
-  margin-top: 40px;
-
-  padding-bottom: 8px;
-
-  border-bottom: 1px solid var(--orange);
-
-  color: var(--orange);
-
-  font-size: 11px;
-}
-
-
-.contact-links {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 30px;
-
-  margin-top: 50px;
-
-  flex-wrap: wrap;
-}
-
-
-.contact-links a {
-  color: #555;
-
-  font-size: 7px;
-
-  letter-spacing: .13em;
-
-  transition: color .2s ease;
-}
-
-
-.contact-links a:hover {
-  color: var(--orange);
-}
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.system-footer {
-  min-height: 60px;
-
-  padding: 0 28px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  border-top: 1px solid var(--line);
-
-  background: #030303;
-
-  color: #444;
-
-  font-size: 6px;
-
-  letter-spacing: .14em;
-}
-
-
-/* =========================================================
-   LIGHTBOX
-   ========================================================= */
-
-.lightbox {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9998;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 40px;
-
-  background: rgba(0,0,0,.96);
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  transition:
-    opacity .2s ease,
-    visibility .2s ease;
-}
-
-
-.lightbox.open {
-  opacity: 1;
-
-  visibility: visible;
-}
-
-
-#lightboxContent {
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-
-#lightboxContent img {
-  max-width: 90vw;
-  max-height: 88vh;
-
-  object-fit: contain;
-}
-
-
-#lightboxClose {
-  position: absolute;
-
-  top: 20px;
-  right: 25px;
-
-  border: none;
-
-  background: none;
-
-  color: #aaa;
-
-  font-size: 35px;
-}
-
-
-#lightboxClose:hover {
-  color: var(--orange);
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 950px) {
-
-  .interface {
-    display: block;
-  }
-
-
-  .sidebar {
-    position: fixed;
-
-    top: auto;
-    bottom: 0;
-
-    width: 100%;
-    height: 55px;
-
-    padding: 0 10px;
-
-    border-right: none;
-
-    border-top: 1px solid var(--line);
-
-    flex-direction: row;
-
-    align-items: center;
-  }
-
-
-  .sidebar-title,
-  .sidebar-bottom {
-    display: none;
-  }
-
-
-  .sidebar nav {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-
-  .nav-item {
-    height: 55px;
-
-    justify-content: center;
-
-    padding: 0;
-
-    font-size: 6px;
-  }
-
-
-  .nav-number {
-    display: none;
-  }
-
-
-  .nav-item.active::before {
-    left: 0;
-
-    bottom: 0;
-
-    width: 100%;
-
-    height: 2px;
-  }
-
-
-  .content {
-    width: 100%;
-  }
-
-
-  .home-main {
-    grid-template-columns: 1fr;
-  }
-
-
-  .home-visual {
-    max-width: 500px;
-  }
-
-
-  .archive-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-
-  .character-layout {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-
-@media (max-width: 650px) {
-
-  .system-header {
-    padding: 0 15px;
-  }
-
-
-  .brand strong {
-    font-size: 12px;
-  }
-
-
-  .brand span {
-    display: none;
-  }
-
-
-  .system-info span:first-child {
-    display: none;
-  }
-
-
-  .screen {
-    padding: 35px 20px 90px;
-  }
-
-
-  .screen-code {
-    right: 20px;
-  }
-
-
-  .home-screen {
-    padding-top: 70px;
-  }
-
-
-  .home-copy h1 {
-    font-size: 24vw;
-  }
-
-
-  .home-subtitle {
-    font-size: 7px;
-  }
-
-
-  .home-footer {
-    gap: 10px;
-
-    flex-wrap: wrap;
-  }
-
-
-  .screen-header {
-    align-items: flex-start;
-
-    flex-direction: column;
-
-    gap: 20px;
-  }
-
-
-  .section-description {
-    text-align: left;
-  }
-
-
-  .archive-grid {
-    grid-template-columns: 1fr;
-  }
-
-
-  .profile-card {
-    grid-template-columns: 1fr;
-
-    margin-top: 50px;
-  }
-
-
-  .profile-icon {
-    min-height: 180px;
-
-    border-right: none;
-
-    border-bottom: 1px solid var(--line);
-  }
-
-
-  .profile-row {
-    flex-direction: column;
-
-    gap: 7px;
-  }
-
-
-  .profile-row strong {
-    text-align: left;
-  }
-
-
-  .terminal-note {
-    flex-direction: column;
-
-    gap: 8px;
-  }
-
-
-  .system-footer {
-    padding: 20px;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 8px;
-
-    margin-bottom: 55px;
-  }
-
-}
+</html>
