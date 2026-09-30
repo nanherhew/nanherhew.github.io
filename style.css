@@ -1375,3 +1375,29 @@ footer div:first-child {
   }
 
 }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-art {
+  position: absolute;
+
+  width: 650px;
+  max-width: 55vw;
+
+  right: 8%;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+}
