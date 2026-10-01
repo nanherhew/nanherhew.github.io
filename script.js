@@ -532,3 +532,70 @@ if (commissionTerms && commissionSubmit) {
   });
 
 }
+
+// =========================================
+// HERO MOUSE PARALLAX
+// =========================================
+
+const hero = document.querySelector(".hero");
+
+if (hero) {
+
+  let targetX = 0;
+  let targetY = 0;
+
+  let currentX = 0;
+  let currentY = 0;
+
+
+  // MOUSE MOVEMENT
+
+  document.addEventListener("mousemove", (event) => {
+
+    const x =
+      (event.clientX / window.innerWidth) - 0.5;
+
+    const y =
+      (event.clientY / window.innerHeight) - 0.5;
+
+
+    // Maximum movement
+
+    targetX = x * 40;
+    targetY = y * 40;
+
+  });
+
+
+  // SMOOTH ANIMATION
+
+  function animateParallax() {
+
+    currentX +=
+      (targetX - currentX) * 0.08;
+
+    currentY +=
+      (targetY - currentY) * 0.08;
+
+
+    hero.style.setProperty(
+      "--parallax-x",
+      `${currentX}px`
+    );
+
+    hero.style.setProperty(
+      "--parallax-y",
+      `${currentY}px`
+    );
+
+
+    requestAnimationFrame(
+      animateParallax
+    );
+
+  }
+
+
+  animateParallax();
+
+}
