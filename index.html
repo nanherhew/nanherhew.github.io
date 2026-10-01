@@ -256,12 +256,322 @@
 
       </div>
 
-    </section>
+   </section>
+
+<!-- COMM STATUS -->
+<section class="comm-status" id="comm-status">
+
+  <div class="section-label">
+    <span>003</span>
+    COMM STATUS
+  </div>
+
+  <div class="comm-status-header">
+
+    <div>
+      <p class="eyebrow">LIVE COMMISSION TRACKER</p>
+
+      <h2>
+        COMM <span>STATUS.</span>
+      </h2>
+    </div>
+
+    <p class="comm-status-description">
+      A live overview of finished commissions and current projects.
+    </p>
+
+  </div>
 
 
-    <!-- =========================
-         ABOUT
-    ========================== -->
+  <!-- STATUS LEGEND -->
+
+  <div class="comm-status-legend">
+
+    <div class="status-key">
+      <span class="status-dot status-blue"></span>
+
+      <div>
+        <strong>RECEIVED</strong>
+        <small>Commission just received.</small>
+      </div>
+    </div>
+
+
+    <div class="status-key">
+      <span class="status-dot status-red"></span>
+
+      <div>
+        <strong>SKETCH</strong>
+        <small>Initial sketch is being worked on.</small>
+      </div>
+    </div>
+
+
+    <div class="status-key">
+      <span class="status-dot status-yellow"></span>
+
+      <div>
+        <strong>ADJUSTING</strong>
+        <small>Making requested changes.</small>
+      </div>
+    </div>
+
+
+    <div class="status-key">
+      <span class="status-dot status-green"></span>
+
+      <div>
+        <strong>REFINING</strong>
+        <small>Final rendering and details.</small>
+      </div>
+    </div>
+
+
+    <div class="status-key">
+      <span class="status-dot status-orange"></span>
+
+      <div>
+        <strong>ALMOST DONE</strong>
+        <small>Final touches before delivery.</small>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- STATUS TABS -->
+
+  <div class="comm-status-tabs">
+
+    <button
+      class="comm-status-tab active"
+      data-status-tab="finished"
+    >
+      FINISHED COMMS
+    </button>
+
+    <button
+      class="comm-status-tab"
+      data-status-tab="progress"
+    >
+      IN PROGRESS
+    </button>
+
+  </div>
+
+
+  <!-- FINISHED -->
+
+  <div
+    class="comm-status-panel active"
+    id="status-finished"
+  >
+
+    <div class="comm-finished-grid">
+
+
+      <!-- FINISHED COMMISSION 01 -->
+
+      <article class="comm-finished-card">
+
+        <div class="comm-finished-image">
+
+          <img
+            src="arts/02.jpg"
+            alt="Commission for @BJOERN90"
+          >
+
+          <span class="comm-finished-number">
+            001
+          </span>
+
+        </div>
+
+        <div class="comm-finished-info">
+
+          <span>COMMISSION / FINISHED</span>
+
+          <strong>@BJOERN90</strong>
+
+        </div>
+
+      </article>
+
+
+      <!-- FINISHED COMMISSION 02 -->
+
+      <article class="comm-finished-card">
+
+        <div class="comm-finished-image">
+
+          <img
+            src="arts/03.jpg"
+            alt="Commission for @OUTDOOWPUMPKIN9"
+          >
+
+          <span class="comm-finished-number">
+            002
+          </span>
+
+        </div>
+
+        <div class="comm-finished-info">
+
+          <span>COMMISSION / FINISHED</span>
+
+          <strong>@OUTDOOWPUMPKIN9</strong>
+
+        </div>
+
+      </article>
+
+
+      <!--
+      DUPLICATE THIS BLOCK FOR MORE FINISHED COMMISSIONS
+
+      <article class="comm-finished-card">
+
+        <div class="comm-finished-image">
+
+          <img
+            src="arts/YOUR-IMAGE.jpg"
+            alt="Commission for @USERNAME"
+          >
+
+          <span class="comm-finished-number">
+            003
+          </span>
+
+        </div>
+
+        <div class="comm-finished-info">
+
+          <span>COMMISSION / FINISHED</span>
+
+          <strong>@USERNAME</strong>
+
+        </div>
+
+      </article>
+      -->
+
+    </div>
+
+  </div>
+
+
+  <!-- IN PROGRESS -->
+
+  <div
+    class="comm-status-panel"
+    id="status-progress"
+  >
+
+    <div class="comm-progress-list">
+
+
+      <!-- COMMISSION IN PROGRESS -->
+
+      <article class="comm-progress-item">
+
+        <div class="comm-progress-main">
+
+          <span class="comm-progress-line status-green"></span>
+
+          <div>
+            <strong>NOTBUTCHRR</strong>
+            <span>REFINING</span>
+          </div>
+
+        </div>
+
+        <span class="comm-progress-code">
+          COMM / 001
+        </span>
+
+      </article>
+
+
+      <!--
+      MORE IN-PROGRESS COMMISSIONS
+
+      <article class="comm-progress-item">
+
+        <div class="comm-progress-main">
+
+          <span class="comm-progress-line status-red"></span>
+
+          <div>
+            <strong>USERNAME</strong>
+            <span>SKETCH</span>
+          </div>
+
+        </div>
+
+        <span class="comm-progress-code">
+          COMM / 002
+        </span>
+
+      </article>
+      -->
+
+
+      <!--
+      EXAMPLE OF ADJUSTING
+
+      <article class="comm-progress-item">
+
+        <div class="comm-progress-main">
+
+          <span class="comm-progress-line status-yellow"></span>
+
+          <div>
+            <strong>USERNAME</strong>
+            <span>ADJUSTING</span>
+          </div>
+
+        </div>
+
+        <span class="comm-progress-code">
+          COMM / 003
+        </span>
+
+      </article>
+      -->
+
+
+      <!--
+      EXAMPLE OF RECEIVED
+
+      <article class="comm-progress-item">
+
+        <div class="comm-progress-main">
+
+          <span class="comm-progress-line status-blue"></span>
+
+          <div>
+            <strong>USERNAME</strong>
+            <span>RECEIVED</span>
+          </div>
+
+        </div>
+
+        <span class="comm-progress-code">
+          COMM / 004
+        </span>
+
+      </article>
+      -->
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section class="about" id="about">
 
     <section class="about" id="about">
 
