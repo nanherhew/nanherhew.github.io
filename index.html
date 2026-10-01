@@ -712,21 +712,107 @@
       </div>
 
 
-      <div class="commission-field">
+      <!-- CONTACT METHOD -->
 
-        <label for="commissionContact">
-          CONTACT
-        </label>
+<div class="commission-field">
 
-        <input
-          type="text"
-          id="commissionContact"
-          name="contact"
-          placeholder="Discord / Email / Telegram"
-          required
-        >
+  <label>
+    CONTACT METHOD
+  </label>
 
-      </div>
+  <p class="commission-field-help">
+    Select a platform where I can contact you.
+  </p>
+
+  <div class="contact-methods">
+
+    <label class="contact-option">
+      <input
+        type="radio"
+        name="contactMethod"
+        value="Discord"
+        required
+      >
+      <span>DISCORD</span>
+    </label>
+
+    <label class="contact-option">
+      <input
+        type="radio"
+        name="contactMethod"
+        value="X"
+      >
+      <span>X</span>
+    </label>
+
+    <label class="contact-option">
+      <input
+        type="radio"
+        name="contactMethod"
+        value="Instagram"
+      >
+      <span>INSTAGRAM</span>
+    </label>
+
+    <label class="contact-option">
+      <input
+        type="radio"
+        name="contactMethod"
+        value="Reddit"
+      >
+      <span>REDDIT</span>
+    </label>
+
+    <label class="contact-option">
+      <input
+        type="radio"
+        name="contactMethod"
+        value="Bluesky"
+      >
+      <span>BLUESKY</span>
+    </label>
+
+  </div>
+
+</div>
+
+
+<!-- USERNAME -->
+
+<div class="commission-field">
+
+  <label for="commissionContact">
+    USERNAME / @
+  </label>
+
+  <input
+    type="text"
+    id="commissionContact"
+    name="contact"
+    placeholder="@yourusername"
+    required
+  >
+
+</div>
+
+
+<!-- EMAIL -->
+
+<div class="commission-field">
+
+  <label for="commissionEmail">
+    EMAIL
+  </label>
+
+  <input
+    type="email"
+    id="commissionEmail"
+    name="email"
+    placeholder="you@example.com"
+    required
+  >
+
+</div>
 
 
       <div class="commission-field">
@@ -802,6 +888,36 @@
 
       </div>
 
+      <!-- COMMISSION TERMS -->
+
+<div class="commission-terms">
+
+  <label class="terms-checkbox">
+
+    <input
+      type="checkbox"
+      id="commissionTerms"
+      name="terms"
+      required
+    >
+
+    <span class="terms-box"></span>
+
+    <span class="terms-text">
+      I AGREE TO THE
+      <button
+        type="button"
+        class="terms-link"
+        id="openTerms"
+      >
+        COMMISSION TERMS ↗
+      </button>
+    </span>
+
+  </label>
+
+</div>
+
 
       <button
         type="submit"
@@ -849,6 +965,294 @@
 
 </div>
 
+<!-- =========================================
+     COMMISSION TERMS MODAL
+========================================= -->
+
+<div class="terms-modal" id="termsModal">
+
+  <div class="terms-modal-bg"></div>
+
+  <div class="terms-panel">
+
+    <button
+      class="terms-close"
+      id="closeTerms"
+      type="button"
+    >
+      ×
+    </button>
+
+    <div class="terms-top">
+
+      <div class="terms-label">
+        COMMISSION SYSTEM / TERMS
+      </div>
+
+      <button
+        class="terms-translate"
+        id="translateTerms"
+        type="button"
+      >
+        TRANSLATE / ES
+      </button>
+
+    </div>
+
+
+    <!-- ENGLISH -->
+
+    <div class="terms-content" id="termsEnglish">
+
+      <div class="terms-symbol">
+        文
+      </div>
+
+      <h2>
+        COMMISSION
+        <span>TERMS.</span>
+      </h2>
+
+      <section class="terms-section">
+
+        <h3>01 / PAYMENT</h3>
+
+        <p>
+          Payment is required before the artwork is started.
+          Prices listed on this website are starting prices and
+          may change depending on the complexity of the request.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>02 / PROCESS</h3>
+
+        <p>
+          After receiving your request, I will review the details
+          and contact you to confirm the commission, price and
+          estimated timeframe.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>03 / REVISIONS</h3>
+
+        <p>
+          Minor revisions are allowed during the sketch stage.
+          Major changes requested after approval may require an
+          additional fee.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>04 / DEADLINES</h3>
+
+        <p>
+          Commission completion times may vary depending on my
+          current queue, the complexity of the artwork and other
+          circumstances. I will communicate significant delays.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>05 / REFUNDS</h3>
+
+        <p>
+          Refund requests are handled individually depending on
+          the current stage of the commission.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>06 / USAGE</h3>
+
+        <p>
+          The finished artwork remains the property of the artist.
+          The commissioner receives personal-use rights unless
+          commercial usage is explicitly agreed upon.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>07 / NSFW</h3>
+
+        <p>
+          Mature commissions may be accepted depending on the
+          subject and content. Requests outside my boundaries
+          will be declined.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>08 / ARTIST RIGHTS</h3>
+
+        <p>
+          I reserve the right to decline a commission request.
+          I may display completed artwork in my portfolio unless
+          a private commission arrangement has been agreed upon.
+        </p>
+
+      </section>
+
+    </div>
+
+
+    <!-- SPANISH -->
+
+    <div
+      class="terms-content"
+      id="termsSpanish"
+      style="display:none;"
+    >
+
+      <div class="terms-symbol">
+        文
+      </div>
+
+      <h2>
+        TÉRMINOS DE
+        <span>COMISIÓN.</span>
+      </h2>
+
+      <section class="terms-section">
+
+        <h3>01 / PAGO</h3>
+
+        <p>
+          El pago debe realizarse antes de comenzar el trabajo.
+          Los precios publicados en este sitio son precios base
+          y pueden cambiar dependiendo de la complejidad de la solicitud.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>02 / PROCESO</h3>
+
+        <p>
+          Después de recibir tu solicitud, revisaré los detalles
+          y me pondré en contacto contigo para confirmar la comisión,
+          el precio y el tiempo estimado.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>03 / REVISIONES</h3>
+
+        <p>
+          Se permiten cambios menores durante la etapa del boceto.
+          Los cambios importantes solicitados después de la aprobación
+          pueden requerir un costo adicional.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>04 / TIEMPOS</h3>
+
+        <p>
+          El tiempo de entrega puede variar dependiendo de mi lista
+          de espera, la complejidad del dibujo y otras circunstancias.
+          Comunicaré cualquier retraso importante.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>05 / REEMBOLSOS</h3>
+
+        <p>
+          Las solicitudes de reembolso serán evaluadas individualmente
+          dependiendo de la etapa en la que se encuentre la comisión.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>06 / USO</h3>
+
+        <p>
+          La obra terminada continúa siendo propiedad del artista.
+          El cliente recibe derechos de uso personal, a menos que
+          se haya acordado explícitamente un uso comercial.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>07 / NSFW</h3>
+
+        <p>
+          Puedo aceptar determinadas comisiones de contenido adulto
+          dependiendo del tema y contenido. Las solicitudes que estén
+          fuera de mis límites serán rechazadas.
+        </p>
+
+      </section>
+
+
+      <section class="terms-section">
+
+        <h3>08 / DERECHOS DEL ARTISTA</h3>
+
+        <p>
+          Me reservo el derecho de rechazar una solicitud de comisión.
+          Puedo mostrar las obras terminadas en mi portafolio, salvo que
+          se haya acordado una comisión privada.
+        </p>
+
+      </section>
+
+    </div>
+
+
+    <button
+      class="terms-done"
+      id="termsDone"
+      type="button"
+    >
+      CLOSE TERMS
+      <span>×</span>
+    </button>
+
+  </div>
+
+</div>
+  
   <script src="script.js"></script>
 
 </body>
