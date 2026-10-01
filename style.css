@@ -2739,8 +2739,8 @@ footer div:first-child {
 
 .hero-art-back {
   translate:
-    calc(var(--parallax-x) * 0.65)
-    calc(var(--parallax-y) * 0.65);
+    calc(var(--parallax-x) * 0.9)
+    calc(var(--parallax-y) * 0.9);
 
   transition:
     translate 0.18s ease-out;
