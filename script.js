@@ -188,3 +188,113 @@ if (ageLeave) {
   });
 
 }
+
+/* =========================================
+   COMMISSION REQUEST MODAL
+========================================= */
+
+const commissionModal =
+  document.getElementById("commissionModal");
+
+const openCommission =
+  document.getElementById("openCommission");
+
+const closeCommission =
+  document.getElementById("closeCommission");
+
+const commissionForm =
+  document.getElementById("commissionForm");
+
+const commissionSuccess =
+  document.getElementById("commissionSuccess");
+
+const successClose =
+  document.getElementById("successClose");
+
+
+/* OPEN */
+
+openCommission.addEventListener("click", () => {
+
+  commissionModal.classList.add("open");
+
+  document.body.style.overflow = "hidden";
+
+});
+
+
+/* CLOSE */
+
+closeCommission.addEventListener("click", () => {
+
+  commissionModal.classList.remove("open");
+
+  document.body.style.overflow = "";
+
+});
+
+
+/* CLICK OUTSIDE */
+
+document
+  .querySelector(".commission-modal-bg")
+  .addEventListener("click", () => {
+
+    commissionModal.classList.remove("open");
+
+    document.body.style.overflow = "";
+
+  });
+
+
+/* ESC */
+
+document.addEventListener("keydown", (event) => {
+
+  if (event.key === "Escape") {
+
+    commissionModal.classList.remove("open");
+
+    document.body.style.overflow = "";
+
+  }
+
+});
+
+
+/* SUBMIT */
+
+commissionForm.addEventListener("submit", (event) => {
+
+  event.preventDefault();
+
+  commissionForm.style.display = "none";
+
+  document.querySelector(
+    ".commission-modal-intro"
+  ).style.display = "none";
+
+  commissionSuccess.classList.add("show");
+
+});
+
+
+/* SUCCESS CLOSE */
+
+successClose.addEventListener("click", () => {
+
+  commissionSuccess.classList.remove("show");
+
+  commissionForm.style.display = "";
+
+  document.querySelector(
+    ".commission-modal-intro"
+  ).style.display = "";
+
+  commissionForm.reset();
+
+  commissionModal.classList.remove("open");
+
+  document.body.style.overflow = "";
+
+});
