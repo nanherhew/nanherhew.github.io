@@ -599,3 +599,42 @@ if (hero) {
   animateParallax();
 
 }
+
+/* =========================================================
+   COMM STATUS TABS
+   ========================================================= */
+
+const commStatusTabs = document.querySelectorAll(".comm-status-tab");
+const commStatusPanels = document.querySelectorAll(".comm-status-panel");
+
+commStatusTabs.forEach((tab) => {
+
+  tab.addEventListener("click", () => {
+
+    const target = tab.dataset.statusTab;
+
+    /* Remove active state from all tabs */
+    commStatusTabs.forEach((item) => {
+      item.classList.remove("active");
+    });
+
+    /* Hide all panels */
+    commStatusPanels.forEach((panel) => {
+      panel.classList.remove("active");
+    });
+
+    /* Activate clicked tab */
+    tab.classList.add("active");
+
+    /* Show matching panel */
+    const targetPanel = document.getElementById(
+      `status-${target}`
+    );
+
+    if (targetPanel) {
+      targetPanel.classList.add("active");
+    }
+
+  });
+
+});
