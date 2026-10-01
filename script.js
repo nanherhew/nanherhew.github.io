@@ -499,3 +499,36 @@ contactMethodInputs.forEach(input => {
   });
 
 });
+
+        // =========================================
+// COMMISSION SUBMIT LOCK
+// =========================================
+
+const commissionTerms =
+  document.getElementById("commissionTerms");
+
+const commissionSubmit =
+  document.getElementById("commissionSubmit");
+
+
+if (commissionTerms && commissionSubmit) {
+
+  commissionTerms.addEventListener("change", () => {
+
+    if (commissionTerms.checked) {
+
+      commissionSubmit.disabled = false;
+
+      commissionSubmit.classList.add("ready");
+
+    } else {
+
+      commissionSubmit.disabled = true;
+
+      commissionSubmit.classList.remove("ready");
+
+    }
+
+  });
+
+}
