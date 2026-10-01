@@ -547,10 +547,10 @@
             <strong>$45</strong>
           </div>
 
-          <a href="#contact" class="commission-button">
-            REQUEST COMMISSION
-            <span>↗</span>
-          </a>
+          <button class="commission-button" id="openCommission">
+  REQUEST COMMISSION
+  <span>↗</span>
+</button>
 
         </div>
 
@@ -661,6 +661,193 @@
 
   </div>
 
+  <!-- =========================================
+     COMMISSION REQUEST MODAL
+========================================= -->
+
+<div class="commission-modal" id="commissionModal">
+
+  <div class="commission-modal-bg"></div>
+
+  <div class="commission-panel">
+
+    <button class="commission-close" id="closeCommission">
+      ×
+    </button>
+
+    <div class="commission-modal-label">
+      COMMISSION SYSTEM / 001
+    </div>
+
+    <div class="commission-modal-symbol">
+      文
+    </div>
+
+    <h2>
+      REQUEST
+      <span>COMMISSION.</span>
+    </h2>
+
+    <p class="commission-modal-intro">
+      Tell me a little about what you'd like me to create.
+    </p>
+
+
+    <form id="commissionForm">
+
+      <div class="commission-field">
+
+        <label for="commissionName">
+          NAME / USERNAME
+        </label>
+
+        <input
+          type="text"
+          id="commissionName"
+          name="name"
+          placeholder="Your name or username"
+          required
+        >
+
+      </div>
+
+
+      <div class="commission-field">
+
+        <label for="commissionContact">
+          CONTACT
+        </label>
+
+        <input
+          type="text"
+          id="commissionContact"
+          name="contact"
+          placeholder="Discord / Email / Telegram"
+          required
+        >
+
+      </div>
+
+
+      <div class="commission-field">
+
+        <label for="commissionType">
+          COMMISSION TYPE
+        </label>
+
+        <select
+          id="commissionType"
+          name="type"
+          required
+        >
+
+          <option value="" disabled selected>
+            Select a type
+          </option>
+
+          <option value="Sketch">
+            Sketch — $15
+          </option>
+
+          <option value="Headshot">
+            Headshot — $20
+          </option>
+
+          <option value="Bust">
+            Bust — $25
+          </option>
+
+          <option value="Half Body">
+            Half Body — $35
+          </option>
+
+          <option value="Full Body">
+            Full Body — $45
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="commission-field">
+
+        <label for="commissionDescription">
+          DESCRIPTION
+        </label>
+
+        <textarea
+          id="commissionDescription"
+          name="description"
+          rows="5"
+          placeholder="Tell me about the character, pose, expression, idea, etc."
+          required
+        ></textarea>
+
+      </div>
+
+
+      <div class="commission-field">
+
+        <label for="commissionReferences">
+          REFERENCES / LINKS
+        </label>
+
+        <input
+          type="text"
+          id="commissionReferences"
+          name="references"
+          placeholder="Links to references, character sheets, etc."
+        >
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="commission-submit"
+      >
+        SEND REQUEST
+        <span>↗</span>
+      </button>
+
+    </form>
+
+
+    <!-- SUCCESS -->
+
+    <div class="commission-success" id="commissionSuccess">
+
+      <div class="success-symbol">
+        ✓
+      </div>
+
+      <div class="success-code">
+        REQUEST RECEIVED.
+      </div>
+
+      <h3>
+        THANK
+        <span>YOU.</span>
+      </h3>
+
+      <p>
+        Your commission request has been received.
+        I'll get back to you as soon as possible.
+      </p>
+
+      <button
+        class="success-close"
+        id="successClose"
+      >
+        CLOSE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
   <script src="script.js"></script>
 
