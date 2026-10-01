@@ -2790,3 +2790,59 @@ footer div:first-child {
   }
 
 }
+
+/* =========================================
+   MOBILE MOTION / GYROSCOPE PARALLAX
+========================================= */
+
+@media (max-width: 768px) {
+
+  .hero {
+    --motion-x: 0px;
+    --motion-y: 0px;
+    --motion-rotate: 0deg;
+  }
+
+  /* Fondo / símbolo */
+
+  .hero-symbol {
+    transform:
+      translate3d(
+        calc(var(--motion-x) * -0.35),
+        calc(var(--motion-y) * -0.35),
+        0
+      );
+    transition: transform 0.12s ease-out;
+  }
+
+  /* Personaje detrás */
+
+  .hero-art-back {
+    transform:
+      translate3d(
+        var(--motion-x),
+        var(--motion-y),
+        0
+      )
+      translateY(-50%)
+      rotate(var(--motion-rotate));
+
+    transition: transform 0.12s ease-out;
+  }
+
+  /* Personaje delante: se mueve un poquito más */
+
+  .hero-art-front {
+    transform:
+      translate3d(
+        calc(var(--motion-x) * 1.35),
+        calc(var(--motion-y) * 1.35),
+        0
+      )
+      translateY(-50%)
+      rotate(var(--motion-rotate));
+
+    transition: transform 0.12s ease-out;
+  }
+
+}
