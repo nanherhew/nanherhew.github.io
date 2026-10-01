@@ -2846,3 +2846,66 @@ footer div:first-child {
   }
 
 }
+
+/* =========================================
+   MOTION BUTTON
+========================================= */
+
+.motion-button {
+  display: none;
+
+  position: absolute;
+
+  top: 125px;
+  right: 5vw;
+
+  z-index: 20;
+
+  padding: 10px 13px;
+
+  border: 1px solid var(--accent);
+
+  background: #050505;
+
+  color: var(--accent);
+
+  font-family: var(--font-body);
+
+  font-size: 8px;
+
+  letter-spacing: 0.12em;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.motion-button span {
+  margin-left: 12px;
+}
+
+.motion-button:hover {
+  background: var(--accent);
+  color: #000;
+
+  transform: translateY(-2px);
+}
+
+.motion-button.enabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* SOLO MÓVIL */
+
+@media (max-width: 768px) {
+
+  .motion-button {
+    display: block;
+  }
+
+}
