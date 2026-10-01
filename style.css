@@ -1660,7 +1660,7 @@ footer div:first-child {
   /* La parte trasera del dibujo */
 
   .hero-art-back {
-    z-index: 1;
+    z-index: 3;
   }
 
 
