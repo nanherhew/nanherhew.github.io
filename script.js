@@ -1,5 +1,5 @@
 // ================================
-// TAB SWITCHINGG
+// TAB SWITCHING
 // ================================
 
 const tabBtns = document.querySelectorAll('.tab-btn');
