@@ -298,3 +298,204 @@ successClose.addEventListener("click", () => {
   document.body.style.overflow = "";
 
 });
+
+// =========================================
+// COMMISSION CONTACT + TERMS
+// =========================================
+
+const termsModal =
+  document.getElementById("termsModal");
+
+const openTerms =
+  document.getElementById("openTerms");
+
+const closeTerms =
+  document.getElementById("closeTerms");
+
+const termsDone =
+  document.getElementById("termsDone");
+
+const termsBg =
+  document.querySelector(".terms-modal-bg");
+
+const translateTerms =
+  document.getElementById("translateTerms");
+
+const termsEnglish =
+  document.getElementById("termsEnglish");
+
+const termsSpanish =
+  document.getElementById("termsSpanish");
+
+
+// =========================================
+// OPEN TERMS
+// =========================================
+
+if (openTerms) {
+
+  openTerms.addEventListener("click", () => {
+
+    termsModal.classList.add("open");
+
+  });
+
+}
+
+
+// =========================================
+// CLOSE TERMS
+// =========================================
+
+function closeTermsModal() {
+
+  termsModal.classList.remove("open");
+
+}
+
+
+if (closeTerms) {
+
+  closeTerms.addEventListener(
+    "click",
+    closeTermsModal
+  );
+
+}
+
+
+if (termsDone) {
+
+  termsDone.addEventListener(
+    "click",
+    closeTermsModal
+  );
+
+}
+
+
+if (termsBg) {
+
+  termsBg.addEventListener(
+    "click",
+    closeTermsModal
+  );
+
+}
+
+
+// =========================================
+// TRANSLATE TERMS
+// =========================================
+
+let termsAreSpanish = false;
+
+if (translateTerms) {
+
+  translateTerms.addEventListener("click", () => {
+
+    termsAreSpanish = !termsAreSpanish;
+
+    if (termsAreSpanish) {
+
+      termsEnglish.style.display = "none";
+
+      termsSpanish.style.display = "block";
+
+      translateTerms.textContent =
+        "ENGLISH / EN";
+
+    } else {
+
+      termsEnglish.style.display = "block";
+
+      termsSpanish.style.display = "none";
+
+      translateTerms.textContent =
+        "TRANSLATE / ES";
+
+    }
+
+  });
+
+}
+
+
+// =========================================
+// ESC — TERMS
+// =========================================
+
+document.addEventListener("keydown", (event) => {
+
+  if (event.key === "Escape") {
+
+    if (termsModal.classList.contains("open")) {
+
+      closeTermsModal();
+
+    }
+
+  }
+
+});
+
+
+// =========================================
+// CONTACT METHOD → PLACEHOLDER
+// =========================================
+
+const contactMethodInputs =
+  document.querySelectorAll(
+    'input[name="contactMethod"]'
+  );
+
+const commissionContact =
+  document.getElementById(
+    "commissionContact"
+  );
+
+
+contactMethodInputs.forEach(input => {
+
+  input.addEventListener("change", () => {
+
+    const platform = input.value;
+
+    if (platform === "Discord") {
+
+      commissionContact.placeholder =
+        "@yourusername";
+
+    }
+
+    if (platform === "X") {
+
+      commissionContact.placeholder =
+        "@yourusername";
+
+    }
+
+    if (platform === "Instagram") {
+
+      commissionContact.placeholder =
+        "@yourusername";
+
+    }
+
+    if (platform === "Reddit") {
+
+      commissionContact.placeholder =
+        "u/yourusername";
+
+    }
+
+    if (platform === "Bluesky") {
+
+      commissionContact.placeholder =
+        "@yourusername.bsky.social";
+
+    }
+
+  });
+
+});
