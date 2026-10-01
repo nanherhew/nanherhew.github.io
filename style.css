@@ -2708,3 +2708,85 @@ footer div:first-child {
   }
 
 }
+
+/* =========================================
+   HERO MOUSE PARALLAX
+========================================= */
+
+.hero {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+}
+
+
+/* ================================
+   BACKGROUND SYMBOL
+================================ */
+
+.hero-symbol {
+  translate:
+    calc(var(--parallax-x) * 1.8)
+    calc(var(--parallax-y) * 1.8);
+
+  transition:
+    translate 0.2s ease-out;
+}
+
+
+/* ================================
+   CHARACTER BACK
+================================ */
+
+.hero-art-back {
+  translate:
+    calc(var(--parallax-x) * 0.65)
+    calc(var(--parallax-y) * 0.65);
+
+  transition:
+    translate 0.18s ease-out;
+}
+
+
+/* ================================
+   CHARACTER FRONT
+================================ */
+
+.hero-art-front {
+  translate:
+    calc(var(--parallax-x) * 0.9)
+    calc(var(--parallax-y) * 0.9);
+
+  transition:
+    translate 0.18s ease-out;
+}
+
+
+/* ================================
+   TEXT
+================================ */
+
+.hero-content {
+  translate:
+    calc(var(--parallax-x) * -0.35)
+    calc(var(--parallax-y) * -0.35);
+
+  transition:
+    translate 0.2s ease-out;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+  .hero-symbol,
+  .hero-art-back,
+  .hero-art-front,
+  .hero-content {
+    translate: none;
+    transition: none;
+  }
+
+}
