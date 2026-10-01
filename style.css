@@ -246,9 +246,12 @@ section {
 .hero h1 span {
   display: block;
 
-  color: transparent;
+  color: var(--accent);
 
-  -webkit-text-stroke: 2px var(--text);
+  -webkit-text-stroke: 0;
+
+  text-shadow:
+    0 0 25px rgba(255, 77, 0, 0.18);
 }
 
 .hero-description {
