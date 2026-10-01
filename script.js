@@ -604,7 +604,7 @@ if (hero) {
 // MOBILE DEVICE MOTION PARALLAX
 // =========================================
 
-const hero = document.querySelector(".hero");
+const mobileHero = document.querySelector(".hero");
 const motionButton = document.getElementById("motionButton");
 
 let motionEnabled = false;
@@ -624,10 +624,7 @@ const isMobileDevice =
 
 function updateHeroMotion(x, y) {
 
-  if (!hero) return;
-
-  // Limitamos el movimiento para evitar
-  // que el personaje se salga de la pantalla.
+  if (!mobileHero) return;
 
   const limitedX = Math.max(-1, Math.min(1, x));
   const limitedY = Math.max(-1, Math.min(1, y));
@@ -637,17 +634,17 @@ function updateHeroMotion(x, y) {
 
   const rotation = limitedX * 1.8;
 
-  hero.style.setProperty(
+  mobileHero.style.setProperty(
     "--motion-x",
     `${moveX}px`
   );
 
-  hero.style.setProperty(
+  mobileHero.style.setProperty(
     "--motion-y",
     `${moveY}px`
   );
 
-  hero.style.setProperty(
+  mobileHero.style.setProperty(
     "--motion-rotate",
     `${rotation}deg`
   );
@@ -666,16 +663,7 @@ function handleDeviceOrientation(event) {
   let gamma = event.gamma || 0;
   let beta = event.beta || 0;
 
-  /*
-    gamma:
-    inclinación izquierda / derecha
-
-    beta:
-    inclinación hacia delante / atrás
-  */
-
   let x = gamma / 25;
-
   let y = (beta - 45) / 25;
 
   updateHeroMotion(x, y);
@@ -690,11 +678,6 @@ function handleDeviceOrientation(event) {
 async function enableMotion() {
 
   try {
-
-    /*
-      iPhone / iPad requieren permiso
-      explícito para DeviceOrientation.
-    */
 
     if (
       typeof DeviceOrientationEvent !== "undefined" &&
