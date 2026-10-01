@@ -599,3 +599,160 @@ if (hero) {
   animateParallax();
 
 }
+
+// =========================================
+// MOBILE DEVICE MOTION PARALLAX
+// =========================================
+
+const hero = document.querySelector(".hero");
+const motionButton = document.getElementById("motionButton");
+
+let motionEnabled = false;
+
+
+// -----------------------------------------
+// DETECT MOBILE
+// -----------------------------------------
+
+const isMobileDevice =
+  window.matchMedia("(max-width: 768px)").matches;
+
+
+// -----------------------------------------
+// APPLY MOTION
+// -----------------------------------------
+
+function updateHeroMotion(x, y) {
+
+  if (!hero) return;
+
+  // Limitamos el movimiento para evitar
+  // que el personaje se salga de la pantalla.
+
+  const limitedX = Math.max(-1, Math.min(1, x));
+  const limitedY = Math.max(-1, Math.min(1, y));
+
+  const moveX = limitedX * 22;
+  const moveY = limitedY * 18;
+
+  const rotation = limitedX * 1.8;
+
+  hero.style.setProperty(
+    "--motion-x",
+    `${moveX}px`
+  );
+
+  hero.style.setProperty(
+    "--motion-y",
+    `${moveY}px`
+  );
+
+  hero.style.setProperty(
+    "--motion-rotate",
+    `${rotation}deg`
+  );
+
+}
+
+
+// -----------------------------------------
+// DEVICE MOTION
+// -----------------------------------------
+
+function handleDeviceOrientation(event) {
+
+  if (!motionEnabled) return;
+
+  let gamma = event.gamma || 0;
+  let beta = event.beta || 0;
+
+  /*
+    gamma:
+    inclinación izquierda / derecha
+
+    beta:
+    inclinación hacia delante / atrás
+  */
+
+  let x = gamma / 25;
+
+  let y = (beta - 45) / 25;
+
+  updateHeroMotion(x, y);
+
+}
+
+
+// -----------------------------------------
+// ENABLE MOTION
+// -----------------------------------------
+
+async function enableMotion() {
+
+  try {
+
+    /*
+      iPhone / iPad requieren permiso
+      explícito para DeviceOrientation.
+    */
+
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+
+      const permission =
+        await DeviceOrientationEvent.requestPermission();
+
+      if (permission !== "granted") {
+
+        console.log(
+          "Device motion permission denied."
+        );
+
+        return;
+      }
+
+    }
+
+    window.addEventListener(
+      "deviceorientation",
+      handleDeviceOrientation,
+      true
+    );
+
+    motionEnabled = true;
+
+    if (motionButton) {
+
+      motionButton.classList.add("enabled");
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Motion could not be enabled:",
+      error
+    );
+
+  }
+
+}
+
+
+// -----------------------------------------
+// BUTTON
+// -----------------------------------------
+
+if (
+  motionButton &&
+  isMobileDevice
+) {
+
+  motionButton.addEventListener(
+    "click",
+    enableMotion
+  );
+
+}
