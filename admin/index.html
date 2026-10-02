@@ -1,1 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>NANHER HEW — ADMIN</title>
+
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:wght@400;700&family=Unbounded:wght@300;400;500;600;700;800&display=swap"
+  >
+
+  <link
+    rel="stylesheet"
+    href="admin.css"
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+  <!-- =========================================
+       LOGIN
+  ========================================== -->
+
+  <main class="admin-login" id="adminLogin">
+
+    <div class="admin-login-grid"></div>
+
+    <div class="login-panel">
+
+      <div class="admin-label">
+        NANHER HEW 文 / ADMIN SYSTEM
+      </div>
+
+      <div class="login-symbol">
+        文
+      </div>
+
+      <h1>
+        ADMIN
+        <span>ACCESS.</span>
+      </h1>
+
+      <p class="login-intro">
+        Authorized personnel only.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="admin-field">
+
+          <label for="loginEmail">
+            EMAIL
+          </label>
+
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="admin@example.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <div class="admin-field">
+
+          <label for="loginPassword">
+            PASSWORD
+          </label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="admin-button"
+          id="loginButton"
+        >
+          ENTER SYSTEM
+          <span>↗</span>
+        </button>
+
+        <p
+          class="login-error"
+          id="loginError"
+        ></p>
+
+      </form>
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================================
+       DASHBOARD
+  ========================================== -->
+
+  <main
+    class="admin-dashboard"
+    id="adminDashboard"
+    style="display:none;"
+  >
+
+    <header class="admin-header">
+
+      <div class="admin-brand">
+
+        <div class="admin-brand-symbol">
+          文
+        </div>
+
+        <div>
+
+          <div class="admin-brand-name">
+            NANHER HEW
+          </div>
+
+          <div class="admin-brand-sub">
+            ADMIN SYSTEM / 001
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-header-actions">
+
+        <span
+          class="admin-user"
+          id="adminUser"
+        ></span>
+
+        <button
+          type="button"
+          class="logout-button"
+          id="logoutButton"
+        >
+          LOG OUT
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <section class="admin-main">
+
+      <div class="admin-heading">
+
+        <div class="admin-section-number">
+          CONTROL CENTER / 001
+        </div>
+
+        <h1>
+          COMMISSION
+          <span>CONTROL.</span>
+        </h1>
+
+        <p>
+          Manage incoming requests and current commissions.
+        </p>
+
+      </div>
+
+
+      <!-- =========================================
+           STATS
+      ========================================== -->
+
+      <section class="admin-stats">
+
+        <div class="stat-card">
+
+          <div class="stat-number" id="newCount">
+            00
+          </div>
+
+          <div class="stat-label">
+            NEW REQUESTS
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-number" id="progressCount">
+            00
+          </div>
+
+          <div class="stat-label">
+            IN PROGRESS
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-number" id="finishedCount">
+            00
+          </div>
+
+          <div class="stat-label">
+            FINISHED
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================================
+           REQUEST LIST
+      ========================================== -->
+
+      <section class="requests-section">
+
+        <div class="section-title-row">
+
+          <div>
+
+            <div class="mini-label">
+              INCOMING
+            </div>
+
+            <h2>
+              NEW COMMISSION
+              <span>REQUESTS.</span>
+            </h2>
+
+          </div>
+
+          <button
+            type="button"
+            class="refresh-button"
+            id="refreshButton"
+          >
+            REFRESH ↻
+          </button>
+
+        </div>
+
+
+        <div
+          class="request-list"
+          id="newRequests"
+        ></div>
+
+        <div
+          class="empty-state"
+          id="newEmpty"
+        >
+          NO NEW REQUESTS.
+        </div>
+
+      </section>
+
+
+      <!-- =========================================
+           IN PROGRESS
+      ========================================== -->
+
+      <section class="requests-section">
+
+        <div class="section-title-row">
+
+          <div>
+
+            <div class="mini-label">
+              ACTIVE
+            </div>
+
+            <h2>
+              IN
+              <span>PROGRESS.</span>
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="request-list"
+          id="progressRequests"
+        ></div>
+
+        <div
+          class="empty-state"
+          id="progressEmpty"
+        >
+          NOTHING IN PROGRESS.
+        </div>
+
+      </section>
+
+
+      <!-- =========================================
+           FINISHED
+      ========================================== -->
+
+      <section class="requests-section">
+
+        <div class="section-title-row">
+
+          <div>
+
+            <div class="mini-label">
+              ARCHIVE
+            </div>
+
+            <h2>
+              FINISHED
+              <span>COMMISSIONS.</span>
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="request-list"
+          id="finishedRequests"
+        ></div>
+
+        <div
+          class="empty-state"
+          id="finishedEmpty"
+        >
+          NO FINISHED COMMISSIONS.
+        </div>
+
+      </section>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================
+       COMMISSION DETAIL
+  ========================================== -->
+
+  <div
+    class="request-modal"
+    id="requestModal"
+  >
+
+    <div
+      class="request-modal-bg"
+      id="requestModalBg"
+    ></div>
+
+
+    <div class="request-panel">
+
+      <button
+        type="button"
+        class="request-close"
+        id="requestClose"
+      >
+        ×
+      </button>
+
+
+      <div class="request-label">
+        COMMISSION REQUEST / <span id="detailId">001</span>
+      </div>
+
+
+      <div class="request-symbol">
+        文
+      </div>
+
+
+      <h2>
+        REQUEST
+        <span>DETAIL.</span>
+      </h2>
+
+
+      <div class="request-detail-grid">
+
+        <div class="detail-block">
+
+          <div class="detail-label">
+            CLIENT
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailName"
+          >
+            —
+          </div>
+
+          <div
+            class="detail-sub"
+            id="detailContact"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <div class="detail-block">
+
+          <div class="detail-label">
+            CONTACT
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailMethod"
+          >
+            —
+          </div>
+
+          <div
+            class="detail-sub"
+            id="detailEmail"
+          >
+            —
+          </div>
+
+        </div>
+
+
+        <div class="detail-block">
+
+          <div class="detail-label">
+            COMMISSION
+          </div>
+
+          <div
+            class="detail-value"
+            id="detailType"
+          >
+            —
+          </div>
+
+          <div
+            class="detail-price"
+            id="detailPrice"
+          >
+            $00
+          </div>
+
+        </div>
+
+
+        <div class="detail-block">
+
+          <div class="detail-label">
+            STATUS
+          </div>
+
+          <select
+            id="detailStatus"
+            class="status-select"
+          >
+
+            <option value="RECEIVED">
+              RECEIVED
+            </option>
+
+            <option value="SKETCH">
+              SKETCH
+            </option>
+
+            <option value="ADJUSTING">
+              ADJUSTING
+            </option>
+
+            <option value="REFINING">
+              REFINING
+            </option>
+
+            <option value="ALMOST DONE">
+              ALMOST DONE
+            </option>
+
+            <option value="FINISHED">
+              FINISHED
+            </option>
+
+            <option value="DECLINED">
+              DECLINED
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-wide">
+
+        <div class="detail-label">
+          DESCRIPTION
+        </div>
+
+        <div
+          class="detail-description"
+          id="detailDescription"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="detail-wide">
+
+        <div class="detail-label">
+          REFERENCES
+        </div>
+
+        <div
+          class="detail-description"
+          id="detailReferences"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <div class="detail-wide">
+
+        <div class="detail-label">
+          RECEIVED
+        </div>
+
+        <div
+          class="detail-description"
+          id="detailDate"
+        >
+          —
+        </div>
+
+      </div>
+
+
+      <!-- PRIVATE NOTES -->
+
+      <div class="detail-wide">
+
+        <div class="detail-label">
+          PRIVATE ADMIN NOTES
+        </div>
+
+        <textarea
+          id="detailNotes"
+          class="admin-notes"
+          rows="5"
+          placeholder="Only you can see these notes."
+        ></textarea>
+
+      </div>
+
+
+      <div
+        class="request-actions"
+        id="requestActions"
+      >
+
+        <button
+          type="button"
+          class="action-button accept"
+          id="acceptRequest"
+        >
+          ACCEPT REQUEST
+          <span>↗</span>
+        </button>
+
+        <button
+          type="button"
+          class="action-button decline"
+          id="declineRequest"
+        >
+          DECLINE REQUEST
+        </button>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="save-button"
+        id="saveChanges"
+      >
+        SAVE CHANGES
+      </button>
+
+
+      <p
+        class="detail-message"
+        id="detailMessage"
+      ></p>
+
+    </div>
+
+  </div>
+
+
+  <script src="admin.js"></script>
+
+</body>
+
+</html>
