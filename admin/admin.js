@@ -1156,6 +1156,11 @@ async function updateCommission(
   detailNotes.value =
     data.admin_notes || "";
 
+   currentIsPublic =
+  data.is_public === true;
+
+updateVisibilityUI();
+   
 
   /*
     ACCEPT / DECLINE buttons disappear
