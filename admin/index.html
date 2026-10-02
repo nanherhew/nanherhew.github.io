@@ -315,149 +315,195 @@
 
         <!-- CLIENT -->
 
-        <div class="detail-block">
+<div class="detail-block">
 
-          <div class="detail-label">
-            CLIENT
-          </div>
+  <div class="detail-label">
+    CLIENT
+  </div>
 
-          <div
-            class="detail-value large"
-            id="detailName"
-          >
-            —
-          </div>
+  <input
+    type="text"
+    id="detailName"
+    class="detail-edit-input detail-edit-large"
+    placeholder="Client name / username"
+  >
 
-        </div>
-
-
-        <!-- CONTACT -->
-
-        <div class="detail-grid">
-
-          <div class="detail-block">
-
-            <div class="detail-label">
-              CONTACT
-            </div>
-
-            <div
-              class="detail-value"
-              id="detailContact"
-            >
-              —
-            </div>
-
-          </div>
+</div>
 
 
-          <div class="detail-block">
+<!-- CONTACT -->
 
-            <div class="detail-label">
-              EMAIL
-            </div>
+<div class="detail-grid">
 
-            <div
-              class="detail-value"
-              id="detailEmail"
-            >
-              —
-            </div>
+  <div class="detail-block">
 
-          </div>
+    <div class="detail-label">
+      CONTACT METHOD
+    </div>
 
-        </div>
+    <select
+      id="detailContactMethod"
+      class="detail-edit-input"
+    >
+      <option value="Discord">DISCORD</option>
+      <option value="X">X</option>
+      <option value="Instagram">INSTAGRAM</option>
+      <option value="Reddit">REDDIT</option>
+      <option value="Bluesky">BLUESKY</option>
+    </select>
 
-
-        <!-- COMMISSION -->
-
-        <div class="detail-grid">
-
-          <div class="detail-block">
-
-            <div class="detail-label">
-              COMMISSION
-            </div>
-
-            <div
-              class="detail-value"
-              id="detailType"
-            >
-              —
-            </div>
-
-          </div>
+  </div>
 
 
-          <div class="detail-block">
+  <div class="detail-block">
 
-            <div class="detail-label">
-              PRICE
-            </div>
+    <div class="detail-label">
+      USERNAME / @
+    </div>
 
-            <div
-              class="detail-value price"
-              id="detailPrice"
-            >
-              $00
-            </div>
+    <input
+      type="text"
+      id="detailContact"
+      class="detail-edit-input"
+      placeholder="@username"
+    >
 
-          </div>
+  </div>
 
-        </div>
-
-
-        <!-- DESCRIPTION -->
-
-        <div class="detail-block">
-
-          <div class="detail-label">
-            DESCRIPTION
-          </div>
-
-          <div
-            class="detail-description"
-            id="detailDescription"
-          >
-            —
-          </div>
-
-        </div>
+</div>
 
 
-        <!-- REFERENCES -->
+<!-- EMAIL -->
 
-        <div class="detail-block">
+<div class="detail-block">
 
-          <div class="detail-label">
-            REFERENCES
-          </div>
+  <div class="detail-label">
+    EMAIL
+  </div>
 
-          <div id="detailReferences">
-            —
-          </div>
+  <input
+    type="email"
+    id="detailEmail"
+    class="detail-edit-input"
+    placeholder="client@example.com"
+  >
 
-        </div>
-
-
-        <!-- DATE -->
-
-        <div class="detail-block">
-
-          <div class="detail-label">
-            RECEIVED
-          </div>
-
-          <div
-            class="detail-value"
-            id="detailDate"
-          >
-            —
-          </div>
-
-        </div>
+</div>
 
 
+<!-- COMMISSION -->
+
+<div class="detail-grid">
+
+  <div class="detail-block">
+
+    <div class="detail-label">
+      COMMISSION
+    </div>
+
+    <select
+      id="detailType"
+      class="detail-edit-input"
+    >
+      <option value="Sketch">
+        Sketch — $15
+      </option>
+
+      <option value="Headshot">
+        Headshot — $20
+      </option>
+
+      <option value="Bust">
+        Bust — $25
+      </option>
+
+      <option value="Half Body">
+        Half Body — $35
+      </option>
+
+      <option value="Full Body">
+        Full Body — $45
+      </option>
+    </select>
+
+  </div>
+
+
+  <div class="detail-block">
+
+    <div class="detail-label">
+      PRICE
+    </div>
+
+    <div
+      class="detail-value price"
+      id="detailPrice"
+    >
+      $00
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- DESCRIPTION -->
+
+<div class="detail-block">
+
+  <div class="detail-label">
+    DESCRIPTION
+  </div>
+
+  <textarea
+    id="detailDescription"
+    class="detail-edit-textarea"
+    rows="7"
+    placeholder="Commission description..."
+  ></textarea>
+
+</div>
+
+
+<!-- REFERENCES -->
+
+<div class="detail-block">
+
+  <div class="detail-label">
+    REFERENCES
+  </div>
+
+  <input
+    type="text"
+    id="detailReferencesInput"
+    class="detail-edit-input"
+    placeholder="https://..."
+  >
+
+  <div
+    id="detailReferences"
+    class="detail-reference-preview"
+  ></div>
+
+</div>
+
+
+<!-- DATE -->
+
+<div class="detail-block">
+
+  <div class="detail-label">
+    RECEIVED
+  </div>
+
+  <div
+    class="detail-value"
+    id="detailDate"
+  >
+    —
+  </div>
+
+</div>
         <!-- ADMIN NOTES -->
 
         <div class="detail-block admin-notes-block">
@@ -551,6 +597,56 @@
 
 </div>
 
+<!-- COMMISSION IMAGE -->
+
+<div class="detail-block commission-image-block">
+
+  <div class="detail-label">
+    COMMISSION IMAGE
+  </div>
+
+  <div
+    class="commission-image-preview"
+    id="commissionImagePreview"
+  >
+    <div class="commission-image-empty">
+      NO IMAGE UPLOADED
+    </div>
+  </div>
+
+  <input
+    type="file"
+    id="commissionImageInput"
+    accept="image/png,image/jpeg,image/webp"
+    hidden
+  >
+
+  <div class="image-actions">
+
+    <button
+      type="button"
+      class="image-button"
+      id="changeImageButton"
+    >
+      CHANGE IMAGE
+    </button>
+
+    <button
+      type="button"
+      class="image-button danger"
+      id="removeImageButton"
+    >
+      REMOVE IMAGE
+    </button>
+
+  </div>
+
+  <p class="detail-help">
+    PNG, JPG or WEBP. Recommended for finished commissions.
+  </p>
+
+</div>
+        
         <!-- ACTIONS -->
 
         <div class="detail-actions">
@@ -584,6 +680,15 @@
           SAVE CHANGES
           <span>↗</span>
         </button>
+
+        <button
+  type="button"
+  class="delete-button"
+  id="deleteButton"
+>
+  DELETE COMMISSION
+  <span>×</span>
+</button>
 
 
         <p
