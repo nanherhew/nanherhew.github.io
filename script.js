@@ -261,12 +261,57 @@ document.addEventListener("keydown", (event) => {
 
 });
 
+/* =========================================
+   SUPABASE
+========================================= */
 
-/* SUBMIT */
+const SUPABASE_URL =
+  "https://orgrbrcfjssvdaxlxxfx.supabase.co";
 
-commissionForm.addEventListener("submit", (event) => {
+const SUPABASE_KEY =
+  "sb_publishable_ZDeBcBinU4rYXPemRjO4DA_-hGWs6YH";
 
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================================
+   COMMISSION SUBMIT
+========================================= */
+
+commissionForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  const formData = new FormData(commissionForm);
+
+  const commission = {
+    name: formData.get("name"),
+    contact_method: formData.get("contactMethod"),
+    contact: formData.get("contact"),
+    email: formData.get("email"),
+    commission_type: formData.get("type"),
+    description: formData.get("description"),
+    references_url: formData.get("references") || null,
+
+    status: "RECEIVED",
+    is_public: false
+  };
+
+  const { error } = await supabase
+    .from("commissions")
+    .insert([commission]);
+
+  if (error) {
+    console.error("Commission submission error:", error);
+
+    alert(
+      "Something went wrong while sending your request. Please try again."
+    );
+
+    return;
+  }
 
   commissionForm.style.display = "none";
 
@@ -275,7 +320,6 @@ commissionForm.addEventListener("submit", (event) => {
   ).style.display = "none";
 
   commissionSuccess.classList.add("show");
-
 });
 
 
