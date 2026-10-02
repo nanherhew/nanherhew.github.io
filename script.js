@@ -689,3 +689,252 @@ commStatusTabs.forEach((tab) => {
   });
 
 });
+
+/* =========================================
+   PUBLIC COMMISSION STATUS
+========================================= */
+
+const publicFinishedGrid =
+  document.getElementById("commFinishedGrid");
+
+const publicProgressList =
+  document.getElementById("commProgressList");
+
+const publicStatusOrder = [
+  "SKETCH",
+  "ADJUSTING",
+  "REFINING",
+  "ALMOST DONE"
+];
+
+const publicStatusClass = {
+  SKETCH: "status-red",
+  ADJUSTING: "status-yellow",
+  REFINING: "status-green",
+  "ALMOST DONE": "status-orange"
+};
+
+async function loadPublicCommissionStatus() {
+
+  if (
+    !publicFinishedGrid &&
+    !publicProgressList
+  ) {
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("public_commission_status")
+    .select(
+      "id, name, commission_type, status, created_at, image_url"
+    )
+    .order("created_at", {
+      ascending: true
+    });
+
+  if (error) {
+
+    console.error(
+      "Public commission status error:",
+      error
+    );
+
+    return;
+  }
+
+  const commissions =
+    data || [];
+
+  renderPublicFinished(
+    commissions
+  );
+
+  renderPublicProgress(
+    commissions
+  );
+}
+
+function renderPublicFinished(
+  commissions
+) {
+
+  if (!publicFinishedGrid) {
+    return;
+  }
+
+  const finished =
+    commissions.filter(
+      commission =>
+        commission.status === "FINISHED"
+    );
+
+  if (!finished.length) {
+
+    publicFinishedGrid.innerHTML = `
+      <div class="comm-status-empty">
+        NO FINISHED COMMISSIONS YET.
+      </div>
+    `;
+
+    return;
+  }
+
+  publicFinishedGrid.innerHTML =
+    finished
+      .map(
+        (commission, index) => {
+
+          const image =
+            commission.image_url
+              ? `
+                <img
+                  src="${escapePublicHTML(
+                    commission.image_url
+                  )}"
+                  alt="Commission for ${escapePublicHTML(
+                    commission.name
+                  )}"
+                >
+              `
+              : `
+                <div class="comm-finished-placeholder">
+                  FINISHED
+                </div>
+              `;
+
+          return `
+            <article class="comm-finished-card">
+
+              <div class="comm-finished-image">
+
+                ${image}
+
+                <span class="comm-finished-number">
+                  ${String(index + 1).padStart(3, "0")}
+                </span>
+
+              </div>
+
+              <div class="comm-finished-info">
+
+                <span>
+                  COMMISSION / FINISHED
+                </span>
+
+                <strong>
+                  ${escapePublicHTML(
+                    commission.name
+                  )}
+                </strong>
+
+              </div>
+
+            </article>
+          `;
+        }
+      )
+      .join("");
+}
+
+function renderPublicProgress(
+  commissions
+) {
+
+  if (!publicProgressList) {
+    return;
+  }
+
+  const progress =
+    commissions.filter(
+      commission =>
+        publicStatusOrder.includes(
+          commission.status
+        )
+    );
+
+  if (!progress.length) {
+
+    publicProgressList.innerHTML = `
+      <div class="comm-status-empty">
+        NO COMMISSIONS IN PROGRESS.
+      </div>
+    `;
+
+    return;
+  }
+
+  publicProgressList.innerHTML =
+    progress
+      .map(
+        (commission, index) => {
+
+          const status =
+            commission.status;
+
+          const statusClass =
+            publicStatusClass[status] ||
+            "status-red";
+
+          return `
+            <article class="comm-progress-item">
+
+              <div class="comm-progress-main">
+
+                <span
+                  class="comm-progress-line ${statusClass}"
+                ></span>
+
+                <div>
+
+                  <strong>
+                    ${escapePublicHTML(
+                      commission.name
+                    )}
+                  </strong>
+
+                  <span>
+                    ${escapePublicHTML(
+                      status
+                    )}
+                  </span>
+
+                </div>
+
+              </div>
+
+              <span class="comm-progress-code">
+                COMM / ${String(
+                  index + 1
+                ).padStart(3, "0")}
+              </span>
+
+            </article>
+          `;
+        }
+      )
+      .join("");
+}
+
+function escapePublicHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* LOAD PUBLIC COMMISSIONS */
+
+loadPublicCommissionStatus();
