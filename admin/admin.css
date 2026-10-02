@@ -1145,3 +1145,49 @@ a {
   }
 
 }
+
+/* =========================================
+   VISIBILITY CONTROL
+========================================= */
+
+.visibility-control {
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #080808;
+}
+
+.visibility-option {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 14px 18px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.visibility-option + .visibility-option {
+  border-left: 1px solid var(--line);
+}
+
+.visibility-option:hover {
+  color: var(--text);
+  background: #111;
+}
+
+.visibility-option.active {
+  color: #050505;
+  background: var(--accent);
+}
+
+.detail-help {
+  margin-top: 8px;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 10px;
+  line-height: 1.5;
+}
