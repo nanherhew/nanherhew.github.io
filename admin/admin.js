@@ -134,6 +134,11 @@ const saveButton =
 const detailMessage =
   document.getElementById("detailMessage");
 
+const visibilityPrivate =
+  document.getElementById("visibilityPrivate");
+
+const visibilityPublic =
+  document.getElementById("visibilityPublic");
 
 /* =========================================
    DATA
@@ -145,6 +150,7 @@ let currentCommission = null;
 
 let currentFilter = "new";
 
+let currentIsPublic = false;
 
 const prices = {
   "Sketch": 15,
@@ -782,7 +788,11 @@ function openDetail(commission) {
   detailNotes.value =
     commission.admin_notes || "";
 
+currentIsPublic =
+  commission.is_public === true;
 
+updateVisibilityUI();
+   
   renderReferences(
     commission.references_url
   );
@@ -823,6 +833,46 @@ function openDetail(commission) {
 
 }
 
+function updateVisibilityUI() {
+
+  if (!visibilityPrivate || !visibilityPublic) {
+    return;
+  }
+
+  visibilityPrivate.classList.toggle(
+    "active",
+    !currentIsPublic
+  );
+
+  visibilityPublic.classList.toggle(
+    "active",
+    currentIsPublic
+  );
+
+}
+
+visibilityPrivate.addEventListener(
+  "click",
+  () => {
+
+    currentIsPublic = false;
+
+    updateVisibilityUI();
+
+  }
+);
+
+
+visibilityPublic.addEventListener(
+  "click",
+  () => {
+
+    currentIsPublic = true;
+
+    updateVisibilityUI();
+
+  }
+);
 
 function renderReferences(reference) {
 
@@ -1000,14 +1050,16 @@ saveButton.addEventListener(
       detailNotes.value.trim();
 
 
-    await updateCommission(
-      currentCommission.id,
-      {
-        status,
-        admin_notes:
-          notes || null
-      }
-    );
+   await updateCommission(
+  currentCommission.id,
+  {
+    status,
+    admin_notes:
+      notes || null,
+    is_public:
+      currentIsPublic
+  }
+);
 
   }
 );
