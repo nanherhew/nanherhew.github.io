@@ -271,7 +271,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_ZDeBcBinU4rYXPemRjO4DA_-hGWs6YH";
 
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
@@ -299,9 +299,9 @@ commissionForm.addEventListener("submit", async (event) => {
     is_public: false
   };
 
-  const { error } = await supabase
-    .from("commissions")
-    .insert([commission]);
+  const { error } = await supabaseClient
+  .from("commissions")
+  .insert([commission]);
 
   if (error) {
     console.error("Commission submission error:", error);
