@@ -925,7 +925,7 @@ function renderPublicProgress(
     </span>
 
   </article>`;
-          `;
+        
         }
       )
       .join("");
