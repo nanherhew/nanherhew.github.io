@@ -282,6 +282,7 @@ const supabaseClient = window.supabase.createClient(
 ========================================= */
 
 commissionForm.addEventListener("submit", async (event) => {
+
   event.preventDefault();
 
   const formData = new FormData(commissionForm);
@@ -300,10 +301,11 @@ commissionForm.addEventListener("submit", async (event) => {
   };
 
   const { error } = await supabaseClient
-  .from("commissions")
-  .insert([commission]);
+    .from("commissions")
+    .insert([commission]);
 
   if (error) {
+
     console.error("Commission submission error:", error);
 
     alert(
@@ -313,13 +315,18 @@ commissionForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  /* HIDE FORM */
+
   commissionForm.style.display = "none";
 
   document.querySelector(
     ".commission-modal-intro"
   ).style.display = "none";
 
+  /* SHOW SUCCESS */
+
   commissionSuccess.classList.add("show");
+
 });
 
 
