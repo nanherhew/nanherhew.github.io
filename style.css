@@ -3310,3 +3310,62 @@ footer div:first-child {
   }
 
 }
+
+.comm-progress-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.comm-progress-image {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  background: #080808;
+  border: 1px solid var(--line);
+}
+
+.comm-progress-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.comm-progress-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 8px;
+  letter-spacing: .08em;
+}
+
+.comm-progress-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .comm-progress-item {
+    grid-template-columns: 70px 1fr;
+    gap: 14px;
+  }
+
+  .comm-progress-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .comm-progress-code {
+    grid-column: 2;
+  }
+}
