@@ -1,5 +1,5 @@
 /* =========================================
-   NANHER HEW — ADMIN SYSTEMm
+   NANHER HEW — ADMIN SYSTEM
 ========================================= */
 
 const SUPABASE_URL =
@@ -7,7 +7,6 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
   "sb_publishable_ZDeBcBinU4rYXPemRjO4DA_-hGWs6YH";
-
 
 const supabaseClient =
   window.supabase.createClient(
@@ -72,7 +71,9 @@ const refreshButton =
   document.getElementById("refreshButton");
 
 
-/* DETAIL */
+/* =========================================
+   DETAIL
+========================================= */
 
 const detailOverlay =
   document.getElementById("detailOverlay");
@@ -95,6 +96,9 @@ const detailStatus =
 const detailName =
   document.getElementById("detailName");
 
+const detailContactMethod =
+  document.getElementById("detailContactMethod");
+
 const detailContact =
   document.getElementById("detailContact");
 
@@ -109,6 +113,9 @@ const detailPrice =
 
 const detailDescription =
   document.getElementById("detailDescription");
+
+const detailReferencesInput =
+  document.getElementById("detailReferencesInput");
 
 const detailReferences =
   document.getElementById("detailReferences");
@@ -131,14 +138,48 @@ const declineButton =
 const saveButton =
   document.getElementById("saveButton");
 
+const deleteButton =
+  document.getElementById("deleteButton");
+
 const detailMessage =
   document.getElementById("detailMessage");
+
+
+/* =========================================
+   VISIBILITY
+========================================= */
 
 const visibilityPrivate =
   document.getElementById("visibilityPrivate");
 
 const visibilityPublic =
   document.getElementById("visibilityPublic");
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+const commissionImagePreview =
+  document.getElementById(
+    "commissionImagePreview"
+  );
+
+const commissionImageInput =
+  document.getElementById(
+    "commissionImageInput"
+  );
+
+const changeImageButton =
+  document.getElementById(
+    "changeImageButton"
+  );
+
+const removeImageButton =
+  document.getElementById(
+    "removeImageButton"
+  );
+
 
 /* =========================================
    DATA
@@ -151,6 +192,13 @@ let currentCommission = null;
 let currentFilter = "new";
 
 let currentIsPublic = false;
+
+let currentImageUrl = null;
+
+let imageWasRemoved = false;
+
+let selectedImageFile = null;
+
 
 const prices = {
   "Sketch": 15,
@@ -227,7 +275,10 @@ function formatShortDate(dateString) {
 
 function escapeHTML(value) {
 
-  if (value === null || value === undefined) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
     return "";
   }
 
@@ -736,13 +787,18 @@ function openDetail(commission) {
     commission;
 
 
+  selectedImageFile = null;
+
+  imageWasRemoved = false;
+
+
   detailId.textContent =
     String(commission.id)
       .padStart(3, "0");
 
 
   detailTitle.textContent =
-    "REQUEST";
+    "EDIT COMMISSION";
 
 
   detailStatus.textContent =
@@ -753,20 +809,24 @@ function openDetail(commission) {
     commission.status;
 
 
-  detailName.textContent =
-    commission.name || "—";
+  detailName.value =
+    commission.name || "";
 
 
-  detailContact.textContent =
-    `${commission.contact_method || "—"} / ${commission.contact || "—"}`;
+  detailContactMethod.value =
+    commission.contact_method || "Discord";
 
 
-  detailEmail.textContent =
-    commission.email || "—";
+  detailContact.value =
+    commission.contact || "";
 
 
-  detailType.textContent =
-    commission.commission_type || "—";
+  detailEmail.value =
+    commission.email || "";
+
+
+  detailType.value =
+    commission.commission_type || "Sketch";
 
 
   detailPrice.textContent =
@@ -775,8 +835,12 @@ function openDetail(commission) {
     );
 
 
-  detailDescription.textContent =
-    commission.description || "—";
+  detailDescription.value =
+    commission.description || "";
+
+
+  detailReferencesInput.value =
+    commission.references_url || "";
 
 
   detailDate.textContent =
@@ -788,24 +852,24 @@ function openDetail(commission) {
   detailNotes.value =
     commission.admin_notes || "";
 
-currentIsPublic =
-  commission.is_public === true;
 
-updateVisibilityUI();
-   
-  renderReferences(
-    commission.references_url
-  );
+  currentIsPublic =
+    commission.is_public === true;
+
+
+  updateVisibilityUI();
+
+
+  currentImageUrl =
+    commission.image_url || null;
+
+
+  renderImagePreview();
 
 
   detailMessage.textContent =
     "";
 
-
-  /*
-    ACCEPT only makes sense for
-    a newly received request.
-  */
 
   if (commission.status === "RECEIVED") {
 
@@ -826,6 +890,9 @@ updateVisibilityUI();
   }
 
 
+  renderReferencePreview();
+
+
   detailOverlay.classList.add("open");
 
   document.body.style.overflow =
@@ -833,16 +900,43 @@ updateVisibilityUI();
 
 }
 
+
+/* =========================================
+   PRICE AUTO UPDATE
+========================================= */
+
+detailType.addEventListener(
+  "change",
+  () => {
+
+    detailPrice.textContent =
+      formatPrice(
+        detailType.value
+      );
+
+  }
+);
+
+
+/* =========================================
+   VISIBILITY
+========================================= */
+
 function updateVisibilityUI() {
 
-  if (!visibilityPrivate || !visibilityPublic) {
+  if (
+    !visibilityPrivate ||
+    !visibilityPublic
+  ) {
     return;
   }
+
 
   visibilityPrivate.classList.toggle(
     "active",
     !currentIsPublic
   );
+
 
   visibilityPublic.classList.toggle(
     "active",
@@ -850,6 +944,7 @@ function updateVisibilityUI() {
   );
 
 }
+
 
 visibilityPrivate.addEventListener(
   "click",
@@ -874,25 +969,32 @@ visibilityPublic.addEventListener(
   }
 );
 
-function renderReferences(reference) {
 
-  detailReferences.innerHTML = "";
+/* =========================================
+   REFERENCES
+========================================= */
 
+function renderReferencePreview() {
 
-  if (!reference) {
-
-    detailReferences.textContent =
-      "NO REFERENCES PROVIDED.";
-
+  if (!detailReferences) {
     return;
   }
 
 
-  const trimmed =
-    reference.trim();
+  detailReferences.innerHTML = "";
 
 
-  let url = trimmed;
+  const reference =
+    detailReferencesInput.value.trim();
+
+
+  if (!reference) {
+    return;
+  }
+
+
+  let url =
+    reference;
 
 
   if (
@@ -909,16 +1011,284 @@ function renderReferences(reference) {
   const link =
     document.createElement("a");
 
-  link.href = url;
+  link.href =
+    url;
 
-  link.target = "_blank";
+  link.target =
+    "_blank";
 
-  link.rel = "noopener noreferrer";
+  link.rel =
+    "noopener noreferrer";
 
-  link.textContent = trimmed;
+  link.textContent =
+    "OPEN REFERENCE ↗";
 
 
-  detailReferences.appendChild(link);
+  detailReferences.appendChild(
+    link
+  );
+
+}
+
+
+detailReferencesInput.addEventListener(
+  "input",
+  renderReferencePreview
+);
+
+
+/* =========================================
+   IMAGE PREVIEW
+========================================= */
+
+function renderImagePreview() {
+
+  if (!commissionImagePreview) {
+    return;
+  }
+
+
+  if (selectedImageFile) {
+
+    const previewUrl =
+      URL.createObjectURL(
+        selectedImageFile
+      );
+
+
+    commissionImagePreview.innerHTML = `
+      <img
+        src="${previewUrl}"
+        alt="Selected commission image"
+      >
+    `;
+
+    return;
+  }
+
+
+  if (
+    imageWasRemoved ||
+    !currentImageUrl
+  ) {
+
+    commissionImagePreview.innerHTML = `
+      <div class="commission-image-empty">
+        NO IMAGE UPLOADED
+      </div>
+    `;
+
+    return;
+  }
+
+
+  commissionImagePreview.innerHTML = `
+    <img
+      src="${escapeHTML(currentImageUrl)}"
+      alt="Commission image"
+    >
+  `;
+
+}
+
+
+changeImageButton.addEventListener(
+  "click",
+  () => {
+
+    commissionImageInput.click();
+
+  }
+);
+
+
+commissionImageInput.addEventListener(
+  "change",
+  () => {
+
+    const file =
+      commissionImageInput.files[0];
+
+    if (!file) {
+      return;
+    }
+
+
+    if (
+      ![
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+      ].includes(file.type)
+    ) {
+
+      detailMessage.textContent =
+        "INVALID IMAGE FORMAT.";
+
+      commissionImageInput.value =
+        "";
+
+      return;
+    }
+
+
+    if (
+      file.size >
+      10 * 1024 * 1024
+    ) {
+
+      detailMessage.textContent =
+        "IMAGE MUST BE UNDER 10 MB.";
+
+      commissionImageInput.value =
+        "";
+
+      return;
+    }
+
+
+    selectedImageFile =
+      file;
+
+    imageWasRemoved =
+      false;
+
+    renderImagePreview();
+
+    detailMessage.textContent =
+      "IMAGE READY. SAVE CHANGES TO UPLOAD.";
+
+  }
+);
+
+
+removeImageButton.addEventListener(
+  "click",
+  () => {
+
+    selectedImageFile =
+      null;
+
+    imageWasRemoved =
+      true;
+
+    commissionImageInput.value =
+      "";
+
+    renderImagePreview();
+
+    detailMessage.textContent =
+      "IMAGE WILL BE REMOVED WHEN YOU SAVE.";
+
+  }
+);
+
+
+/* =========================================
+   UPLOAD IMAGE
+========================================= */
+
+async function uploadCommissionImage(
+  commissionId,
+  file
+) {
+
+  const extension =
+    file.name
+      .split(".")
+      .pop()
+      .toLowerCase();
+
+
+  const filePath =
+    `${commissionId}-${Date.now()}.${extension}`;
+
+
+  const {
+    error
+  } = await supabaseClient
+    .storage
+    .from("commission-images")
+    .upload(
+      filePath,
+      file,
+      {
+        cacheControl: "3600",
+        upsert: false
+      }
+    );
+
+
+  if (error) {
+    throw error;
+  }
+
+
+  const {
+    data
+  } = supabaseClient
+    .storage
+    .from("commission-images")
+    .getPublicUrl(
+      filePath
+    );
+
+
+  return data.publicUrl;
+
+}
+
+
+/* =========================================
+   DELETE OLD IMAGE
+========================================= */
+
+async function deleteCommissionImage(
+  imageUrl
+) {
+
+  if (!imageUrl) {
+    return;
+  }
+
+
+  try {
+
+    const marker =
+      "/storage/v1/object/public/commission-images/";
+
+    const index =
+      imageUrl.indexOf(marker);
+
+
+    if (index === -1) {
+      return;
+    }
+
+
+    const filePath =
+      decodeURIComponent(
+        imageUrl.substring(
+          index + marker.length
+        )
+      );
+
+
+    await supabaseClient
+      .storage
+      .from("commission-images")
+      .remove([
+        filePath
+      ]);
+
+  } catch (error) {
+
+    console.warn(
+      "Could not remove old image:",
+      error
+    );
+
+  }
 
 }
 
@@ -937,6 +1307,12 @@ function closeDetail() {
     "";
 
   currentCommission = null;
+
+  selectedImageFile = null;
+
+  imageWasRemoved = false;
+
+  currentImageUrl = null;
 
 }
 
@@ -1042,157 +1418,326 @@ saveButton.addEventListener(
     }
 
 
-    const status =
-      detailStatusSelect.value;
+    saveButton.disabled =
+      true;
+
+    deleteButton.disabled =
+      true;
+
+    acceptButton.disabled =
+      true;
+
+    declineButton.disabled =
+      true;
 
 
-    const notes =
-      detailNotes.value.trim();
+    detailMessage.textContent =
+      "SAVING...";
 
 
-   await updateCommission(
-  currentCommission.id,
-  {
-    status,
-    admin_notes:
-      notes || null,
-    is_public:
-      currentIsPublic
-  }
-);
+    try {
+
+      let newImageUrl =
+        currentImageUrl;
+
+
+      /* REMOVE OLD IMAGE */
+
+      if (imageWasRemoved) {
+
+        await deleteCommissionImage(
+          currentImageUrl
+        );
+
+        newImageUrl =
+          null;
+
+      }
+
+
+      /* UPLOAD NEW IMAGE */
+
+      if (selectedImageFile) {
+
+        const oldImageUrl =
+          currentImageUrl;
+
+
+        newImageUrl =
+          await uploadCommissionImage(
+            currentCommission.id,
+            selectedImageFile
+          );
+
+
+        if (oldImageUrl) {
+
+          await deleteCommissionImage(
+            oldImageUrl
+          );
+
+        }
+
+      }
+
+
+      const changes = {
+
+        name:
+          detailName.value.trim(),
+
+        contact_method:
+          detailContactMethod.value,
+
+        contact:
+          detailContact.value.trim(),
+
+        email:
+          detailEmail.value.trim(),
+
+        commission_type:
+          detailType.value,
+
+        description:
+          detailDescription.value.trim(),
+
+        references_url:
+          detailReferencesInput.value.trim() ||
+          null,
+
+        status:
+          detailStatusSelect.value,
+
+        admin_notes:
+          detailNotes.value.trim() ||
+          null,
+
+        is_public:
+          currentIsPublic,
+
+        image_url:
+          newImageUrl
+
+      };
+
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("commissions")
+        .update(changes)
+        .eq(
+          "id",
+          currentCommission.id
+        )
+        .select()
+        .single();
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      commissions =
+        commissions.map(
+          commission =>
+            commission.id === data.id
+              ? data
+              : commission
+        );
+
+
+      currentCommission =
+        data;
+
+
+      currentImageUrl =
+        data.image_url || null;
+
+      selectedImageFile =
+        null;
+
+      imageWasRemoved =
+        false;
+
+      commissionImageInput.value =
+        "";
+
+      updateStats();
+
+      renderRequests();
+
+      detailStatus.textContent =
+        data.status;
+
+      detailStatusSelect.value =
+        data.status;
+
+      detailPrice.textContent =
+        formatPrice(
+          data.commission_type
+        );
+
+      currentIsPublic =
+        data.is_public === true;
+
+      updateVisibilityUI();
+
+      renderImagePreview();
+
+      renderReferencePreview();
+
+
+      if (
+        data.status === "RECEIVED"
+      ) {
+
+        acceptButton.style.display =
+          "block";
+
+        declineButton.style.display =
+          "block";
+
+      } else {
+
+        acceptButton.style.display =
+          "none";
+
+        declineButton.style.display =
+          "none";
+
+      }
+
+
+      detailMessage.textContent =
+        "CHANGES SAVED.";
+
+    } catch (error) {
+
+      console.error(
+        "Commission save error:",
+        error
+      );
+
+      detailMessage.textContent =
+        "COULD NOT SAVE CHANGES.";
+
+    }
+
+
+    saveButton.disabled =
+      false;
+
+    deleteButton.disabled =
+      false;
+
+    acceptButton.disabled =
+      false;
+
+    declineButton.disabled =
+      false;
 
   }
 );
 
 
 /* =========================================
-   UPDATE COMMISSION
+   DELETE COMMISSION
 ========================================= */
 
-async function updateCommission(
-  id,
-  changes
-) {
+deleteButton.addEventListener(
+  "click",
+  async () => {
 
-  saveButton.disabled = true;
-
-  acceptButton.disabled = true;
-
-  declineButton.disabled = true;
+    if (!currentCommission) {
+      return;
+    }
 
 
-  detailMessage.textContent =
-    "SAVING...";
+    const confirmed =
+      window.confirm(
+        "DELETE THIS COMMISSION?\n\nThis action cannot be undone."
+      );
 
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("commissions")
-    .update(changes)
-    .eq("id", id)
-    .select()
-    .single();
+    if (!confirmed) {
+      return;
+    }
 
 
-  if (error) {
+    deleteButton.disabled =
+      true;
 
-    console.error(
-      "Commission update error:",
-      error
-    );
+    saveButton.disabled =
+      true;
 
     detailMessage.textContent =
-      "COULD NOT SAVE CHANGES.";
-
-    saveButton.disabled = false;
-
-    acceptButton.disabled = false;
-
-    declineButton.disabled = false;
-
-    return;
-
-  }
+      "DELETING...";
 
 
-  /*
-    Replace the local commission
-    with the updated database row.
-  */
+    try {
 
-  commissions =
-    commissions.map(
-      commission =>
-        commission.id === id
-          ? data
-          : commission
-    );
+      if (currentCommission.image_url) {
+
+        await deleteCommissionImage(
+          currentCommission.image_url
+        );
+
+      }
 
 
-  currentCommission =
-    data;
+      const {
+        error
+      } = await supabaseClient
+        .from("commissions")
+        .delete()
+        .eq(
+          "id",
+          currentCommission.id
+        );
 
 
-  updateStats();
-
-  renderRequests();
-
-  detailMessage.textContent =
-    "CHANGES SAVED.";
+      if (error) {
+        throw error;
+      }
 
 
-  /*
-    Refresh detail UI.
-  */
+      commissions =
+        commissions.filter(
+          commission =>
+            commission.id !==
+            currentCommission.id
+        );
 
-  detailStatus.textContent =
-    data.status;
 
-  detailStatusSelect.value =
-    data.status;
+      updateStats();
 
-  detailNotes.value =
-    data.admin_notes || "";
+      renderRequests();
 
-   currentIsPublic =
-  data.is_public === true;
+      closeDetail();
 
-updateVisibilityUI();
-   
+    } catch (error) {
 
-  /*
-    ACCEPT / DECLINE buttons disappear
-    after leaving RECEIVED.
-  */
+      console.error(
+        "Commission delete error:",
+        error
+      );
 
-  if (data.status === "RECEIVED") {
+      detailMessage.textContent =
+        "COULD NOT DELETE COMMISSION.";
 
-    acceptButton.style.display =
-      "block";
+      deleteButton.disabled =
+        false;
 
-    declineButton.style.display =
-      "block";
+      saveButton.disabled =
+        false;
 
-  } else {
-
-    acceptButton.style.display =
-      "none";
-
-    declineButton.style.display =
-      "none";
+    }
 
   }
-
-
-  saveButton.disabled = false;
-
-  acceptButton.disabled = false;
-
-  declineButton.disabled = false;
-
-}
+);
 
 
 /* =========================================
@@ -1203,7 +1748,8 @@ refreshButton.addEventListener(
   "click",
   async () => {
 
-    refreshButton.disabled = true;
+    refreshButton.disabled =
+      true;
 
     refreshButton.textContent =
       "REFRESHING...";
@@ -1212,7 +1758,8 @@ refreshButton.addEventListener(
     await loadCommissions();
 
 
-    refreshButton.disabled = false;
+    refreshButton.disabled =
+      false;
 
     refreshButton.textContent =
       "REFRESH ↻";
@@ -1245,7 +1792,9 @@ supabaseClient.auth.onAuthStateChange(
       session
     ) {
 
-      showAdmin(session.user);
+      showAdmin(
+        session.user
+      );
 
     }
 
