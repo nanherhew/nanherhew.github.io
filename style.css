@@ -703,17 +703,48 @@ section {
 .price-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   padding: 21px 0;
 
   border-bottom: 1px solid var(--line);
-
-  font-size: 10px;
-  letter-spacing: 0.12em;
 }
 
-.price-row strong {
+.price-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* NOMBRE DE LA COMISIÓN */
+
+.price-row > div > span {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   color: var(--accent);
+}
+
+/* DESCRIPCIÓN */
+
+.price-row small {
+  font-family: var(--font-body);
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+/* PRECIO */
+
+.price-row strong {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
 }
 
 .commission-button {
