@@ -879,39 +879,52 @@ function renderPublicProgress(
             "status-red";
 
           return `
-            <article class="comm-progress-item">
+  <article class="comm-progress-item">
 
-              <div class="comm-progress-main">
+    <div class="comm-progress-image">
+      ${
+        commission.image_url
+          ? `<img
+              src="${escapePublicHTML(commission.image_url)}"
+              alt="Commission for ${escapePublicHTML(commission.name)}"
+            >`
+          : `<div class="comm-progress-placeholder">
+              NO IMAGE
+            </div>`
+      }
+    </div>
 
-                <span
-                  class="comm-progress-line ${statusClass}"
-                ></span>
+    <div class="comm-progress-main">
 
-                <div>
+      <span
+        class="comm-progress-line ${statusClass}"
+      ></span>
 
-                  <strong>
-                    ${escapePublicHTML(
-                      commission.name
-                    )}
-                  </strong>
+      <div>
 
-                  <span>
-                    ${escapePublicHTML(
-                      status
-                    )}
-                  </span>
+        <strong>
+          ${escapePublicHTML(
+            commission.name
+          )}
+        </strong>
 
-                </div>
+        <span>
+          ${escapePublicHTML(
+            status
+          )}
+        </span>
 
-              </div>
+      </div>
 
-              <span class="comm-progress-code">
-                COMM / ${String(
-                  index + 1
-                ).padStart(3, "0")}
-              </span>
+    </div>
 
-            </article>
+    <span class="comm-progress-code">
+      COMM / ${String(
+        index + 1
+      ).padStart(3, "0")}
+    </span>
+
+  </article>`;
           `;
         }
       )
