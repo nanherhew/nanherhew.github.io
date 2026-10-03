@@ -673,13 +673,9 @@ section {
 }
 
 .commission-layout {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 10vw;
-
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
 }
 
 .commission-layout h2 {
