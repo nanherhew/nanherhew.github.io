@@ -53,7 +53,7 @@
     <div class="site-toolbar__actions">
       <button type="button" id="navToggle" class="toolbar-button" aria-controls="accessNodes" aria-expanded="false">[ + ] ACCESS NODES</button>
       <button type="button" id="feedToggle" class="toolbar-button" aria-controls="monitorFeed" aria-expanded="false">[ + ] MIND MONITOR</button>
-      <button type="button" id="soundToggle" class="toolbar-button toolbar-button--sound" aria-pressed="false">AUDIO OFF</button>
+      <button type="button" id="soundToggle" class="toolbar-button toolbar-button--sound" aria-pressed="false">AUDIO READY</button>
     </div>
   </header>
 
@@ -87,6 +87,16 @@
       <div class="vital-item"><small>ARTIST ACTIVE SINCE</small><strong>2024</strong></div>
     </div>
     <svg class="ecg" viewBox="0 0 280 62" preserveAspectRatio="none" aria-hidden="true"><path class="ecg__grid" d="M0 15H280M0 31H280M0 47H280M28 0V62M56 0V62M84 0V62M112 0V62M140 0V62M168 0V62M196 0V62M224 0V62M252 0V62"/><path class="ecg__line" d="M0 32 H53 l10 -5 8 12 9 -29 9 44 8 -22 H160 l9 -4 8 11 9 -27 9 40 8 -18 H280" /></svg>
+    <div class="mind-volume" role="group" aria-labelledby="musicVolumeLabel">
+      <div class="mind-volume__header">
+        <label id="musicVolumeLabel" for="musicVolume">AUDIO / MASTER LEVEL</label>
+        <output id="musicVolumeValue" for="musicVolume">18%</output>
+      </div>
+      <input type="range" id="musicVolume" min="0" max="100" step="1" value="18" aria-label="Background music volume">
+      <div class="mind-volume__scale"><span>00 / SILENCE</span><span>100 / MAX</span></div>
+      <button type="button" id="musicVolumeToggle" class="mind-volume__toggle" aria-pressed="false">MUTE AUDIO</button>
+      <p class="mind-volume__note">MP3 / SYNTHETIC AMBIENCE · STARTS AFTER ACCESS</p>
+    </div>
     <button type="button" id="motionToggle" class="mind-monitor__motion">ENABLE MOTION INPUT (MOBILE)</button><p class="mind-monitor__disclaimer">FICTIONAL UI TELEMETRY · PULSE IS A VISUAL EFFECT, NOT A HEALTH MEASUREMENT. THE SESSION TIMER IS REAL.</p>
   </aside>
 

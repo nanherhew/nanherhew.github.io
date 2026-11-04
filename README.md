@@ -1,4 +1,4 @@
-# Nanher Hew — ENTER THE CONSCIOUSNESS / V7
+# Nanher Hew — ENTER THE CONSCIOUSNESS / V8
 
 Sitio estático, sin compilación ni backend. Diseñado para publicarse en GitHub Pages.
 
@@ -29,7 +29,15 @@ No hace falta editar HTML/CSS/JS: el sitio comprueba si existen y, cuando cargan
 
 ## Música de fondo
 
-Si colocas tu pista personal en `arts/ambient.mp3`, se reproducirá en bucle a volumen reducido **después de que el visitante pulse ENTER**. El control AUDIO permite silenciar/reanudar. Sin archivo, el sitio usa sonidos ambientales originales generados con Web Audio API, sin dependencias. El navegador puede bloquear audio hasta la primera interacción.
+**Audio activado por defecto:** la página intenta comenzar a reproducir música cuando el visitante pulsa **I AM 18+ / ENTER CONSCIOUSNESS**. Los navegadores bloquean el sonido automático antes de una interacción explícita. Si el visitante ya había confirmado su edad en esa sesión y recarga la página, aparecerá `AUDIO READY` y se activará con su siguiente interacción.
+
+- **MP3 opcional:** coloca tu propia pista autorizada en `arts/ambient.mp3`, que se reproducirá en bucle.
+- **Sin MP3:** se utiliza el ambiente original generado con Web Audio API.
+- **Volumen inicial:** 18%, editable de 0 a 100% desde **MIND MONITOR → AUDIO / MASTER LEVEL**.
+- **Persistencia:** el volumen y el estado de encendido/apagado se conservan en `sessionStorage` durante la sesión.
+- **Silenciar:** el control global de audio o el botón **MUTE AUDIO** dentro del monitor; cualquiera puede reactivar el sonido.
+- **Ambas fuentes:** el deslizador controla el MP3 y también el ambiente sintético. Nunca se mezclan simultáneamente como dos fondos independientes.
+- Si incluyes música de otra persona, respeta los permisos y créditos exigidos por su licencia.
 
 ## Cambios principales de V7
 
@@ -52,3 +60,11 @@ Si colocas tu pista personal en `arts/ambient.mp3`, se reproducirá en bucle a v
 ## Mantenimiento
 
 Sitio en tres archivos: estructura HTML, estilos CSS y controladores JS. No necesita Node.js, npm, Supabase, frameworks ni bases de datos en producción. El contenido de las comisiones mantiene los nombres y precios del archivo original ($15, $20, $25, $35, $45; extras +$25, +$15 y +50%).
+
+## Cambios de V8
+
+- Slider de volumen real dentro de MIND MONITOR, con lectura porcentual y diseño rojo `#FF0032`.
+- Música habilitada por defecto tras el acceso del visitante.
+- Control MUTE / ENABLE AUDIO integrado en la misma ventana móvil y desktop.
+- Comprobación de sintaxis y pruebas automatizadas del acceso, audio, volumen, persistencia, mute y reanudación en 320, 390, 768 y 1440 píxeles, más prueba de una visita posterior con volumen guardado.
+- El MP3 real y las ilustraciones no se incluyen: conserva tu carpeta `arts/` del repositorio.

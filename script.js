@@ -21,7 +21,8 @@
     lightbox: $('lightbox'), lightboxArt: $('lightboxArt'), lightboxTitle: $('lightboxTitle'),
     lightboxDetail: $('lightboxDetail'), lightboxCounter: $('lightboxCounter'),
     lightboxClose: $('lightboxClose'), lightboxPrev: $('lightboxPrev'), lightboxNext: $('lightboxNext'),
-    sound: $('soundToggle'), music: $('ambientMusic'), cursor: $('cursorReticle'), announcer: $('announcer')
+    sound: $('soundToggle'), music: $('ambientMusic'), volume: $('musicVolume'),
+    volumeValue: $('musicVolumeValue'), volumeToggle: $('musicVolumeToggle'), cursor: $('cursorReticle'), announcer: $('announcer')
   };
 
   // Original portfolio filenames, titles, category groupings, and client attributions.
@@ -44,7 +45,11 @@
     ]
   };
 
+  const storedVolume = storage.get('nhVolume');
+  const parsedVolume = storedVolume === null ? 18 : Number(storedVolume);
+  const initialVolume = Number.isFinite(parsedVolume) ? Math.max(0, Math.min(100, Math.round(parsedVolume))) : 18;
   const state = {
+    volume: initialVolume, audioWanted: storage.get('nhAudioPreference') !== 'off',
     verified: storage.get('nhAgeVerifiedV7') === 'true',
     unlocked: false, navOpen: false, feedOpen: false, filter: 'all',
     activeSection: 'overview', list: [], lightboxIndex: 0, lightboxOrigin: null,
@@ -78,6 +83,7 @@
     setupIntersectionTracking();
     setupParallax();
     setupAudio();
+    syncAudio();
     bootSequence();
   }
 
@@ -110,6 +116,8 @@
     state.unlocked = true;
     els.age.hidden = true;
     document.body.classList.remove('state-locked');
+    // On a revisit, a browser may block autoplay. Start on the next visitor gesture.
+    if (state.audioWanted && !state.playing) armAudioForNextInteraction();
     const target = decodeURIComponent(location.hash.slice(1));
     if (target && document.getElementById(target)) {
       requestAnimationFrame(() => document.getElementById(target).scrollIntoView({behavior:'instant'}));
@@ -149,7 +157,8 @@
       renderArchive();
       playUi('tab');
     }));
-    els.sound.addEventListener('click', () => state.playing ? stopAudio() : startAudio());
+    els.sound.addEventListener('click', () => state.playing || state.audioWanted ? stopAudio() : startAudio());
+    els.volumeToggle?.addEventListener('click', () => state.playing || state.audioWanted ? stopAudio() : startAudio());
     els.motion.addEventListener('click', enableMotion);
     document.addEventListener('keydown', (event) => {
       if (event.target.closest?.('input,textarea,select,[contenteditable]')) return;
@@ -348,18 +357,56 @@
   function setupAudio() {
     els.music.loop = true;
     els.music.preload = 'none';
-    els.music.volume = .18;
+    applyVolume(state.volume, false);
+    els.volume?.addEventListener('input', () => applyVolume(els.volume.value));
     els.music.addEventListener('error', () => {
       if (state.playing && state.audioSource === 'loading') void fallback(state.audioToken);
     });
   }
+  function applyVolume(raw, persist = true) {
+    const candidate = Number(raw);
+    const value = Number.isFinite(candidate) ? Math.max(0, Math.min(100, Math.round(candidate))) : 18;
+    state.volume = value;
+    els.music.volume = value / 100;
+    synth.setVolume(value / 100);
+    if (els.volume) els.volume.value = String(value);
+    if (els.volumeValue) els.volumeValue.textContent = `${value}%`;
+    if (persist) storage.set('nhVolume', value);
+  }
+
+  // On subsequent page loads, autoplay may be forbidden until the first gesture.
+  // The first interaction starts audio automatically unless the visitor explicitly mutes it.
+  let cancelGestureStart = null;
+  function armAudioForNextInteraction() {
+    if (cancelGestureStart || !state.audioWanted || state.playing) return;
+    const handle = (event) => {
+      if (event.type === 'keydown' && !['Enter',' ','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)) return;
+      if (event.target?.closest?.('#soundToggle')) return;
+      disarmAudioGesture();
+      if (state.unlocked && state.audioWanted && !state.playing) startAudio();
+    };
+    const options = {capture: true};
+    window.addEventListener('pointerdown', handle, options);
+    window.addEventListener('keydown', handle, options);
+    cancelGestureStart = () => {
+      window.removeEventListener('pointerdown', handle, true);
+      window.removeEventListener('keydown', handle, true);
+    };
+  }
+  function disarmAudioGesture() {
+    cancelGestureStart?.();
+    cancelGestureStart = null;
+  }
   function startAudio() {
     if (state.playing) return;
+    disarmAudioGesture();
+    state.audioWanted = true;
+    storage.set('nhAudioPreference', 'on');
     state.playing = true;
     state.audioSource = 'loading';
     const token = ++state.audioToken;
     syncAudio();
-    // play() called in user gesture; browser policies forbid pre-interaction playback.
+    // Audio playback begins in the visitor's gesture, never unsolicited on first access.
     void synth.init();
     const playRequest = els.music.play();
     Promise.resolve(playRequest).then(() => {
@@ -378,6 +425,9 @@
     syncAudio();
   }
   function stopAudio() {
+    disarmAudioGesture();
+    state.audioWanted = false;
+    storage.set('nhAudioPreference', 'off');
     state.playing = false;
     state.audioSource = 'off';
     state.audioToken++;
@@ -386,14 +436,18 @@
     syncAudio();
   }
   function syncAudio() {
-    els.sound.textContent = !state.playing ? 'AUDIO OFF' : state.audioSource === 'file' ? 'MUSIC ON' : 'AMBIENT ON';
+    els.sound.textContent = !state.playing ? (state.audioWanted ? 'AUDIO READY' : 'AUDIO OFF') : state.audioSource === 'file' ? 'MUSIC ON' : 'AMBIENT ON';
     els.sound.setAttribute('aria-pressed', String(state.playing));
+    if (els.volumeToggle) {
+      els.volumeToggle.textContent = (state.playing || state.audioWanted) ? 'MUTE AUDIO' : 'ENABLE AUDIO';
+      els.volumeToggle.setAttribute('aria-pressed', String(state.playing));
+    }
   }
   function playUi(kind) { if (state.playing && synth.ctx) synth.ui(kind); }
   function announce(text) { els.announcer.textContent = text; }
 
   function createSynth() {
-    let ctx = null, master = null, drones = [], shimmerTimer = null;
+    let ctx = null, master = null, drones = [], shimmerTimer = null, volumeLevel = .18;
     function pulse(frequency, duration = .12, volume = .028) {
       if (!ctx || !master) return;
       const start = ctx.currentTime, osc = ctx.createOscillator(), gain = ctx.createGain();
@@ -407,6 +461,10 @@
     }
     return {
       get ctx() { return ctx; },
+      setVolume(level) {
+        volumeLevel = Number.isFinite(level) ? Math.max(0, Math.min(1, level)) : .18;
+        if (master && ctx) master.gain.setTargetAtTime(volumeLevel * .75, ctx.currentTime, .025);
+      },
       async init() {
         try {
           if (!ctx) {
@@ -414,7 +472,7 @@
             if (!Ctor) return;
             ctx = new Ctor();
             master = ctx.createGain();
-            master.gain.value = .16;
+            master.gain.value = volumeLevel * .75;
             master.connect(ctx.destination);
           }
           if (ctx.state === 'suspended') await ctx.resume();
