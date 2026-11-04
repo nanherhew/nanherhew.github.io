@@ -1,6 +1,20 @@
 (() => {
   'use strict';
 
+  // In privacy-restricted contexts sessionStorage may throw a SecurityError.
+  // Fall back to this page's lifetime instead of blocking the age gate.
+  const memoryFallback = new Map();
+  const session = {
+    getItem(key) {
+      try { return window.sessionStorage.getItem(key); }
+      catch { return memoryFallback.get(key) || null; }
+    },
+    setItem(key, value) {
+      try { window.sessionStorage.setItem(key, value); }
+      catch { memoryFallback.set(key, String(value)); }
+    },
+  };
+
   const state = {
     activeModule: 'overview',
     currentFilter: 'all',
@@ -57,6 +71,7 @@
     bootStatus: document.getElementById('bootStatus'),
     introModeLabel: document.getElementById('introModeLabel'),
     appShell: document.getElementById('appShell'),
+    mainContent: document.getElementById('mainContent'),
     moduleNavItems: [...document.querySelectorAll('[data-module-target]')],
     modules: [...document.querySelectorAll('.module')],
     telemetryModule: document.getElementById('telemetryModule'),
@@ -115,8 +130,8 @@
   }
 
   function setupAgeGate() {
-    const verified = sessionStorage.getItem('nhAgeVerified') === 'true';
-    const introSeen = sessionStorage.getItem('nhIntroSeen') === 'true';
+    const verified = session.getItem('nhAgeVerified') === 'true';
+    const introSeen = session.getItem('nhIntroSeen') === 'true';
 
     if (verified) {
       els.ageGate.classList.add('hidden');
@@ -131,7 +146,7 @@
     }
 
     els.ageEnter?.addEventListener('click', () => {
-      sessionStorage.setItem('nhAgeVerified', 'true');
+      session.setItem('nhAgeVerified', 'true');
       els.ageGate.classList.add('hidden');
       playUi('confirm');
       showIntro();
@@ -181,7 +196,7 @@
   }
 
   function finishIntro() {
-    sessionStorage.setItem('nhIntroSeen', 'true');
+    session.setItem('nhIntroSeen', 'true');
     els.introScreen.hidden = true;
     showApp();
   }
@@ -230,7 +245,19 @@
     updateTelemetry();
     announce(`Opened ${modulesMeta[moduleName]}`);
 
-    if (playSound) playUi('select');
+    if (playSound) {
+      // Reset the reading position after switching files. On phones the nav is
+      // sticky, so align the newly opened module immediately beneath it.
+      if (window.matchMedia('(max-width: 960px)').matches) {
+        const nav = document.querySelector('.left-nav');
+        const navHeight = nav ? nav.getBoundingClientRect().height : 0;
+        const top = Math.max(0, els.mainContent.getBoundingClientRect().top + window.scrollY - navHeight);
+        window.scrollTo({ top, behavior: 'instant' });
+      } else {
+        els.mainContent.scrollTop = 0;
+      }
+      playUi('select');
+    }
   }
 
   function updateTelemetry() {
@@ -448,6 +475,13 @@
       const interactive = event.target.closest('button, a, .art-tile');
       els.body.classList.toggle('cursor-hover', Boolean(interactive));
     });
+
+    // Avoid leaving the simulated cursor visible at the edge of the screen.
+    const resetCursor = () => {
+      els.body.classList.remove('cursor-ready', 'cursor-hover');
+    };
+    document.documentElement.addEventListener('mouseleave', resetCursor);
+    window.addEventListener('blur', resetCursor);
   }
 
   function setupParallax() {
