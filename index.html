@@ -105,13 +105,15 @@
           <span>CONSCIOUSNESS LINK ACTIVE</span>
         </div>
         <div class="topbar__actions">
+          <button type="button" class="tiny-button panel-switch" id="navToggle" aria-controls="accessNodes" aria-expanded="true" aria-label="Collapse access nodes panel" title="Show or hide access nodes">NODES −</button>
+          <button type="button" class="tiny-button panel-switch" id="feedToggle" aria-controls="monitorFeed" aria-expanded="true" aria-label="Collapse monitor feed panel" title="Show or hide monitor feed">FEED −</button>
           <button type="button" class="tiny-button" id="motionToggle">MOTION INPUT</button>
           <button type="button" class="tiny-button" id="soundToggle" aria-pressed="false">AMBIENT OFF</button>
         </div>
       </header>
 
-      <div class="main-layout">
-        <aside class="left-nav" aria-label="Main navigation">
+      <div class="main-layout" id="mainLayout">
+        <aside class="left-nav" id="accessNodes" aria-label="Main navigation">
           <div class="left-nav__title">ACCESS NODES</div>
           <nav class="module-nav" id="moduleNav">
             <button type="button" class="module-nav__item is-active" data-module-target="overview"><span>01</span><strong>OVERVIEW</strong><small>PRIMARY ENTRY</small></button>
@@ -141,6 +143,9 @@
                 <div class="hero-screen__image hero-parallax__front" style="background-image:url('arts/hero.PNG')"></div>
               </div>
               <div class="hero-screen__overlay"></div>
+              <!-- The upper portion of the original hero artwork passes OVER the name.
+                   This mirrors the clipping technique from the original Nanher Hew CSS. -->
+              <div class="hero-screen__foreground" id="heroForeground" aria-hidden="true" style="background-image:url('arts/hero.PNG')"></div>
               <div class="hero-screen__content">
                 <div class="hero-screen__headline">
                   <p class="system-kicker"><span class="sig-dot"></span> CONFIDENTIAL SUBJECT / DIGITAL ARTIST</p>
@@ -337,7 +342,7 @@
           </section>
         </main>
 
-        <aside class="right-telemetry">
+        <aside class="right-telemetry" id="monitorFeed" aria-label="Monitor feed">
           <div class="right-telemetry__head">
             <span>MONITOR FEED</span>
             <span class="sig-dot"></span>
@@ -389,6 +394,10 @@
       </div>
     </div>
   </div>
+
+  <!-- Optional owner-supplied music. Place the file at arts/ambient.mp3.
+       Browser policies require a user action before playback. -->
+  <audio id="ambientMusic" src="./arts/ambient.mp3" preload="none" loop></audio>
 
   <div class="cursor-reticle" id="cursorReticle" aria-hidden="true"><span></span></div>
   <div class="sr-only" id="announcer" aria-live="polite"></div>

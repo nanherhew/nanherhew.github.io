@@ -1,6 +1,6 @@
 :root {
-  --bg: #060609;
-  --bg-2: #0a0a11;
+  --bg: #000000;
+  --bg-2: #000000;
   --surface: rgba(12, 12, 18, 0.92);
   --surface-strong: rgba(18, 18, 28, 0.98);
   --surface-soft: rgba(19, 19, 28, 0.72);
@@ -27,10 +27,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  background:
-    radial-gradient(circle at 20% 0%, rgba(255, 0, 50, 0.08), transparent 30%),
-    radial-gradient(circle at 100% 0%, rgba(75, 163, 255, 0.05), transparent 28%),
-    linear-gradient(180deg, #050509 0%, #08080e 100%);
+  background: #000000;
   color: var(--text);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -97,7 +94,7 @@ body::before {
 
 .monitor-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(16,16,24,0.88), rgba(10,10,16,0.94));
+  background: linear-gradient(180deg, rgba(8,8,8,0.95), rgba(0,0,0,0.99));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--panel-glow);
@@ -211,7 +208,7 @@ body:not(.touch-device) .lightbox__step:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(2, 2, 8, 0.84);
+  background: rgba(0, 0, 0, 0.89);
   backdrop-filter: blur(14px);
 }
 .age-gate__panel,
@@ -352,7 +349,7 @@ body:not(.touch-device) .lightbox__step:hover {
   border-radius: 0;
   background:
     radial-gradient(circle at center, rgba(255, 0, 50, 0.12), transparent 34%),
-    radial-gradient(circle at center, rgba(119, 227, 255, 0.08), transparent 55%),
+    radial-gradient(circle at center, rgba(255,0,50,0.04), transparent 55%),
     linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   overflow: hidden;
 }
@@ -429,7 +426,7 @@ body:not(.touch-device) .lightbox__step:hover {
   min-height: calc(100vh - 2 * clamp(0.7rem, 2vw, 1.2rem));
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 0;
-  background: linear-gradient(180deg, rgba(7,7,12,0.92), rgba(10,10,16,0.96));
+  background: #000000;
   box-shadow: 0 40px 80px rgba(0,0,0,0.48), inset 0 0 0 1px rgba(255,255,255,0.03);
   overflow: hidden;
   display: grid;
@@ -592,8 +589,8 @@ body:not(.touch-device) .lightbox__step:hover {
 .hero-parallax__back { opacity: 0.92; filter: saturate(0.72) contrast(1.06); }
 .hero-screen__overlay {
   background:
-    linear-gradient(180deg, rgba(3,3,6,0.35), rgba(4,4,8,0.65) 52%, rgba(4,4,8,0.92)),
-    linear-gradient(135deg, rgba(255, 0, 50, 0.1), transparent 36%, transparent 70%, rgba(119, 227, 255, 0.08));
+    linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.6) 52%, rgba(0,0,0,0.93)),
+    linear-gradient(135deg, rgba(255, 0, 50, 0.1), transparent 36%, transparent 70%, rgba(255,0,50,0.04));
 }
 .hero-screen__content {
   position: relative;
@@ -969,7 +966,7 @@ body.touch-device .cursor-reticle { display: none; }
     gap: 0;
     border-right: 0;
     border-bottom: 1px solid var(--line-strong);
-    background: rgba(7,7,13,.96);
+    background: rgba(0,0,0,.98);
     backdrop-filter: blur(14px);
   }
   .left-nav__title, .left-nav__meta, .left-nav__discord { display: none; }
@@ -1082,7 +1079,7 @@ body.touch-device .cursor-reticle { display: none; }
   .hero-screen__image { background-size: cover; background-position: center 22%; }
   .hero-screen__overlay {
     background:
-      linear-gradient(180deg, rgba(3,3,6,.22), rgba(4,4,8,.62) 26%, rgba(4,4,8,.97) 65%),
+      linear-gradient(180deg, rgba(0,0,0,.19), rgba(0,0,0,.55) 26%, rgba(0,0,0,.97) 65%),
       linear-gradient(135deg, rgba(255,0,50,.06), transparent 68%);
   }
   .hero-screen__content { position: relative; inset: auto; max-width: 100%; padding: 0; }
@@ -1229,4 +1226,156 @@ body.touch-device .cursor-reticle { display: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+
+/* ========================================================================
+   V5 — CLASSIFIED MONITOR / PURE BLACK + COLLAPSIBLE PANELS + LAYERED HERO
+   ======================================================================== */
+html, body { background-color: #000; }
+body { background: #000 !important; }
+.monitor-shell { background: #000 !important; }
+.content-stage, .main-layout, .left-nav, .right-telemetry { background-color: #000; }
+
+/* Desktop rail visibility is controlled by the real buttons in the top bar. */
+.main-layout {
+  --nav-column: var(--left-w);
+  --feed-column: var(--right-w);
+  grid-template-columns: minmax(0,var(--nav-column)) minmax(0,1fr) minmax(0,var(--feed-column));
+  transition: grid-template-columns .27s ease;
+}
+.main-layout.nav-collapsed { --nav-column: 0px; }
+.main-layout.feed-collapsed { --feed-column: 0px; }
+.main-layout.nav-collapsed .left-nav,
+.main-layout.feed-collapsed .right-telemetry {
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+.main-layout .left-nav, .main-layout .right-telemetry { overflow: hidden; min-width: 0; }
+.panel-switch[aria-expanded="false"] { background: rgba(255,0,50,.14); border-color: var(--accent); color: var(--text); }
+.topbar__actions { flex-wrap: wrap; }
+
+/* The character's top half crosses OVER the type, as in the original CSS.
+   Clipping prevents the art from obscuring CTA buttons or the information strip. */
+.hero-screen { isolation: isolate; }
+.hero-screen__image-layer { z-index: 0; }
+.hero-screen__overlay { z-index: 1; }
+.hero-screen__content { z-index: 2; }
+.hero-screen__foreground {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  clip-path: polygon(0 0, 100% 0, 100% 59%, 0 59%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 4%, #000 46%);
+  mask-image: linear-gradient(90deg, transparent 4%, #000 46%);
+  opacity: .96;
+  filter: contrast(1.12);
+  will-change: transform;
+}
+.hero-screen__data { z-index: 4; }
+.hero-screen__controls { position: relative; z-index: 5; }
+
+/* Mid-sized desktop/tablet: keep the feed available via the toggle,
+   default collapse state is assigned by JS (only on first visit). */
+@media (min-width: 961px) and (max-width: 1240px) {
+  .main-layout {
+    display: grid;
+    grid-template-columns: minmax(0,var(--nav-column)) minmax(0,1fr) minmax(0,var(--feed-column));
+  }
+  .right-telemetry { display: flex; }
+  .topbar__actions { gap: 5px; }
+  .topbar__actions .tiny-button { font-size: .6rem; padding: 7px; }
+}
+
+/* Phone/tablet: the navigation becomes a horizontal selector that can be
+   hidden/reopened; the monitor feed is an on-demand overlay, not dead space. */
+@media (max-width: 960px) {
+  .main-layout { display: block; }
+  .main-layout.nav-collapsed .left-nav { display: none; }
+  .main-layout:not(.nav-collapsed) .left-nav {
+    display: flex;
+    visibility: visible;
+    overflow: visible;
+    pointer-events: auto;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line-strong);
+    background: #000;
+  }
+  .main-layout.feed-collapsed .right-telemetry { display: none; }
+  .main-layout:not(.feed-collapsed) .right-telemetry {
+    display: flex;
+    position: fixed;
+    z-index: 90;
+    top: 76px;
+    right: 10px;
+    width: min(310px,calc(100vw - 20px));
+    max-height: calc(100dvh - 87px);
+    overflow-y: auto;
+    visibility: visible;
+    pointer-events: auto;
+    padding: 16px;
+    border: 1px solid var(--accent);
+    background: #000;
+    box-shadow: -16px 20px 70px rgba(0,0,0,.9);
+  }
+  .topbar__actions { flex-wrap: wrap; }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    grid-template-columns: minmax(0,1fr);
+    align-items: center;
+    gap: 9px;
+  }
+  .topbar__identity { width: 100%; }
+  .topbar__actions {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    width: 100%;
+    gap: 5px;
+  }
+  .topbar__actions .tiny-button {
+    width: 100%; max-width: none; min-width: 0;
+    font-size: clamp(.48rem, 1.85vw, .64rem);
+    padding: 7px 3px;
+    line-height: 1.25;
+    letter-spacing: .015em;
+    overflow-wrap: anywhere;
+  }
+  .main-layout:not(.feed-collapsed) .right-telemetry { top: 102px; max-height: calc(100dvh - 112px); }
+  .hero-screen__foreground {
+    background-position: center 22%;
+    clip-path: polygon(28% 0,100% 0,100% 48%,28% 48%);
+    opacity: .9;
+    -webkit-mask-image: linear-gradient(90deg, transparent 18%, #000 65%);
+    mask-image: linear-gradient(90deg, transparent 18%, #000 65%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-layout { transition: none; }
+  .hero-screen__foreground { will-change: auto; }
+}
+
+/* Distinct two-line masthead: same visual hierarchy as the original hero. */
+.hero-screen__headline h1 em { display: block; width: max-content; max-width: 100%; }
+
+/* On laptop screens leave the lower-right monitor readouts unobstructed. */
+@media (min-width: 961px) and (max-width: 1580px) {
+  .hero-screen__controls {
+    display: grid;
+    grid-template-columns: minmax(0,1fr);
+    width: min(280px, 100%);
+    gap: 8px;
+  }
+}
+@media (min-width: 961px) and (max-width: 1220px) {
+  .hero-screen__data { bottom: auto; top: 1rem; right: 1rem; max-width: 300px; }
 }

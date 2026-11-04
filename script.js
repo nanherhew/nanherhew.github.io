@@ -24,6 +24,7 @@
     touchDevice: matchMedia('(pointer: coarse)').matches,
     audioReady: false,
     audioEnabled: false,
+    audioSource: 'off',
     motionEnabled: false,
     motionMode: 'pointer',
     parallax: { currentX: 0, currentY: 0, targetX: 0, targetY: 0 },
@@ -71,6 +72,13 @@
     bootStatus: document.getElementById('bootStatus'),
     introModeLabel: document.getElementById('introModeLabel'),
     appShell: document.getElementById('appShell'),
+    mainLayout: document.getElementById('mainLayout'),
+    navToggle: document.getElementById('navToggle'),
+    feedToggle: document.getElementById('feedToggle'),
+    accessNodes: document.getElementById('accessNodes'),
+    monitorFeed: document.getElementById('monitorFeed'),
+    heroForeground: document.getElementById('heroForeground'),
+    ambientMusic: document.getElementById('ambientMusic'),
     mainContent: document.getElementById('mainContent'),
     moduleNavItems: [...document.querySelectorAll('[data-module-target]')],
     modules: [...document.querySelectorAll('.module')],
@@ -102,7 +110,9 @@
 
   const audio = createAudioEngine();
   let bootTimer = null;
-  let ambientStartRequested = false;
+  let audioRequestToken = 0;
+  // The website uses the owner's file when it exists; otherwise it falls back
+  // to the original procedural ambience. No music autoplays before interaction.
 
   init();
 
@@ -118,6 +128,7 @@
     setupAgeGate();
     setupIntro();
     setupNavigation();
+    setupCollapsiblePanels();
     setupArchiveTabs();
     setupLightbox();
     setupGlobalKeys();
@@ -228,6 +239,57 @@
     });
   }
 
+  function setupCollapsiblePanels() {
+    const compact = window.matchMedia('(max-width: 1240px)').matches;
+    let navCollapsed = session.getItem('nhNavCollapsed') === 'true';
+    const storedFeed = session.getItem('nhFeedCollapsed');
+    let feedCollapsed = storedFeed === null ? compact : storedFeed === 'true';
+
+    const sync = () => {
+      els.mainLayout.classList.toggle('nav-collapsed', navCollapsed);
+      els.mainLayout.classList.toggle('feed-collapsed', feedCollapsed);
+      els.navToggle.setAttribute('aria-expanded', String(!navCollapsed));
+      els.feedToggle.setAttribute('aria-expanded', String(!feedCollapsed));
+      els.navToggle.setAttribute('aria-label', navCollapsed ? 'Expand access nodes panel' : 'Collapse access nodes panel');
+      els.feedToggle.setAttribute('aria-label', feedCollapsed ? 'Expand monitor feed panel' : 'Collapse monitor feed panel');
+      els.navToggle.textContent = navCollapsed ? 'NODES +' : 'NODES −';
+      els.feedToggle.textContent = feedCollapsed ? 'FEED +' : 'FEED −';
+      els.accessNodes.setAttribute('aria-hidden', String(navCollapsed));
+      els.monitorFeed.setAttribute('aria-hidden', String(feedCollapsed));
+    };
+
+    els.navToggle.addEventListener('click', () => {
+      navCollapsed = !navCollapsed;
+      session.setItem('nhNavCollapsed', String(navCollapsed));
+      sync();
+      playUi('tab');
+    });
+    els.feedToggle.addEventListener('click', () => {
+      feedCollapsed = !feedCollapsed;
+      session.setItem('nhFeedCollapsed', String(feedCollapsed));
+      sync();
+      playUi('tab');
+    });
+
+    // On handhelds, the feed becomes an overlay. Dismiss it when the visitor
+    // taps elsewhere; the visible FEED switch always allows reopening.
+    document.addEventListener('pointerdown', (event) => {
+      if (window.innerWidth > 960 || feedCollapsed) return;
+      if (els.feedToggle.contains(event.target) || els.monitorFeed.contains(event.target)) return;
+      feedCollapsed = true;
+      session.setItem('nhFeedCollapsed', 'true');
+      sync();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !feedCollapsed && window.innerWidth <= 960) {
+        feedCollapsed = true;
+        session.setItem('nhFeedCollapsed', 'true');
+        sync();
+      }
+    });
+    sync();
+  }
+
   function showModule(moduleName, playSound = true) {
     if (!moduleName || !modulesMeta[moduleName]) return;
 
@@ -264,7 +326,7 @@
     const label = modulesMeta[state.activeModule] || '01 / OVERVIEW';
     if (els.telemetryModule) els.telemetryModule.textContent = label;
     if (els.currentPath) els.currentPath.textContent = `/${state.activeModule.toUpperCase()}`;
-    if (els.telemetryAudio) els.telemetryAudio.textContent = state.audioEnabled ? 'AMBIENT ON' : 'MUTED';
+    if (els.telemetryAudio) els.telemetryAudio.textContent = !state.audioEnabled ? 'MUTED' : state.audioSource === 'file' ? 'CUSTOM TRACK' : state.audioSource === 'procedural' ? 'PROCEDURAL' : 'CONNECTING';
   }
 
   function setupArchiveTabs() {
@@ -403,32 +465,69 @@
   }
 
   function setupSoundToggle() {
-    els.soundToggle?.addEventListener('click', async () => {
-      if (!state.audioReady) await initAudio();
-      state.audioEnabled = !state.audioEnabled;
+    if (els.ambientMusic) {
+      els.ambientMusic.loop = true;
+      els.ambientMusic.preload = 'none';
+      els.ambientMusic.volume = 0.18; // gentle background level
+    }
+    els.soundToggle?.addEventListener('click', () => {
       if (state.audioEnabled) {
-        audio.startAmbient();
-        playUi('confirm');
+        stopBackgroundAudio();
       } else {
-        audio.stopAmbient();
+        startAmbientAudio();
       }
-      syncAudioUi();
     });
     syncAudioUi();
   }
 
+  // Can be called only by a real visitor interaction: ENTER / SKIP / sound.
+  // Priority: arts/ambient.mp3. If absent, keep the legacy ambient synthesizer.
   function startAmbientAudio() {
-    ambientStartRequested = true;
-    if (!state.audioReady) {
-      initAudio().then(() => {
-        state.audioEnabled = true;
-        audio.startAmbient();
-        syncAudioUi();
-      });
+    if (state.audioEnabled) return;
+    const token = ++audioRequestToken;
+    state.audioEnabled = true;
+    state.audioSource = 'loading';
+    syncAudioUi();
+    // Initialize Web Audio while user activation is still available for UI SFX.
+    void initAudio();
+
+    if (!els.ambientMusic) {
+      void startProceduralFallback(token);
       return;
     }
-    state.audioEnabled = true;
+    try {
+      const playing = els.ambientMusic.play();
+      Promise.resolve(playing).then(() => {
+        if (token !== audioRequestToken || !state.audioEnabled) {
+          els.ambientMusic.pause();
+          return;
+        }
+        audio.stopAmbient();
+        state.audioSource = 'file';
+        syncAudioUi();
+      }).catch(() => {
+        void startProceduralFallback(token);
+      });
+    } catch {
+      void startProceduralFallback(token);
+    }
+  }
+
+  async function startProceduralFallback(token) {
+    await initAudio();
+    if (token !== audioRequestToken || !state.audioEnabled) return;
+    if (els.ambientMusic) els.ambientMusic.pause();
     audio.startAmbient();
+    state.audioSource = 'procedural';
+    syncAudioUi();
+  }
+
+  function stopBackgroundAudio() {
+    ++audioRequestToken; // invalidate pending file loading / fallback
+    state.audioEnabled = false;
+    state.audioSource = 'off';
+    if (els.ambientMusic) els.ambientMusic.pause();
+    audio.stopAmbient();
     syncAudioUi();
   }
 
@@ -436,16 +535,13 @@
     try {
       if (!state.audioReady) {
         await audio.init();
-        state.audioReady = true;
+        state.audioReady = !!audio.context;
       }
       if (audio.context?.state === 'suspended') {
         await audio.context.resume();
       }
-      if (ambientStartRequested && state.audioEnabled) {
-        audio.startAmbient();
-      }
-    } catch (error) {
-      console.error('Audio initialization failed', error);
+    } catch {
+      // Browsers can restrict Web Audio. The HTML audio track may still work.
     }
   }
 
@@ -453,7 +549,7 @@
     if (!els.soundToggle) return;
     els.soundToggle.classList.toggle('is-active', state.audioEnabled);
     els.soundToggle.setAttribute('aria-pressed', String(state.audioEnabled));
-    els.soundToggle.textContent = state.audioEnabled ? 'AMBIENT ON' : 'AMBIENT OFF';
+    els.soundToggle.textContent = !state.audioEnabled ? 'AUDIO OFF' : state.audioSource === 'file' ? 'MUSIC ON' : 'AMBIENT ON';
     updateTelemetry();
   }
 
@@ -504,6 +600,9 @@
       }
       if (els.heroFront) {
         els.heroFront.style.transform = `translate(${state.parallax.currentX * 0.75}px, ${state.parallax.currentY * 0.75}px) scale(1.06)`;
+      }
+      if (els.heroForeground) {
+        els.heroForeground.style.transform = `translate(${state.parallax.currentX * 0.75}px, ${state.parallax.currentY * 0.75}px) scale(1.06)`;
       }
       requestAnimationFrame(animate);
     };
