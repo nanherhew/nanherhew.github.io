@@ -1,105 +1,54 @@
-# NANHER HEW 文 — ENTER THE CONSCIOUSNESS / V6
+# Nanher Hew — ENTER THE CONSCIOUSNESS / V7
 
-Reconstructing Nanher Hew as a minimal mental archive, inspired by classified
-computer interfaces with its own black-and-red aesthetic. Static HTML/CSS/JS.
+Sitio estático, sin compilación ni backend. Diseñado para publicarse en GitHub Pages.
 
-## Publishing to your existing GitHub Pages repository
+## Instalación
 
-Replace the repository's root files:
+1. Sustituye en tu repositorio los archivos `index.html`, `style.css` y `script.js` por los incluidos en este ZIP.
+2. **Conserva** tu carpeta original `arts/` con sus imágenes, sin sobrescribirla. El ZIP no trae dibujos originales porque ya están en tu repositorio.
+3. Publica como siempre desde GitHub Pages. El proyecto utiliza rutas relativas (`./arts/...`), compatibles con repositorios publicados bajo subrutas.
+4. Si modificaste la página y parece no cambiar, recarga sin caché (Ctrl+Shift+R).
 
-- `index.html`
-- `style.css`
-- `script.js`
+## Archivos de arte existentes (conservar nombres y mayúsculas)
 
-**Keep your existing `arts/` directory** (it is not duplicated in the ZIP).
-All paths are relative to the repository root, and the project does not need
-Node.js, Supabase, a build step, or a backend.
+- `arts/age-banner.jpg` — advertencia 18+.
+- `arts/hero.PNG` — personaje en portada (idealmente con transparencia).
+- `arts/01.jpg` a `arts/04.jpg` — Recent Works.
+- `arts/05.jpg` a `arts/08.jpg` — Archive.
+- `arts/02.jpg`, `arts/03.jpg` — Commission artworks catalogados en Archive (con nombres originales de clientes).
+- `arts/wip01.jpg`, `arts/wip02.jpg` — trabajos en progreso.
 
-The existing assets expected in `arts/` are:
+## Nuevas imágenes opcionales — reemplazo automático
 
-```
-arts/age-banner.jpg
-arts/hero.PNG               ← exact uppercase PNG extension
-arts/01.jpg … arts/08.jpg
-arts/wip01.jpg
-arts/wip02.jpg
-arts/ambient.mp3            ← optional personal music, not bundled
-```
+Añade los siguientes archivos a `arts/` cuando tengas las ilustraciones listas:
 
-If publishing in a subdirectory, keep `index.html`, `style.css`, `script.js`,
-and `arts/` alongside each other.
+- **`arts/identity.png`** — reemplaza el símbolo 文 del módulo **Identity**.
+- **`arts/commission-sample.png`** — reemplaza el símbolo de muestra en el catálogo de **Commissions**.
 
-## New visitor experience
+No hace falta editar HTML/CSS/JS: el sitio comprueba si existen y, cuando cargan, oculta el símbolo y muestra la nueva imagen. Conserva la extensión `.png` y las minúsculas. Si aún no existen, el símbolo sigue visible.
 
-1. **Initialization:** a short sequence displays `ACCESSING NANHER'S MIND`,
-   a progress meter, and `70% / ALMOST DONE..` during loading.
-2. **Combined warning / invitation:** explains that this is a mental portfolio
-   of character art and requires a conscious **18+ confirmation**. No separate
-   lengthy intro. The acknowledgement is remembered in sessionStorage for the
-   browser tab/session (with graceful storage failure handling).
-3. **Access granted:** fullscreen NANHER HEW identity and ONE complete
-   `arts/hero.PNG` drawn in front of the name, with full opacity and no duplicate
-   background/foreground image layers.
+## Música de fondo
 
-**Important:** the character image must contain transparency if you want
-its *shape*, rather than a rectangle, to pass in front of the text. We cannot
-change the pixels inside your original artwork through CSS. The original PNG
-was not provided in this ZIP because it is already in your GitHub repo.
+Si colocas tu pista personal en `arts/ambient.mp3`, se reproducirá en bucle a volumen reducido **después de que el visitante pulse ENTER**. El control AUDIO permite silenciar/reanudar. Sin archivo, el sitio usa sonidos ambientales originales generados con Web Audio API, sin dependencias. El navegador puede bloquear audio hasta la primera interacción.
 
-## Interface controls
+## Cambios principales de V7
 
-- `[ + ] INTERFACE` opens a compact toolbar; clicking it again hides everything.
-- `01 / NODES` opens the small navigation window at the top of the screen.
-- `02 / FEED` opens the compact context monitor window.
-- `03 / DETAILS` temporarily reveals extra home-page actions/details.
-- The windows have real close buttons and close by clicking outside.
-- Press `H` to hide/show the toolbar, `1`–`6` to navigate, `Esc` to close a
-  window or the lightbox, and arrow keys for previous/next artwork.
-- Selecting an access node opens its content and hides the controls again.
-  To return to the fullscreen hero, open NODES → OVERVIEW or press `1`.
-- No controls are forced onscreen except the small INTERFACE handle.
+- Una sola página con desplazamiento y seis apartados: **Overview, Recent Works, Archive, Identity, Commissions y Contact**.
+- Home con título gigante, resplandor naranja en HEW, icono 文 al fondo, personaje `hero.PNG` delante del texto, descripción rápida y botones de salto.
+- Ventana flotante ACCESS NODES. Seleccionar un nodo desplaza a la sección **sin cerrar el menú**.
+- Ventana MIND MONITOR: dibujo vectorial de cerebro, señal de estado, pulso simulado de 74 BPM, temporizador real de sesión y año original de actividad artística (2024). **El BPM es una animación decorativa, no un dato biométrico real**.
+- Filtros y lightbox, cursor blanco de cruz en desktop, imagen adaptable y navegación apta para móviles.
+- Enlace Discord oficial actualizado: https://discord.gg/KxpdYMte
+- Paleta negro `#000000`, rojo `#FF0032` y resplandor naranja solo en HEW.
+- Eliminación de Supabase, formularios de comisiones y Commission Status (no hay código ni dependencias residuales).
 
-## Music and sound
+## Verificaciones realizadas
 
-Place **`ambient.mp3`** in your existing `arts/` folder. The browser plays it
-in a loop at volume **18%** after the visitor presses the entry button.
-If missing or blocked, the page uses a quiet synthesized fallback using Web
-Audio API (3 oscillators and occasional soft notes).
+- Sintaxis JavaScript (`node --check`).
+- Pruebas automatizadas en Chromium con HTML, CSS y JS cargados localmente mediante Playwright en ocho anchos: 320, 360, 390, 430, 768, 1024, 1440 y 1920 px.
+- Advertencia +18, navegación con ventana persistente, galería Archive/WIPS, apertura/cierre de lightbox, monitor retráctil, y ausencia de desbordamientos horizontales y errores de ejecución en esos escenarios.
+- Los originales **no** estaban incluidos aquí; debes comprobar visualmente cómo queda `hero.PNG` y la carga real de `arts/` una vez publicado. También debes verificar tu MP3 y los sensores móviles en un dispositivo real.
 
-The visitor can toggle `AUDIO OFF / MUSIC ON / AMBIENT ON` after opening the
-interface. Sound is never started automatically before a click.
+## Mantenimiento
 
-## Existing content and functionality
-
-- Recent Works uses `01.jpg` through `04.jpg`.
-- Archive uses `05.jpg`–`08.jpg`, `02.jpg`, `03.jpg`, `wip01.jpg`, `wip02.jpg`.
-- Archive filters, image lightbox, Identity, commissions, prices, and social links
-  are preserved/adapted.
-- Commission prices are unchanged: Sketch $15; Headshot $20; Bust $25;
-  Half Body $35; Full Body $45. Add-ons: extra character +$25,
-  complex background +$15, commercial use +50%.
-- Discord direct contact: `https://discord.gg/bzENFbeE`.
-- No internal commission forms, tracking UI, Supabase, authentication, or
-  external database requests.
-
-## Performance changes
-
-- Removed the three repeated hero layers and their heavy blending/masks.
-- Only **one image** is rendered, at 100% opacity.
-- No continuous requestAnimationFrame parallax loop. Pointer movement updates
-  a small transform only when necessary, capped to one frame per event batch.
-- No full-screen noise textures, costly blur overlays or continuous glitch effects.
-- Short intro and module transitions; respects `prefers-reduced-motion`.
-- On touch devices parallax only activates via the explicit motion permission
-  control where orientation input is available.
-
-## Validation and remaining manual checks
-
-Browser interaction checks: 320, 360, 390, 430, 768, 1024, 1280, 1440,
-and 1920px screen widths. Checks covered startup, 18+ gate, module popups,
-archive filters, lightbox, and horizontal overflow, with no JavaScript page
-errors in these tests.
-
-**Still verify manually on GitHub Pages:** actual illustration transparency,
-real image network loading, your own optional MP3, iOS motion permission, and
-actual performance on the laptop where the previous version lagged.
+Sitio en tres archivos: estructura HTML, estilos CSS y controladores JS. No necesita Node.js, npm, Supabase, frameworks ni bases de datos en producción. El contenido de las comisiones mantiene los nombres y precios del archivo original ($15, $20, $25, $35, $45; extras +$25, +$15 y +50%).
