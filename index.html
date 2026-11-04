@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07070a">
-  <meta name="description" content="Nanher Hew 文 — Enter the consciousness. Classified mental archive, digital art, character design and visual storytelling.">
-  <title>NANHER HEW 文 / ENTER THE CONSCIOUSNESS</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Nanher Hew 文 — Enter a classified digital mind. Original artwork, identity and commissions.">
+  <title>NANHER HEW 文 / CLASSIFIED MIND ARCHIVE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:wght@400;700&family=Unbounded:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,185 +13,93 @@
   <script src="./script.js" defer></script>
 </head>
 <body class="state-locked">
-  <a class="skip-link" href="#mainContent">Skip to content</a>
+  <a class="skip-link" href="#mainContent">SKIP TO CONTENT</a>
 
-  <div class="screen-noise" aria-hidden="true"></div>
-  <div class="screen-vignette" aria-hidden="true"></div>
-
-  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
-    <div class="age-gate__backdrop"></div>
-    <div class="age-gate__panel monitor-card">
-      <div class="age-gate__preview" style="background-image:url('arts/age-banner.jpg')"></div>
-      <div class="monitor-card__grid"></div>
-      <div class="monitor-card__header">
-        <span>MENTAL FILE / CONTENT RESTRICTION</span>
-        <span>GATE / 18+</span>
-      </div>
-      <div class="age-gate__content">
-        <p class="system-kicker"><span class="sig-dot"></span> ACCESS REQUIREMENT / ADULT CONTENT</p>
-        <div class="age-gate__symbol">文</div>
-        <h1 id="ageTitle">ACCESS <em>RESTRICTED</em></h1>
-        <p class="age-gate__lede">This archive contains mature artwork, nudity and sexual themes.</p>
-        <p class="age-gate__copy">By entering this site, you confirm that you are 18 years of age or older and understand the content warning.</p>
-        <div class="age-gate__actions">
-          <button type="button" class="action action--primary" id="ageEnter">I AM 18 OR OLDER <span aria-hidden="true">↗</span></button>
-          <button type="button" class="action action--ghost" id="ageLeave">LEAVE</button>
-        </div>
-        <div class="age-gate__footer">NANHER HEW 文 / AUTHORIZATION REQUIRED</div>
-      </div>
+  <!-- A short, non-blocking visual boot precedes the combined 18+ authorization. -->
+  <div class="boot-screen" id="bootScreen" role="status" aria-live="polite" aria-label="Accessing Nanher's mind">
+    <div class="boot-screen__content">
+      <div class="boot-screen__top"><span>NH // RESTRICTED MEMORY ACCESS</span><span>PROTOCOL 001</span></div>
+      <div class="boot-screen__seal" aria-hidden="true">文</div>
+      <p class="boot-screen__overline">NEURAL INTERFACE · CLASSIFIED</p>
+      <h1>ACCESSING<br><em>NANHER'S MIND</em></h1>
+      <div class="boot-screen__status"><span id="bootMessage">ESTABLISHING CONNECTION</span><strong id="bootPercent">00%</strong></div>
+      <div class="boot-screen__track" role="progressbar" aria-label="Initialization" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bootTrack"><div id="bootBar"></div></div>
+      <div class="boot-screen__details"><span>ENCRYPTED STORAGE / MEMORY FILE</span><span id="bootSubstatus">INITIALIZING…</span></div>
     </div>
   </div>
 
-  <div class="intro-screen" id="introScreen" role="dialog" aria-modal="true" aria-labelledby="introTitle" hidden>
-    <div class="intro-screen__frame monitor-card">
-      <div class="monitor-card__grid"></div>
-      <div class="monitor-card__header">
-        <span>NEURAL ARCHIVE / INITIALIZATION</span>
-        <span id="introModeLabel">STANDBY</span>
-      </div>
-      <div class="intro-layout">
-        <div class="intro-copy">
-          <p class="system-kicker"><span class="sig-dot"></span> CLASSIFIED PERSONAL FILE / NH-01</p>
-          <h2 id="introTitle">ENTER THE <em>CONSCIOUSNESS</em></h2>
-          <p class="intro-copy__lede">Not a portfolio. Not a profile. A monitored access point into the visual mind of Nanher Hew.</p>
-          <div class="boot-block" aria-live="polite">
-            <div><span>IDENTITY</span><b>NANHER HEW / VERIFIED</b></div>
-            <div><span>CONNECTION</span><b id="bootStatus">NEURAL LINK READY</b></div>
-            <div><span>MEMORY FRAGMENTS</span><b>ARCHIVED / AVAILABLE</b></div>
-            <div><span>AUDIO ENVIRONMENT</span><b>AMBIENT / OPTIONAL</b></div>
-            <div class="boot-line"><span id="bootBar"></span></div>
-          </div>
-          <div class="intro-actions">
-            <button type="button" class="action action--primary action--large" id="enterConsciousness">[ ENTER CONSCIOUSNESS ] <span aria-hidden="true">↗</span></button>
-            <button type="button" class="action action--quiet" id="skipIntro">SKIP INTRO</button>
-          </div>
+  <!-- Single combined warning / explanation / entry; no second intro. -->
+  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" hidden>
+    <div class="age-gate__frame">
+      <div class="age-gate__preview" aria-hidden="true" style="background-image:url('arts/age-banner.jpg')"></div>
+      <div class="age-gate__copy">
+        <div class="gate-topline"><span><span class="signal"></span> SECURITY NOTICE // NH-01</span><span>LEVEL / 18+</span></div>
+        <p class="gate-kicker">UNAUTHORIZED MEMORY ARCHIVE</p>
+        <h2 id="ageTitle">WARNING<span>.</span></h2>
+        <p class="gate-lead">YOU ARE ABOUT TO ENTER NANHER HEW'S CONSCIOUSNESS.</p>
+        <p>This is an interactive mental portfolio: a private-looking archive of my digital drawings, furry characters, bara illustrations and visual ideas.</p>
+        <div class="gate-warning"><strong>ADULT CONTENT / 18+ ONLY</strong><span>Some artwork may contain nudity, mature themes or sexual imagery. Continue only if you are at least 18 years old.</span></div>
+        <div class="gate-actions">
+          <button class="action action--primary" id="ageEnter" type="button">I AM 18+ / ENTER CONSCIOUSNESS <span aria-hidden="true">↗</span></button>
+          <button class="action action--ghost" id="ageLeave" type="button">LEAVE ARCHIVE</button>
         </div>
-        <div class="intro-visual" aria-hidden="true">
-          <div class="mind-panel">
-            <div class="mind-panel__circle"></div>
-            <div class="mind-panel__circle mind-panel__circle--two"></div>
-            <div class="mind-panel__cross"></div>
-            <div class="mind-panel__core">文</div>
-            <span class="mind-panel__tag one">MEMORY CORE</span>
-            <span class="mind-panel__tag two">MIND FILE</span>
-            <span class="mind-panel__tag three">SYSTEM ACTIVE</span>
-          </div>
-          <div class="intro-technical">
-            <span>SUBJECT // NANHER HEW</span>
-            <span>STATUS // STABLE</span>
-            <span>FIELD // DIGITAL ARTIST</span>
-          </div>
-        </div>
-      </div>
-      <div class="intro-footer">
-        <span>THE USER IS ACCESSING A MIND</span>
-        <span>SESSION / LOCAL STATIC BUILD</span>
+        <div class="gate-bottom">IDENTITY VERIFIED BY VISITOR // NO ACCOUNT REQUIRED</div>
       </div>
     </div>
   </div>
 
   <div class="app-shell" id="appShell" aria-hidden="true">
-    <div class="monitor-shell">
-      <header class="topbar">
-        <div class="topbar__identity">
-          <span class="topbar__mark">文</span>
-          <div>
-            <strong>NANHER HEW</strong>
-            <small>CLASSIFIED NEURAL DOSSIER / NH-01</small>
+    <!-- Persistent access handle: every other interface element can be hidden. -->
+    <button type="button" class="interface-handle" id="uiToggle" aria-controls="systemTools" aria-expanded="false" title="Show or hide interface [H]">[ + ] INTERFACE</button>
+
+    <header class="topbar" id="systemTools" hidden>
+      <div class="topbar__brand"><span class="signal"></span> NANHER HEW <small>NH.OS / 06</small></div>
+      <div class="topbar__actions">
+        <button type="button" class="tiny-button" id="navToggle" aria-controls="accessNodes" aria-expanded="false">01 / NODES +</button>
+        <button type="button" class="tiny-button" id="feedToggle" aria-controls="monitorFeed" aria-expanded="false">02 / FEED +</button>
+        <button type="button" class="tiny-button" id="detailsToggle" aria-pressed="false">03 / DETAILS +</button>
+        <button type="button" class="tiny-button" id="motionToggle">MOTION</button>
+        <button type="button" class="tiny-button" id="soundToggle" aria-pressed="false">AUDIO OFF</button>
+        <button type="button" class="tiny-button toolbar-close" id="hideUiButton" aria-label="Hide controls">×</button>
+      </div>
+    </header>
+
+    <aside class="left-nav mini-window" id="accessNodes" aria-label="Access nodes" hidden>
+      <div class="mini-window__head"><span>ACCESS NODES // 01–06</span><button type="button" class="window-close" data-close-window="nodes" aria-label="Close access nodes">×</button></div>
+      <nav class="module-nav" id="moduleNav">
+        <button type="button" class="module-nav__item is-active" data-module-target="overview"><span>01</span><strong>OVERVIEW</strong></button>
+        <button type="button" class="module-nav__item" data-module-target="works"><span>02</span><strong>RECENT WORKS</strong></button>
+        <button type="button" class="module-nav__item" data-module-target="archive"><span>03</span><strong>ARCHIVE</strong></button>
+        <button type="button" class="module-nav__item" data-module-target="identity"><span>04</span><strong>IDENTITY</strong></button>
+        <button type="button" class="module-nav__item" data-module-target="commissions"><span>05</span><strong>COMMISSIONS</strong></button>
+        <button type="button" class="module-nav__item" data-module-target="contact"><span>06</span><strong>CONTACT</strong></button>
+      </nav>
+      <a class="mini-window__link" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>REQUEST COMMISSION ↗</a>
+    </aside>
+
+    <aside class="right-telemetry mini-window" id="monitorFeed" aria-label="Monitor feed" hidden>
+      <div class="mini-window__head"><span>MONITOR FEED // LIVE</span><button type="button" class="window-close" data-close-window="feed" aria-label="Close monitor feed">×</button></div>
+      <div class="feed-core"><span>文</span><small>NEURAL LINK / ACTIVE</small></div>
+      <div class="telemetry-block"><span>MODULE</span><strong id="telemetryModule">01 / OVERVIEW</strong></div>
+      <div class="telemetry-block"><span>VISUAL MODE</span><strong>CLASSIFIED / PERSONAL</strong></div>
+      <div class="telemetry-block"><span>AUDIO</span><strong id="telemetryAudio">MUTED</strong></div>
+    </aside>
+
+    <main class="content-stage" id="mainContent">
+      <section class="module is-active" id="overview" data-module="overview" aria-labelledby="overviewTitle">
+        <div class="hero-screen" id="heroScreen">
+          <div class="hero-screen__ambient" aria-hidden="true"></div>
+          <div class="hero-screen__content">
+            <h1 id="overviewTitle"><span>NANHER</span><em>HEW</em></h1>
+          </div>
+          <!-- ONE original PNG at full opacity above the typography: no duplicate/mask. -->
+          <img class="hero-screen__portrait" id="heroPortrait" src="./arts/hero.PNG" alt="Nanher Hew original character artwork" fetchpriority="high">
+          <div class="hero-screen__details" id="heroDetails" hidden>
+            <p>NH-01 / DIGITAL ARTIST · FURRY · BARA · CHARACTER DESIGN</p>
+            <div class="hero-screen__actions"><button type="button" class="action action--primary" data-module-jump="works">EXPLORE WORK ↗</button><button type="button" class="action action--ghost" data-module-jump="identity">IDENTITY FILE ↗</button></div>
           </div>
         </div>
-        <div class="topbar__status">
-          <span class="sig-dot"></span>
-          <span>CONSCIOUSNESS LINK ACTIVE</span>
-        </div>
-        <div class="topbar__actions">
-          <button type="button" class="tiny-button panel-switch" id="navToggle" aria-controls="accessNodes" aria-expanded="true" aria-label="Collapse access nodes panel" title="Show or hide access nodes">NODES −</button>
-          <button type="button" class="tiny-button panel-switch" id="feedToggle" aria-controls="monitorFeed" aria-expanded="true" aria-label="Collapse monitor feed panel" title="Show or hide monitor feed">FEED −</button>
-          <button type="button" class="tiny-button" id="motionToggle">MOTION INPUT</button>
-          <button type="button" class="tiny-button" id="soundToggle" aria-pressed="false">AMBIENT OFF</button>
-        </div>
-      </header>
-
-      <div class="main-layout" id="mainLayout">
-        <aside class="left-nav" id="accessNodes" aria-label="Main navigation">
-          <div class="left-nav__title">ACCESS NODES</div>
-          <nav class="module-nav" id="moduleNav">
-            <button type="button" class="module-nav__item is-active" data-module-target="overview"><span>01</span><strong>OVERVIEW</strong><small>PRIMARY ENTRY</small></button>
-            <button type="button" class="module-nav__item" data-module-target="works"><span>02</span><strong>RECENT WORKS</strong><small>VISUAL RECORDS</small></button>
-            <button type="button" class="module-nav__item" data-module-target="archive"><span>03</span><strong>ARCHIVE</strong><small>MEMORY BANK</small></button>
-            <button type="button" class="module-nav__item" data-module-target="identity"><span>04</span><strong>IDENTITY</strong><small>PERSONAL FILE</small></button>
-            <button type="button" class="module-nav__item" data-module-target="commissions"><span>05</span><strong>COMMISSIONS</strong><small>SERVICE CATALOG</small></button>
-            <button type="button" class="module-nav__item" data-module-target="contact"><span>06</span><strong>CONTACT</strong><small>EXTERNAL LINKS</small></button>
-          </nav>
-          <a class="left-nav__discord action action--primary action--compact" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>REQUEST A COMMISSION <span aria-hidden="true">↗</span></a>
-          <div class="left-nav__meta">
-            <span>PROFILE STATUS</span>
-            <strong>INDEPENDENT / AVAILABLE</strong>
-          </div>
-        </aside>
-
-        <main class="content-stage" id="mainContent">
-          <section class="module is-active" id="overview" data-module="overview" aria-labelledby="overviewTitle">
-            <div class="module-hud">
-              <span>01 / PRIMARY ENTRY</span>
-              <span>MONITORED VISUALIZATION</span>
-            </div>
-            <div class="hero-screen monitor-card">
-              <div class="monitor-card__grid"></div>
-              <div class="hero-screen__image-layer hero-parallax" id="heroParallax">
-                <div class="hero-screen__image hero-parallax__back" style="background-image:url('arts/hero.PNG')"></div>
-                <div class="hero-screen__image hero-parallax__front" style="background-image:url('arts/hero.PNG')"></div>
-              </div>
-              <div class="hero-screen__overlay"></div>
-              <!-- The upper portion of the original hero artwork passes OVER the name.
-                   This mirrors the clipping technique from the original Nanher Hew CSS. -->
-              <div class="hero-screen__foreground" id="heroForeground" aria-hidden="true" style="background-image:url('arts/hero.PNG')"></div>
-              <div class="hero-screen__content">
-                <div class="hero-screen__headline">
-                  <p class="system-kicker"><span class="sig-dot"></span> CONFIDENTIAL SUBJECT / DIGITAL ARTIST</p>
-                  <h1 id="overviewTitle">NANHER <em>HEW</em></h1>
-                  <p class="hero-screen__lede">We are looking through the monitor of a hidden system: the consciousness, artwork and identity archive of Nanher Hew.</p>
-                </div>
-                <div class="hero-screen__controls">
-                  <button type="button" class="action action--primary" data-module-jump="works">OPEN VISUAL RECORDS <span aria-hidden="true">↗</span></button>
-                  <button type="button" class="action action--ghost" data-module-jump="identity">READ IDENTITY FILE</button>
-                </div>
-              </div>
-              <div class="hero-screen__data">
-                <div class="data-chip"><span>ARTIST TYPE</span><strong>FURRY / BARA / DESIGN</strong></div>
-                <div class="data-chip"><span>CONNECTION</span><strong>STABLE</strong></div>
-                <div class="data-chip"><span>LOCATION</span><strong>MEXICO</strong></div>
-                <div class="data-chip"><span>STATUS</span><strong>INDEPENDENT</strong></div>
-              </div>
-            </div>
-
-            <div class="overview-grid">
-              <article class="panel-card monitor-card">
-                <div class="monitor-card__header">
-                  <span>SUBJECT DOSSIER</span>
-                  <span>TEXT / LIVE</span>
-                </div>
-                <div class="panel-card__body">
-                  <h2>ENTER THE CONSCIOUSNESS</h2>
-                  <p>This interface interprets Nanher Hew as a monitored mental archive — a dark, cinematic operating environment with original artwork at the center.</p>
-                  <p>The composition is built to feel like a hidden file, not a conventional landing page.</p>
-                </div>
-              </article>
-              <article class="panel-card monitor-card">
-                <div class="monitor-card__header">
-                  <span>MISSION PARAMETERS</span>
-                  <span>VISUAL INDEX</span>
-                </div>
-                <div class="panel-card__stats">
-                  <div><span>RECENT WORKS</span><strong>04</strong></div>
-                  <div><span>ARCHIVE FRAGMENTS</span><strong>10</strong></div>
-                  <div><span>COMMISSION TIERS</span><strong>05</strong></div>
-                  <div><span>COMM LINK</span><strong>DISCORD</strong></div>
-                </div>
-              </article>
-            </div>
-          </section>
-
+      </section>
           <section class="module" id="works" data-module="works" aria-labelledby="worksTitle" hidden>
             <div class="module-hud">
               <span>02 / VISUAL RECORDS</span>
@@ -340,38 +248,9 @@
               </article>
             </div>
           </section>
-        </main>
 
-        <aside class="right-telemetry" id="monitorFeed" aria-label="Monitor feed">
-          <div class="right-telemetry__head">
-            <span>MONITOR FEED</span>
-            <span class="sig-dot"></span>
-          </div>
-          <div class="telemetry-circle" aria-hidden="true">
-            <span></span><span></span><span></span><b>文</b>
-          </div>
-          <div class="telemetry-block">
-            <span>ACTIVE MODULE</span>
-            <strong id="telemetryModule">01 / OVERVIEW</strong>
-          </div>
-          <div class="telemetry-block">
-            <span>VISUAL MODE</span>
-            <strong>MONITOR / CLASSIFIED</strong>
-          </div>
-          <div class="telemetry-block">
-            <span>AUDIO</span>
-            <strong id="telemetryAudio">MUTED</strong>
-          </div>
-          <div class="telemetry-note">THE USER IS NOT VISITING A PORTFOLIO.<br>THE USER IS ACCESSING A MIND.</div>
-        </aside>
-      </div>
-
-      <footer class="bottombar">
-        <span>© NANHER HEW 文 / DIGITAL ART</span>
-        <span>PATH <b id="currentPath">/OVERVIEW</b></span>
-        <span>1-6 NAVIGATION / ESC CLOSES VIEWER</span>
-      </footer>
-    </div>
+    </main>
+    <div class="current-path" id="currentPath" aria-live="polite" hidden>/OVERVIEW</div>
   </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle" hidden>
@@ -397,8 +276,8 @@
 
   <!-- Optional owner-supplied music. Place the file at arts/ambient.mp3.
        Browser policies require a user action before playback. -->
-  <audio id="ambientMusic" src="./arts/ambient.mp3" preload="none" loop></audio>
 
+  <audio id="ambientMusic" src="./arts/ambient.mp3" preload="none" loop></audio>
   <div class="cursor-reticle" id="cursorReticle" aria-hidden="true"><span></span></div>
   <div class="sr-only" id="announcer" aria-live="polite"></div>
 </body>

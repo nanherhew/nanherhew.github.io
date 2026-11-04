@@ -1,841 +1,363 @@
+/* NANHER HEW 文 — V6 / static, dependency-free interface */
 (() => {
   'use strict';
-
-  // In privacy-restricted contexts sessionStorage may throw a SecurityError.
-  // Fall back to this page's lifetime instead of blocking the age gate.
-  const memoryFallback = new Map();
-  const session = {
-    getItem(key) {
-      try { return window.sessionStorage.getItem(key); }
-      catch { return memoryFallback.get(key) || null; }
-    },
-    setItem(key, value) {
-      try { window.sessionStorage.setItem(key, value); }
-      catch { memoryFallback.set(key, String(value)); }
-    },
+  const $ = id => document.getElementById(id);
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const touchDevice = matchMedia('(pointer: coarse)').matches;
+  const storage = {
+    get(key) { try { return sessionStorage.getItem(key); } catch { return null; } },
+    set(key, val) { try { sessionStorage.setItem(key, val); } catch { /* privacy mode */ } }
   };
-
-  const state = {
-    activeModule: 'overview',
-    currentFilter: 'all',
-    lightboxItems: [],
-    lightboxIndex: 0,
-    reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    touchDevice: matchMedia('(pointer: coarse)').matches,
-    audioReady: false,
-    audioEnabled: false,
-    audioSource: 'off',
-    motionEnabled: false,
-    motionMode: 'pointer',
-    parallax: { currentX: 0, currentY: 0, targetX: 0, targetY: 0 },
+  const els = {
+    boot: $('bootScreen'), bootPercent: $('bootPercent'), bootBar: $('bootBar'),
+    bootMessage: $('bootMessage'), bootSubstatus: $('bootSubstatus'), bootTrack: $('bootTrack'),
+    age: $('ageGate'), ageEnter: $('ageEnter'), ageLeave: $('ageLeave'),
+    app: $('appShell'), content: $('mainContent'),
+    uiToggle: $('uiToggle'), tools: $('systemTools'), hideUiButton: $('hideUiButton'),
+    nodes: $('accessNodes'), feed: $('monitorFeed'), navToggle: $('navToggle'),
+    feedToggle: $('feedToggle'), detailsToggle: $('detailsToggle'), details: $('heroDetails'),
+    module: Array.from(document.querySelectorAll('section.module')),
+    navItems: Array.from(document.querySelectorAll('[data-module-target]')),
+    moduleJumps: Array.from(document.querySelectorAll('[data-module-jump]')),
+    recent: $('recentWorks'), archive: $('archiveGrid'), archiveSummary: $('archiveSummary'),
+    archiveTabs: Array.from(document.querySelectorAll('.archive-tab')),
+    telemetry: $('telemetryModule'), telemetryAudio: $('telemetryAudio'), currentPath: $('currentPath'),
+    portrait: $('heroPortrait'), cursor: $('cursorReticle'), announcer: $('announcer'),
+    lightbox: $('lightbox'), lightboxArt: $('lightboxArt'),
+    lightboxClose: $('lightboxClose'), lightboxPrev: $('lightboxPrev'), lightboxNext: $('lightboxNext'),
+    lightboxTitle: $('lightboxTitle'), lightboxDetail: $('lightboxDetail'), lightboxCounter: $('lightboxCounter'),
+    sound: $('soundToggle'), motion: $('motionToggle'), music: $('ambientMusic'),
   };
-
-  const artworkData = {
+  const sections = {overview:'01 / OVERVIEW', works:'02 / RECENT WORKS', archive:'03 / ARCHIVE',identity:'04 / IDENTITY',commissions:'05 / COMMISSIONS',contact:'06 / CONTACT'};
+  const art = {
     recent: [
-      { path: 'arts/01.jpg', title: 'CHARACTER', detail: 'RECENT WORK / 01', category: 'characters' },
-      { path: 'arts/02.jpg', title: 'FURRY', detail: 'RECENT WORK / 02', category: 'commissions' },
-      { path: 'arts/03.jpg', title: 'BARA', detail: 'RECENT WORK / 03', category: 'bara' },
-      { path: 'arts/04.jpg', title: 'ILLUSTRATION', detail: 'RECENT WORK / 04', category: 'characters' },
+      ['arts/01.jpg','CHARACTER','RECENT WORK / 01','characters'],
+      ['arts/02.jpg','FURRY','RECENT WORK / 02','commissions'],
+      ['arts/03.jpg','BARA','RECENT WORK / 03','bara'],
+      ['arts/04.jpg','ILLUSTRATION','RECENT WORK / 04','characters']
     ],
     archive: [
-      { path: 'arts/01.jpg', title: 'CHARACTER / 01', detail: 'ARCHIVE RECORD', category: 'characters' },
-      { path: 'arts/02.jpg', title: 'COMMISSION / 01', detail: 'ARCHIVE RECORD', category: 'commissions' },
-      { path: 'arts/03.jpg', title: 'BARA / 01', detail: 'ARCHIVE RECORD', category: 'bara' },
-      { path: 'arts/04.jpg', title: 'CHARACTER / 02', detail: 'ARCHIVE RECORD', category: 'characters' },
-      { path: 'arts/05.jpg', title: 'CHARACTER / 03', detail: 'ARCHIVE RECORD', category: 'characters' },
-      { path: 'arts/06.jpg', title: 'CHARACTER / 04', detail: 'ARCHIVE RECORD', category: 'characters' },
-      { path: 'arts/07.jpg', title: 'BARA / 02', detail: 'ARCHIVE RECORD', category: 'bara' },
-      { path: 'arts/08.jpg', title: 'BARA / 03', detail: 'ARCHIVE RECORD', category: 'bara' },
-      { path: 'arts/wip01.jpg', title: 'WIP / 01', detail: 'WORK IN PROGRESS', category: 'wips' },
-      { path: 'arts/wip02.jpg', title: 'WIP / 02', detail: 'WORK IN PROGRESS', category: 'wips' },
-    ],
+      ['arts/05.jpg','ARCHIVE / 05','ARTWORK','characters'],
+      ['arts/06.jpg','ARCHIVE / 06','ARTWORK','characters'],
+      ['arts/07.jpg','ARCHIVE / 07','ARTWORK','bara'],
+      ['arts/08.jpg','ARCHIVE / 08','ARTWORK','bara'],
+      ['arts/02.jpg','COMMISSION / 01','FOR @BJOERN90','commissions'],
+      ['arts/03.jpg','COMMISSION / 02','FOR @OUTDOOWPUMPKIN9','commissions'],
+      ['arts/wip01.jpg','WIP / 01','WORK IN PROGRESS','wips'],
+      ['arts/wip02.jpg','WIP / 02','WORK IN PROGRESS','wips'],
+    ]
   };
-
-  const modulesMeta = {
-    overview: '01 / OVERVIEW',
-    works: '02 / RECENT WORKS',
-    archive: '03 / ARCHIVE',
-    identity: '04 / IDENTITY',
-    commissions: '05 / COMMISSIONS',
-    contact: '06 / CONTACT',
+  const state = {
+    verified: storage.get('nhAgeVerifiedV6') === 'true',
+    unlocked: false, module: 'overview', filter: 'all', ui: false, nodes: false, feed: false, details: false,
+    list: [], index: 0, focusBeforeLightbox: null, playing: false, audioSource:'off', audioToken:0,
+    orientation: false, lastHover:0,
   };
-
-  const els = {
-    body: document.body,
-    ageGate: document.getElementById('ageGate'),
-    ageEnter: document.getElementById('ageEnter'),
-    ageLeave: document.getElementById('ageLeave'),
-    introScreen: document.getElementById('introScreen'),
-    enterConsciousness: document.getElementById('enterConsciousness'),
-    skipIntro: document.getElementById('skipIntro'),
-    bootBar: document.getElementById('bootBar'),
-    bootStatus: document.getElementById('bootStatus'),
-    introModeLabel: document.getElementById('introModeLabel'),
-    appShell: document.getElementById('appShell'),
-    mainLayout: document.getElementById('mainLayout'),
-    navToggle: document.getElementById('navToggle'),
-    feedToggle: document.getElementById('feedToggle'),
-    accessNodes: document.getElementById('accessNodes'),
-    monitorFeed: document.getElementById('monitorFeed'),
-    heroForeground: document.getElementById('heroForeground'),
-    ambientMusic: document.getElementById('ambientMusic'),
-    mainContent: document.getElementById('mainContent'),
-    moduleNavItems: [...document.querySelectorAll('[data-module-target]')],
-    modules: [...document.querySelectorAll('.module')],
-    telemetryModule: document.getElementById('telemetryModule'),
-    telemetryAudio: document.getElementById('telemetryAudio'),
-    currentPath: document.getElementById('currentPath'),
-    archiveTabs: [...document.querySelectorAll('.archive-tab')],
-    archiveGrid: document.getElementById('archiveGrid'),
-    archiveSummary: document.getElementById('archiveSummary'),
-    recentWorks: document.getElementById('recentWorks'),
-    lightbox: document.getElementById('lightbox'),
-    lightboxArt: document.getElementById('lightboxArt'),
-    lightboxTitle: document.getElementById('lightboxTitle'),
-    lightboxDetail: document.getElementById('lightboxDetail'),
-    lightboxCounter: document.getElementById('lightboxCounter'),
-    lightboxClose: document.getElementById('lightboxClose'),
-    lightboxPrev: document.getElementById('lightboxPrev'),
-    lightboxNext: document.getElementById('lightboxNext'),
-    cursor: document.getElementById('cursorReticle'),
-    announcer: document.getElementById('announcer'),
-    heroParallax: document.getElementById('heroParallax'),
-    heroBack: document.querySelector('.hero-parallax__back'),
-    heroFront: document.querySelector('.hero-parallax__front'),
-    moduleJumpButtons: [...document.querySelectorAll('[data-module-jump]')],
-    soundToggle: document.getElementById('soundToggle'),
-    motionToggle: document.getElementById('motionToggle'),
-    externalLinks: [...document.querySelectorAll('[data-external-sfx]')],
-  };
-
-  const audio = createAudioEngine();
-  let bootTimer = null;
-  let audioRequestToken = 0;
-  // The website uses the owner's file when it exists; otherwise it falls back
-  // to the original procedural ambience. No music autoplays before interaction.
-
-  init();
+  const synth = createSynth();
 
   function init() {
-    if (state.touchDevice) {
-      els.body.classList.add('touch-device');
-    } else {
-      setupCursor();
-    }
-
-    renderRecentWorks();
-    renderArchive();
-    setupAgeGate();
-    setupIntro();
-    setupNavigation();
-    setupCollapsiblePanels();
-    setupArchiveTabs();
+    if (touchDevice) document.body.classList.add('touch-device');
+    else setupCursor();
+    // An absent asset must not expose the browser's broken-image alt text.
+    // The actual original art is retained in the user's existing arts/ folder.
+    els.portrait.addEventListener('error', () => { els.portrait.hidden = true; });
+    renderRecent(); renderArchive();
+    bindControls();
     setupLightbox();
-    setupGlobalKeys();
-    setupModuleJumps();
-    setupInteractiveSfx();
     setupParallax();
-    setupMotionToggle();
-    setupSoundToggle();
-    updateTelemetry();
+    configureAudio();
+    // Always show a brief system access animation first; the warning follows.
+    bootSequence();
   }
 
-  function setupAgeGate() {
-    const verified = session.getItem('nhAgeVerified') === 'true';
-    const introSeen = session.getItem('nhIntroSeen') === 'true';
-
-    if (verified) {
-      els.ageGate.classList.add('hidden');
-      els.body.classList.remove('state-locked');
-      if (introSeen) {
-        showApp();
-      } else {
-        showIntro();
-      }
-    } else {
-      els.body.classList.add('state-locked');
-    }
-
-    els.ageEnter?.addEventListener('click', () => {
-      session.setItem('nhAgeVerified', 'true');
-      els.ageGate.classList.add('hidden');
-      playUi('confirm');
-      showIntro();
+  function bootSequence() {
+    const steps = reducedMotion ? [[0,8,'INITIALIZING'],[90,70,'ALMOST DONE'],[210,100,'ACCESS READY']]
+      : [[70,7,'CONNECTING'],[260,19,'DECRYPTING PROFILE'],[490,37,'LOCATING MEMORY'],
+         [730,54,'READING NEURAL FILE'],[970,70,'ALMOST DONE'],[1280,87,'SYNCHRONIZING'],[1560,100,'ACCESS READY']];
+    steps.forEach(([delay, percentage, message]) => {
+      setTimeout(() => {
+        els.bootBar.style.width = percentage + '%';
+        els.bootPercent.textContent = String(percentage).padStart(2,'0') + '%';
+        els.bootTrack.setAttribute('aria-valuenow',String(percentage));
+        els.bootMessage.textContent = message;
+        els.bootSubstatus.textContent = percentage === 70 ? '70% / ALMOST DONE..' : percentage === 100 ? 'SYSTEM ONLINE' : 'CHECKING MEMORY BLOCKS';
+      }, delay);
     });
-
-    els.ageLeave?.addEventListener('click', () => {
-      playUi('error');
-      window.location.href = 'https://www.google.com';
-    });
+    setTimeout(() => {
+      els.boot.hidden = true;
+      if (state.verified) unlock();
+      else showWarning();
+    }, reducedMotion ? 380 : 1880);
   }
 
-  function setupIntro() {
-    els.enterConsciousness?.addEventListener('click', () => {
-      runIntroSequence(true);
-    });
-    els.skipIntro?.addEventListener('click', () => {
-      runIntroSequence(false);
-    });
+  function showWarning() {
+    els.age.hidden = false;
+    els.ageEnter.focus({preventScroll:true});
   }
-
-  function showIntro() {
-    els.body.classList.add('state-locked');
-    els.introScreen.hidden = false;
-    if (els.introModeLabel) els.introModeLabel.textContent = 'READY';
-    startBootIdle();
+  function unlock() {
+    state.unlocked = true;
+    els.age.hidden = true;
+    els.app.setAttribute('aria-hidden','false');
+    document.body.classList.remove('state-locked');
+    showModule('overview', false);
   }
-
-  function runIntroSequence(withSequence) {
-    if (bootTimer) {
-      clearInterval(bootTimer);
-      bootTimer = null;
-    }
-    if (withSequence) {
-      if (els.introModeLabel) els.introModeLabel.textContent = 'INITIALIZING';
-      if (els.bootStatus) els.bootStatus.textContent = 'SYNCHRONIZING';
-      if (els.bootBar) els.bootBar.style.width = '100%';
+  function bindControls() {
+    els.ageEnter.addEventListener('click', () => {
+      storage.set('nhAgeVerifiedV6','true');
+      state.verified = true;
+      unlock();
+      startAudio(); // user gesture only; will fall back when MP3 unavailable
       playUi('enter');
-      startAmbientAudio();
-      setTimeout(finishIntro, state.reducedMotion ? 160 : 1200);
-    } else {
-      if (els.bootStatus) els.bootStatus.textContent = 'SKIPPED / ACCESSING';
-      if (els.bootBar) els.bootBar.style.width = '100%';
-      playUi('confirm');
-      startAmbientAudio();
-      setTimeout(finishIntro, 180);
-    }
-  }
-
-  function finishIntro() {
-    session.setItem('nhIntroSeen', 'true');
-    els.introScreen.hidden = true;
-    showApp();
-  }
-
-  function showApp() {
-    els.appShell.setAttribute('aria-hidden', 'false');
-    els.body.classList.remove('state-locked');
-    showModule(state.activeModule, false);
-  }
-
-  function startBootIdle() {
-    if (!els.bootBar) return;
-    let width = 22;
-    let direction = 1;
-    els.bootBar.style.width = `${width}%`;
-    if (bootTimer) clearInterval(bootTimer);
-    bootTimer = setInterval(() => {
-      width += direction * 10;
-      if (width >= 76 || width <= 22) direction *= -1;
-      els.bootBar.style.width = `${width}%`;
-    }, 900);
-  }
-
-  function setupNavigation() {
-    els.moduleNavItems.forEach((button) => {
-      button.addEventListener('click', () => {
-        showModule(button.dataset.moduleTarget, true);
-      });
     });
-  }
-
-  function setupCollapsiblePanels() {
-    const compact = window.matchMedia('(max-width: 1240px)').matches;
-    let navCollapsed = session.getItem('nhNavCollapsed') === 'true';
-    const storedFeed = session.getItem('nhFeedCollapsed');
-    let feedCollapsed = storedFeed === null ? compact : storedFeed === 'true';
-
-    const sync = () => {
-      els.mainLayout.classList.toggle('nav-collapsed', navCollapsed);
-      els.mainLayout.classList.toggle('feed-collapsed', feedCollapsed);
-      els.navToggle.setAttribute('aria-expanded', String(!navCollapsed));
-      els.feedToggle.setAttribute('aria-expanded', String(!feedCollapsed));
-      els.navToggle.setAttribute('aria-label', navCollapsed ? 'Expand access nodes panel' : 'Collapse access nodes panel');
-      els.feedToggle.setAttribute('aria-label', feedCollapsed ? 'Expand monitor feed panel' : 'Collapse monitor feed panel');
-      els.navToggle.textContent = navCollapsed ? 'NODES +' : 'NODES −';
-      els.feedToggle.textContent = feedCollapsed ? 'FEED +' : 'FEED −';
-      els.accessNodes.setAttribute('aria-hidden', String(navCollapsed));
-      els.monitorFeed.setAttribute('aria-hidden', String(feedCollapsed));
-    };
-
-    els.navToggle.addEventListener('click', () => {
-      navCollapsed = !navCollapsed;
-      session.setItem('nhNavCollapsed', String(navCollapsed));
-      sync();
+    els.ageLeave.addEventListener('click', () => { window.location.href = 'https://www.google.com'; });
+    els.uiToggle.addEventListener('click', () => setUi(!state.ui));
+    els.hideUiButton.addEventListener('click', () => setUi(false));
+    els.navToggle.addEventListener('click', () => setWindow('nodes', !state.nodes));
+    els.feedToggle.addEventListener('click', () => setWindow('feed', !state.feed));
+    els.detailsToggle.addEventListener('click', () => {
+      state.details = !state.details;
+      els.details.hidden = !state.details;
+      els.detailsToggle.textContent = state.details ? '03 / DETAILS −' : '03 / DETAILS +';
+      els.detailsToggle.setAttribute('aria-pressed',String(state.details));
       playUi('tab');
     });
-    els.feedToggle.addEventListener('click', () => {
-      feedCollapsed = !feedCollapsed;
-      session.setItem('nhFeedCollapsed', String(feedCollapsed));
-      sync();
-      playUi('tab');
+    document.querySelectorAll('[data-close-window]').forEach(button => {
+      button.addEventListener('click', () => setWindow(button.dataset.closeWindow, false));
     });
-
-    // On handhelds, the feed becomes an overlay. Dismiss it when the visitor
-    // taps elsewhere; the visible FEED switch always allows reopening.
-    document.addEventListener('pointerdown', (event) => {
-      if (window.innerWidth > 960 || feedCollapsed) return;
-      if (els.feedToggle.contains(event.target) || els.monitorFeed.contains(event.target)) return;
-      feedCollapsed = true;
-      session.setItem('nhFeedCollapsed', 'true');
-      sync();
+    els.navItems.forEach(btn => btn.addEventListener('click',()=>showModule(btn.dataset.moduleTarget)));
+    els.moduleJumps.forEach(btn => btn.addEventListener('click',()=>showModule(btn.dataset.moduleJump)));
+    els.archiveTabs.forEach(tab => tab.addEventListener('click',()=>{
+      state.filter=tab.dataset.filter||'all';
+      els.archiveTabs.forEach(t=>{const active=t===tab;t.classList.toggle('is-active',active);t.setAttribute('aria-selected',String(active));});
+      renderArchive(); playUi('tab');
+    }));
+    els.sound.addEventListener('click',()=>state.playing ? stopAudio() : startAudio());
+    els.motion.addEventListener('click', enableMotion);
+    document.addEventListener('pointerdown', event => {
+      if (!state.ui) return;
+      if (state.nodes && !els.nodes.contains(event.target) && event.target!==els.navToggle) setWindow('nodes',false);
+      if (state.feed && !els.feed.contains(event.target) && event.target!==els.feedToggle) setWindow('feed',false);
     });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !feedCollapsed && window.innerWidth <= 960) {
-        feedCollapsed = true;
-        session.setItem('nhFeedCollapsed', 'true');
-        sync();
-      }
-    });
-    sync();
-  }
-
-  function showModule(moduleName, playSound = true) {
-    if (!moduleName || !modulesMeta[moduleName]) return;
-
-    state.activeModule = moduleName;
-    els.modules.forEach((section) => {
-      const active = section.dataset.module === moduleName;
-      section.classList.toggle('is-active', active);
-      section.hidden = !active;
-    });
-
-    els.moduleNavItems.forEach((button) => {
-      button.classList.toggle('is-active', button.dataset.moduleTarget === moduleName);
-    });
-
-    updateTelemetry();
-    announce(`Opened ${modulesMeta[moduleName]}`);
-
-    if (playSound) {
-      // Reset the reading position after switching files. On phones the nav is
-      // sticky, so align the newly opened module immediately beneath it.
-      if (window.matchMedia('(max-width: 960px)').matches) {
-        const nav = document.querySelector('.left-nav');
-        const navHeight = nav ? nav.getBoundingClientRect().height : 0;
-        const top = Math.max(0, els.mainContent.getBoundingClientRect().top + window.scrollY - navHeight);
-        window.scrollTo({ top, behavior: 'instant' });
-      } else {
-        els.mainContent.scrollTop = 0;
-      }
-      playUi('select');
-    }
-  }
-
-  function updateTelemetry() {
-    const label = modulesMeta[state.activeModule] || '01 / OVERVIEW';
-    if (els.telemetryModule) els.telemetryModule.textContent = label;
-    if (els.currentPath) els.currentPath.textContent = `/${state.activeModule.toUpperCase()}`;
-    if (els.telemetryAudio) els.telemetryAudio.textContent = !state.audioEnabled ? 'MUTED' : state.audioSource === 'file' ? 'CUSTOM TRACK' : state.audioSource === 'procedural' ? 'PROCEDURAL' : 'CONNECTING';
-  }
-
-  function setupArchiveTabs() {
-    els.archiveTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const filter = tab.dataset.filter || 'all';
-        state.currentFilter = filter;
-        els.archiveTabs.forEach((item) => {
-          const active = item === tab;
-          item.classList.toggle('is-active', active);
-          item.setAttribute('aria-selected', String(active));
-        });
-        renderArchive();
-        playUi('tab');
-      });
-    });
-  }
-
-  function renderRecentWorks() {
-    if (!els.recentWorks) return;
-    els.recentWorks.innerHTML = artworkData.recent.map(createArtTile).join('');
-    bindArtButtons(els.recentWorks, artworkData.recent);
-  }
-
-  function renderArchive() {
-    if (!els.archiveGrid) return;
-    const items = state.currentFilter === 'all'
-      ? artworkData.archive
-      : artworkData.archive.filter((item) => item.category === state.currentFilter);
-
-    els.archiveGrid.innerHTML = items.map(createArtTile).join('');
-    bindArtButtons(els.archiveGrid, items);
-    if (els.archiveSummary) {
-      els.archiveSummary.textContent = `${state.currentFilter.toUpperCase()} / ${String(items.length).padStart(2, '0')} RECORDS`;
-    }
-  }
-
-  function createArtTile(item, index) {
-    return `
-      <button type="button" class="art-tile" data-open-lightbox="${index}" data-path="${item.path}">
-        <span class="art-tile__visual" style="background-image:url('${item.path}')"></span>
-        <span class="art-tile__meta"><span>${item.title}</span><span>${item.detail} ↗</span></span>
-      </button>
-    `;
-  }
-
-  function bindArtButtons(container, items) {
-    const buttons = [...container.querySelectorAll('[data-open-lightbox]')];
-    buttons.forEach((button, index) => {
-      button.addEventListener('click', () => {
-        openLightbox(items, index);
-      });
-    });
-  }
-
-  function setupLightbox() {
-    els.lightboxClose?.addEventListener('click', closeLightbox);
-    els.lightboxPrev?.addEventListener('click', () => stepLightbox(-1));
-    els.lightboxNext?.addEventListener('click', () => stepLightbox(1));
-    els.lightbox?.addEventListener('click', (event) => {
-      if (event.target === els.lightbox) {
-        closeLightbox();
-      }
-    });
-  }
-
-  function openLightbox(items, index) {
-    state.lightboxItems = items;
-    state.lightboxIndex = index;
-    updateLightbox();
-    els.lightbox.hidden = false;
-    els.body.classList.add('lightbox-open');
-    playUi('open');
-  }
-
-  function closeLightbox() {
-    if (els.lightbox.hidden) return;
-    els.lightbox.hidden = true;
-    els.body.classList.remove('lightbox-open');
-    playUi('close');
-  }
-
-  function stepLightbox(direction) {
-    if (!state.lightboxItems.length) return;
-    state.lightboxIndex = (state.lightboxIndex + direction + state.lightboxItems.length) % state.lightboxItems.length;
-    updateLightbox();
-    playUi('tab');
-  }
-
-  function updateLightbox() {
-    const item = state.lightboxItems[state.lightboxIndex];
-    if (!item || !els.lightboxArt) return;
-    els.lightboxArt.innerHTML = `<img src="${item.path}" alt="${escapeHtml(item.title)}">`;
-    if (els.lightboxTitle) els.lightboxTitle.textContent = item.title;
-    if (els.lightboxDetail) els.lightboxDetail.textContent = item.detail;
-    if (els.lightboxCounter) els.lightboxCounter.textContent = `${String(state.lightboxIndex + 1).padStart(2, '0')} / ${String(state.lightboxItems.length).padStart(2, '0')}`;
-  }
-
-  function setupGlobalKeys() {
-    document.addEventListener('keydown', (event) => {
-      if (!els.lightbox.hidden) {
-        if (event.key === 'Escape') closeLightbox();
-        if (event.key === 'ArrowRight') stepLightbox(1);
-        if (event.key === 'ArrowLeft') stepLightbox(-1);
-      }
-
-      if (!els.introScreen.hidden && event.key === 'Escape') {
-        runIntroSequence(false);
-      }
-
-      const digitMap = { '1': 'overview', '2': 'works', '3': 'archive', '4': 'identity', '5': 'commissions', '6': 'contact' };
-      if (digitMap[event.key] && els.appShell.getAttribute('aria-hidden') === 'false') {
-        showModule(digitMap[event.key], true);
-      }
-    });
-  }
-
-  function setupModuleJumps() {
-    els.moduleJumpButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        showModule(button.dataset.moduleJump, true);
-      });
-    });
-  }
-
-  function setupInteractiveSfx() {
-    const hoverables = [...document.querySelectorAll('button, a')];
-    hoverables.forEach((element) => {
-      element.addEventListener('mouseenter', () => {
-        if (!state.touchDevice) playUi('hover');
-      });
-    });
-    els.externalLinks.forEach((link) => {
-      link.addEventListener('click', () => playUi('confirm'));
-    });
-  }
-
-  function setupSoundToggle() {
-    if (els.ambientMusic) {
-      els.ambientMusic.loop = true;
-      els.ambientMusic.preload = 'none';
-      els.ambientMusic.volume = 0.18; // gentle background level
-    }
-    els.soundToggle?.addEventListener('click', () => {
-      if (state.audioEnabled) {
-        stopBackgroundAudio();
-      } else {
-        startAmbientAudio();
-      }
-    });
-    syncAudioUi();
-  }
-
-  // Can be called only by a real visitor interaction: ENTER / SKIP / sound.
-  // Priority: arts/ambient.mp3. If absent, keep the legacy ambient synthesizer.
-  function startAmbientAudio() {
-    if (state.audioEnabled) return;
-    const token = ++audioRequestToken;
-    state.audioEnabled = true;
-    state.audioSource = 'loading';
-    syncAudioUi();
-    // Initialize Web Audio while user activation is still available for UI SFX.
-    void initAudio();
-
-    if (!els.ambientMusic) {
-      void startProceduralFallback(token);
-      return;
-    }
-    try {
-      const playing = els.ambientMusic.play();
-      Promise.resolve(playing).then(() => {
-        if (token !== audioRequestToken || !state.audioEnabled) {
-          els.ambientMusic.pause();
-          return;
-        }
-        audio.stopAmbient();
-        state.audioSource = 'file';
-        syncAudioUi();
-      }).catch(() => {
-        void startProceduralFallback(token);
-      });
-    } catch {
-      void startProceduralFallback(token);
-    }
-  }
-
-  async function startProceduralFallback(token) {
-    await initAudio();
-    if (token !== audioRequestToken || !state.audioEnabled) return;
-    if (els.ambientMusic) els.ambientMusic.pause();
-    audio.startAmbient();
-    state.audioSource = 'procedural';
-    syncAudioUi();
-  }
-
-  function stopBackgroundAudio() {
-    ++audioRequestToken; // invalidate pending file loading / fallback
-    state.audioEnabled = false;
-    state.audioSource = 'off';
-    if (els.ambientMusic) els.ambientMusic.pause();
-    audio.stopAmbient();
-    syncAudioUi();
-  }
-
-  async function initAudio() {
-    try {
-      if (!state.audioReady) {
-        await audio.init();
-        state.audioReady = !!audio.context;
-      }
-      if (audio.context?.state === 'suspended') {
-        await audio.context.resume();
-      }
-    } catch {
-      // Browsers can restrict Web Audio. The HTML audio track may still work.
-    }
-  }
-
-  function syncAudioUi() {
-    if (!els.soundToggle) return;
-    els.soundToggle.classList.toggle('is-active', state.audioEnabled);
-    els.soundToggle.setAttribute('aria-pressed', String(state.audioEnabled));
-    els.soundToggle.textContent = !state.audioEnabled ? 'AUDIO OFF' : state.audioSource === 'file' ? 'MUSIC ON' : 'AMBIENT ON';
-    updateTelemetry();
-  }
-
-  function playUi(type) {
-    if (!state.audioReady || !state.audioEnabled) return;
-    audio.play(type);
-  }
-
-  function setupCursor() {
-    const cursor = els.cursor;
-    if (!cursor) return;
-    document.addEventListener('mousemove', (event) => {
-      els.body.classList.add('cursor-ready');
-      cursor.style.left = `${event.clientX}px`;
-      cursor.style.top = `${event.clientY}px`;
-    });
-
-    document.addEventListener('mouseover', (event) => {
-      const interactive = event.target.closest('button, a, .art-tile');
-      els.body.classList.toggle('cursor-hover', Boolean(interactive));
-    });
-
-    // Avoid leaving the simulated cursor visible at the edge of the screen.
-    const resetCursor = () => {
-      els.body.classList.remove('cursor-ready', 'cursor-hover');
-    };
-    document.documentElement.addEventListener('mouseleave', resetCursor);
-    window.addEventListener('blur', resetCursor);
-  }
-
-  function setupParallax() {
-    if (!els.heroParallax || state.reducedMotion) return;
-
-    if (!state.touchDevice) {
-      document.addEventListener('mousemove', (event) => {
-        const x = event.clientX / window.innerWidth - 0.5;
-        const y = event.clientY / window.innerHeight - 0.5;
-        state.parallax.targetX = x * 18;
-        state.parallax.targetY = y * 18;
-      });
-    }
-
-    const animate = () => {
-      state.parallax.currentX += (state.parallax.targetX - state.parallax.currentX) * 0.08;
-      state.parallax.currentY += (state.parallax.targetY - state.parallax.currentY) * 0.08;
-      if (els.heroBack) {
-        els.heroBack.style.transform = `translate(${state.parallax.currentX * 0.35}px, ${state.parallax.currentY * 0.35}px) scale(1.03)`;
-      }
-      if (els.heroFront) {
-        els.heroFront.style.transform = `translate(${state.parallax.currentX * 0.75}px, ${state.parallax.currentY * 0.75}px) scale(1.06)`;
-      }
-      if (els.heroForeground) {
-        els.heroForeground.style.transform = `translate(${state.parallax.currentX * 0.75}px, ${state.parallax.currentY * 0.75}px) scale(1.06)`;
-      }
-      requestAnimationFrame(animate);
-    };
-    animate();
-  }
-
-  function setupMotionToggle() {
-    els.motionToggle?.addEventListener('click', async () => {
-      if (!('DeviceOrientationEvent' in window) || !state.touchDevice) {
-        state.motionEnabled = false;
-        playUi('error');
-        announce('Motion input is unavailable on this device.');
-        els.motionToggle.textContent = 'MOTION UNAVAILABLE';
+    document.addEventListener('keydown', event => {
+      const typing = event.target.closest?.('input,textarea,select,[contenteditable]');
+      if (typing) return;
+      if (event.key === 'Escape') {
+        if (!els.lightbox.hidden) closeLightbox();
+        else if (state.nodes||state.feed) {setWindow('nodes',false);setWindow('feed',false);}
+        else if (state.ui) setUi(false);
         return;
       }
-
-      try {
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-          const result = await DeviceOrientationEvent.requestPermission();
-          if (result !== 'granted') throw new Error('Permission denied');
-        }
-        enableMotionSensor();
-      } catch (error) {
-        console.error(error);
-        playUi('error');
-        els.motionToggle.textContent = 'MOTION BLOCKED';
+      if (!els.lightbox.hidden) {
+        if (event.key==='ArrowLeft')stepLightbox(-1);
+        if (event.key==='ArrowRight')stepLightbox(1);
+        return;
       }
+      if (!state.unlocked) return;
+      if (event.key.toLowerCase()==='h' && !event.repeat) setUi(!state.ui);
+      const ids=['overview','works','archive','identity','commissions','contact'];
+      const index = Number(event.key)-1;
+      if (index>=0 && index<6) showModule(ids[index]);
+    });
+    document.querySelectorAll('[data-external-sfx]').forEach(a=>a.addEventListener('click',()=>playUi('confirm')));
+  }
+
+  function setUi(open) {
+    state.ui=open;
+    els.tools.hidden=!open;
+    els.uiToggle.setAttribute('aria-expanded',String(open));
+    els.uiToggle.textContent=open ? '[ − ] INTERFACE' : '[ + ] INTERFACE';
+    if (!open) {
+      setWindow('nodes',false);setWindow('feed',false);
+      state.details=false;els.details.hidden=true;
+      els.detailsToggle.textContent='03 / DETAILS +';
+      els.detailsToggle.setAttribute('aria-pressed','false');
+    }
+  }
+  function setWindow(which,open) {
+    if (open && !state.ui) setUi(true);
+    const isNodes=which==='nodes';
+    const target=isNodes?els.nodes:els.feed;
+    const toggle=isNodes?els.navToggle:els.feedToggle;
+    state[isNodes?'nodes':'feed']=open;
+    target.hidden=!open;
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.textContent=isNodes?(open?'01 / NODES −':'01 / NODES +'):(open?'02 / FEED −':'02 / FEED +');
+    if (open) playUi('open');
+  }
+  function showModule(id,sound=true) {
+    if (!(id in sections)) return;
+    state.module=id;
+    els.module.forEach(s=>{const active=s.dataset.module===id;s.hidden=!active;s.classList.toggle('is-active',active);});
+    els.navItems.forEach(b=>b.classList.toggle('is-active',b.dataset.moduleTarget===id));
+    if (els.telemetry) els.telemetry.textContent=sections[id];
+    if (els.currentPath) els.currentPath.textContent='/'+id.toUpperCase();
+    if (sound){setWindow('nodes',false);setWindow('feed',false);setUi(false);window.scrollTo({top:0,behavior:'instant'});playUi('select');}
+    announce('Accessed '+sections[id]);
+  }
+  function renderRecent(){renderTiles(els.recent,art.recent);}
+  function renderArchive(){
+    const list=state.filter==='all'?art.archive:art.archive.filter(x=>x[3]===state.filter);
+    renderTiles(els.archive,list);
+    els.archiveSummary.textContent=state.filter.toUpperCase()+' / '+String(list.length).padStart(2,'0')+' RECORDS';
+  }
+  function renderTiles(container,list){
+    if(!container)return;
+    container.replaceChildren(...list.map((item,index)=>{
+      const button=document.createElement('button');button.type='button';button.className='art-tile';
+      const visual=document.createElement('span');visual.className='art-tile__visual';visual.style.backgroundImage='url("'+item[0]+'")';
+      const meta=document.createElement('span');meta.className='art-tile__meta';
+      const label=document.createElement('span');label.textContent=item[1];const descriptor=document.createElement('span');descriptor.textContent=item[2]+' ↗';
+      meta.append(label,descriptor);button.append(visual,meta);
+      button.addEventListener('click',()=>openLightbox(list,index,button));return button;
+    }));
+  }
+  function setupLightbox(){
+    els.lightboxClose.addEventListener('click',closeLightbox);
+    els.lightboxPrev.addEventListener('click',()=>stepLightbox(-1));
+    els.lightboxNext.addEventListener('click',()=>stepLightbox(1));
+    els.lightbox.addEventListener('click',ev=>{if(ev.target===els.lightbox)closeLightbox();});
+  }
+  function openLightbox(list,index,button){
+    state.list=list;state.index=index;state.focusBeforeLightbox=button;
+    updateLightbox();els.lightbox.hidden=false;document.body.classList.add('lightbox-open');
+    els.lightboxClose.focus({preventScroll:true});playUi('open');
+  }
+  function closeLightbox(){
+    if(els.lightbox.hidden)return;
+    els.lightbox.hidden=true;document.body.classList.remove('lightbox-open');
+    state.focusBeforeLightbox?.focus({preventScroll:true});playUi('close');
+  }
+  function stepLightbox(dir){
+    if(!state.list.length)return;
+    state.index=(state.index+dir+state.list.length)%state.list.length;
+    updateLightbox();playUi('tab');
+  }
+  function updateLightbox(){
+    const item=state.list[state.index];if(!item)return;
+    const img=new Image();img.src=item[0];img.alt=item[1];
+    els.lightboxArt.replaceChildren(img);
+    els.lightboxTitle.textContent=item[1];els.lightboxDetail.textContent=item[2];
+    els.lightboxCounter.textContent=String(state.index+1).padStart(2,'0')+' / '+String(state.list.length).padStart(2,'0');
+  }
+
+  function setupCursor(){
+    let pointerX=0,pointerY=0,scheduled=false;
+    document.addEventListener('pointermove',e=>{
+      pointerX=e.clientX;pointerY=e.clientY;
+      if(scheduled)return;scheduled=true;
+      requestAnimationFrame(()=>{
+        scheduled=false;document.body.classList.add('cursor-ready');
+        els.cursor.style.left=pointerX+'px';els.cursor.style.top=pointerY+'px';
+      });
+    },{passive:true});
+    document.addEventListener('pointerover',e=>document.body.classList.toggle('cursor-hover',Boolean(e.target.closest?.('button,a'))),{passive:true});
+    document.addEventListener('pointerleave',()=>document.body.classList.remove('cursor-ready'));
+  }
+  function setupParallax(){
+    if(touchDevice||reducedMotion||!els.portrait)return;
+    let scheduled=false,x=0,y=0;
+    document.addEventListener('pointermove',e=>{
+      if(state.module!=='overview'||!state.unlocked)return;
+      x=(e.clientX/window.innerWidth-.5)*8;y=(e.clientY/window.innerHeight-.5)*6;
+      if(scheduled)return;scheduled=true;
+      requestAnimationFrame(()=>{scheduled=false;els.portrait.style.setProperty('--hero-x',x.toFixed(2)+'px');els.portrait.style.setProperty('--hero-y',y.toFixed(2)+'px');});
+    },{passive:true});
+  }
+  async function enableMotion(){
+    if(!touchDevice||!('DeviceOrientationEvent' in window)||state.orientation){
+      els.motion.textContent=state.orientation?'MOTION ON':'UNAVAILABLE';return;
+    }
+    try {
+      if(typeof DeviceOrientationEvent.requestPermission==='function'){
+        const granted=await DeviceOrientationEvent.requestPermission();if(granted!=='granted')throw Error('Permission denied');
+      }
+      state.orientation=true;
+      window.addEventListener('deviceorientation',e=>{
+        if(!state.unlocked||state.module!=='overview'||reducedMotion)return;
+        const x=Math.max(-8,Math.min(8,(e.gamma||0)*.36));
+        const y=Math.max(-7,Math.min(7,(e.beta||0)*.2));
+        els.portrait.style.setProperty('--hero-x',x.toFixed(1)+'px');
+        els.portrait.style.setProperty('--hero-y',y.toFixed(1)+'px');
+      },{passive:true});
+      els.motion.textContent='MOTION ON';playUi('confirm');
+    } catch {els.motion.textContent='MOTION BLOCKED';}
+  }
+
+  function configureAudio(){
+    els.music.loop=true;els.music.preload='none';els.music.volume=.18;
+    els.music.addEventListener('error',()=>{
+      if(state.playing&&state.audioSource==='loading')void fallback(state.audioToken);
     });
   }
-
-  function enableMotionSensor() {
-    if (state.motionEnabled) return;
-    state.motionEnabled = true;
-    state.motionMode = 'sensor';
-    els.motionToggle.classList.add('is-active');
-    els.motionToggle.textContent = 'MOTION ACTIVE';
-    window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
-    playUi('confirm');
-    announce('Motion input enabled');
+  function startAudio(){
+    if(state.playing)return;
+    state.playing=true;state.audioSource='loading';const token=++state.audioToken;syncAudio();
+    // Calling .play() directly from the click event preserves browser activation.
+    void synth.init();
+    const promise=els.music.play();
+    Promise.resolve(promise).then(()=>{
+      if(!state.playing||token!==state.audioToken){els.music.pause();return;}
+      synth.stopAmbient();state.audioSource='file';syncAudio();
+    }).catch(()=>{void fallback(token);});
   }
-
-  function handleDeviceOrientation(event) {
-    const gamma = clamp(event.gamma || 0, -18, 18);
-    const beta = clamp(event.beta || 0, -18, 18);
-    state.parallax.targetX = gamma * 0.7;
-    state.parallax.targetY = beta * 0.45;
+  async function fallback(token){
+    await synth.init();
+    if(!state.playing||token!==state.audioToken)return;
+    els.music.pause();synth.startAmbient();state.audioSource='procedural';syncAudio();
   }
-
-  function announce(message) {
-    if (els.announcer) els.announcer.textContent = message;
+  function stopAudio(){
+    state.playing=false;state.audioSource='off';state.audioToken++;
+    els.music.pause();synth.stopAmbient();syncAudio();
   }
-
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
+  function syncAudio(){
+    els.sound.textContent=!state.playing?'AUDIO OFF':state.audioSource==='file'?'MUSIC ON':'AMBIENT ON';
+    els.sound.setAttribute('aria-pressed',String(state.playing));
+    els.telemetryAudio.textContent=!state.playing?'MUTED':state.audioSource==='file'?'CUSTOM TRACK':'PROCEDURAL';
   }
-
-  function escapeHtml(value) {
-    return String(value)
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#039;');
+  function playUi(kind){
+    if(!state.playing||!synth.ctx)return;
+    const now=performance.now();if(kind==='hover'&&now-state.lastHover<140)return;state.lastHover=now;
+    synth.ui(kind);
   }
+  function announce(text){els.announcer.textContent=text;}
 
-  function createAudioEngine() {
-    const engine = {
-      context: null,
-      master: null,
-      ambientNodes: [],
-      ambientNoise: null,
-      ambientInterval: null,
-      async init() {
-        if (this.context) return;
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        this.context = new AudioCtx();
-        this.master = this.context.createGain();
-        this.master.gain.value = 0.11;
-        this.master.connect(this.context.destination);
+  /* A compact, quiet ambient synth. No constant animation loop, noise buffer or heavy effects. */
+  function createSynth(){
+    let ctx=null,master=null,drones=[],shimmerTimer=null;
+    function pulse(freq,duration=.12,vol=.028){
+      if(!ctx||!master)return;
+      const start=ctx.currentTime;
+      const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(freq,start);
+      gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(vol,start+.015);
+      gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+      osc.connect(gain).connect(master);osc.start(start);osc.stop(start+duration+.03);
+    }
+    return {
+      get ctx(){return ctx;},
+      async init(){
+        try{
+          if(!ctx){const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;ctx=new AudioCtx();master=ctx.createGain();master.gain.value=.16;master.connect(ctx.destination);}
+          if(ctx.state==='suspended')await ctx.resume();
+        }catch{/* Audio optional; fail quietly */}
       },
-      play(type) {
-        if (!this.context || !this.master) return;
-        const ctx = this.context;
-        const now = ctx.currentTime;
-        switch (type) {
-          case 'hover':
-            this.pulse(now, 580, 0.02, 'triangle', 0.03);
-            break;
-          case 'select':
-            this.pulse(now, 220, 0.05, 'sine', 0.06);
-            this.pulse(now + 0.05, 330, 0.06, 'triangle', 0.04);
-            break;
-          case 'tab':
-            this.pulse(now, 310, 0.04, 'sine', 0.04);
-            break;
-          case 'open':
-            this.pulse(now, 240, 0.08, 'triangle', 0.05);
-            this.pulse(now + 0.04, 430, 0.1, 'sine', 0.04);
-            break;
-          case 'close':
-            this.pulse(now, 400, 0.07, 'triangle', 0.04, true);
-            break;
-          case 'confirm':
-            this.pulse(now, 260, 0.08, 'sine', 0.05);
-            this.pulse(now + 0.07, 480, 0.1, 'triangle', 0.05);
-            break;
-          case 'error':
-            this.pulse(now, 140, 0.12, 'sawtooth', 0.04, true);
-            break;
-          case 'enter':
-            this.pulse(now, 110, 0.22, 'sine', 0.08);
-            this.pulse(now + 0.16, 170, 0.24, 'triangle', 0.06);
-            this.pulse(now + 0.28, 260, 0.28, 'triangle', 0.05);
-            this.pulse(now + 0.42, 420, 0.22, 'sine', 0.05);
-            break;
-          default:
-            break;
-        }
-      },
-      pulse(start, frequency, duration, type = 'sine', volume = 0.04, descending = false) {
-        const ctx = this.context;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = 1800;
-        osc.type = type;
-        osc.frequency.setValueAtTime(frequency, start);
-        if (descending) {
-          osc.frequency.exponentialRampToValueAtTime(Math.max(30, frequency * 0.65), start + duration);
-        } else {
-          osc.frequency.exponentialRampToValueAtTime(frequency * 1.08, start + duration);
-        }
-        gain.gain.setValueAtTime(0.0001, start);
-        gain.gain.exponentialRampToValueAtTime(volume, start + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(this.master);
-        osc.start(start);
-        osc.stop(start + duration + 0.05);
-      },
-      startAmbient() {
-        if (!this.context || this.ambientNodes.length) return;
-        const ctx = this.context;
-        const ambientGain = ctx.createGain();
-        ambientGain.gain.value = 0.035;
-        ambientGain.connect(this.master);
-
-        const makeOsc = (freq, type, detune = 0) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          const lfo = ctx.createOscillator();
-          const lfoGain = ctx.createGain();
-          osc.type = type;
-          osc.frequency.value = freq;
-          osc.detune.value = detune;
-          gain.gain.value = 0.16;
-          lfo.type = 'sine';
-          lfo.frequency.value = 0.08 + Math.random() * 0.06;
-          lfoGain.gain.value = 4 + Math.random() * 6;
-          lfo.connect(lfoGain);
-          lfoGain.connect(osc.detune);
-          osc.connect(gain);
-          gain.connect(ambientGain);
-          osc.start();
-          lfo.start();
-          return { osc, gain, lfo, lfoGain };
-        };
-
-        const oscA = makeOsc(73.42, 'triangle', -6);
-        const oscB = makeOsc(110, 'sine', 4);
-        const oscC = makeOsc(164.81, 'triangle', 9);
-
-        const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-        const data = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < data.length; i += 1) {
-          data[i] = (Math.random() * 2 - 1) * 0.18;
-        }
-        const noiseSource = ctx.createBufferSource();
-        noiseSource.buffer = noiseBuffer;
-        noiseSource.loop = true;
-        const noiseFilter = ctx.createBiquadFilter();
-        noiseFilter.type = 'bandpass';
-        noiseFilter.frequency.value = 680;
-        noiseFilter.Q.value = 0.8;
-        const noiseGain = ctx.createGain();
-        noiseGain.gain.value = 0.007;
-        noiseSource.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(ambientGain);
-        noiseSource.start();
-
-        this.ambientNodes = [ambientGain, oscA, oscB, oscC, noiseSource, noiseGain, noiseFilter];
-        this.ambientNoise = { source: noiseSource, gain: noiseGain, filter: noiseFilter };
-
-        const shimmer = () => {
-          if (!this.context || !this.ambientNodes.length) return;
-          const notes = [293.66, 349.23, 392.0, 440.0, 523.25];
-          const note = notes[Math.floor(Math.random() * notes.length)];
-          this.pulse(this.context.currentTime, note, 0.9, 'sine', 0.012);
-          this.pulse(this.context.currentTime + 0.12, note * 0.5, 1.4, 'triangle', 0.008);
-        };
-        shimmer();
-        this.ambientInterval = window.setInterval(shimmer, 4200);
-      },
-      stopAmbient() {
-        if (this.ambientInterval) {
-          clearInterval(this.ambientInterval);
-          this.ambientInterval = null;
-        }
-        if (!this.context || !this.ambientNodes.length) return;
-        const stopNow = this.context.currentTime;
-        const [ambientGain, ...nodes] = this.ambientNodes;
-        try {
-          ambientGain.gain.cancelScheduledValues(stopNow);
-          ambientGain.gain.setTargetAtTime(0.0001, stopNow, 0.25);
-        } catch (error) {
-          console.warn(error);
-        }
-        nodes.forEach((node) => {
-          try {
-            if (node.osc) node.osc.stop(stopNow + 0.45);
-            if (node.lfo) node.lfo.stop(stopNow + 0.45);
-            if (typeof node.stop === 'function') node.stop(stopNow + 0.45);
-          } catch (error) {
-            // noop
-          }
+      ui(kind){const tones={enter:220,select:310,tab:360,open:260,close:190,confirm:460,error:145};pulse(tones[kind]||280,kind==='enter'?.33:.11,kind==='enter'?.065:.025);},
+      startAmbient(){
+        if(!ctx||drones.length)return;
+        const freqs=[73.42,110,164.81];
+        drones=freqs.map((freq,i)=>{
+          const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=i===1?'sine':'triangle';osc.frequency.value=freq;
+          gain.gain.value=.009;osc.connect(gain).connect(master);osc.start();return {osc,gain};
         });
-        this.ambientNodes = [];
+        shimmerTimer=setInterval(()=>{
+          if(!drones.length)return;
+          pulse([293.66,349.23,392,440,523.25][Math.floor(Math.random()*5)],1.5,.006);
+        },5700);
       },
+      stopAmbient(){
+        if(shimmerTimer){clearInterval(shimmerTimer);shimmerTimer=null;}
+        drones.forEach(({osc,gain})=>{try{osc.stop();osc.disconnect();gain.disconnect();}catch{}});drones=[];
+      }
     };
-    return engine;
   }
+  init();
 })();
