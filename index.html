@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#080b12">
-  <meta name="description" content="Enter the consciousness of Nanher Hew 文 — digital artist, character designer and visual storyteller.">
+  <meta name="theme-color" content="#07070a">
+  <meta name="description" content="Nanher Hew 文 — Enter the consciousness. Classified mental archive, digital art, character design and visual storytelling.">
   <title>NANHER HEW 文 / ENTER THE CONSCIOUSNESS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,169 +12,382 @@
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
 </head>
-<body class="access-locked">
-  <a class="skip-link" href="#mainContent">SKIP TO CONTENT</a>
+<body class="state-locked">
+  <a class="skip-link" href="#mainContent">Skip to content</a>
 
-  <!-- The age confirmation always precedes the cinematic introduction. -->
+  <div class="screen-noise" aria-hidden="true"></div>
+  <div class="screen-vignette" aria-hidden="true"></div>
+
   <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
-    <div class="age-gate__image" id="ageBanner" aria-hidden="true"></div>
-    <div class="age-gate__rail" aria-hidden="true"><span>NH / RESTRICTED ACCESS</span><span>001 — 018</span></div>
-    <div class="age-gate__content">
-      <p class="microline"><span class="signal-dot"></span> CONTENT PROTOCOL / 18+</p>
-      <div class="age-gate__symbol" aria-hidden="true">文</div>
-      <p class="overline">BEFORE INITIALIZATION</p>
-      <h1 id="ageTitle">ACCESS<br><em>RESTRICTED.</em></h1>
-      <div class="age-gate__notice">
-        <strong>THIS ARCHIVE CONTAINS MATURE ARTWORK.</strong>
-        <p>Some illustrations may include nudity and sexual themes. You must be 18 or older to enter.</p>
+    <div class="age-gate__backdrop"></div>
+    <div class="age-gate__panel monitor-card">
+      <div class="age-gate__preview" style="background-image:url('arts/age-banner.jpg')"></div>
+      <div class="monitor-card__grid"></div>
+      <div class="monitor-card__header">
+        <span>MENTAL FILE / CONTENT RESTRICTION</span>
+        <span>GATE / 18+</span>
       </div>
-      <div class="age-gate__actions">
-        <button class="action action--red" id="ageEnter" type="button">I AM 18 OR OLDER <span aria-hidden="true">↗</span></button>
-        <button class="action action--quiet" id="ageLeave" type="button">LEAVE THIS SITE</button>
+      <div class="age-gate__content">
+        <p class="system-kicker"><span class="sig-dot"></span> ACCESS REQUIREMENT / ADULT CONTENT</p>
+        <div class="age-gate__symbol">文</div>
+        <h1 id="ageTitle">ACCESS <em>RESTRICTED</em></h1>
+        <p class="age-gate__lede">This archive contains mature artwork, nudity and sexual themes.</p>
+        <p class="age-gate__copy">By entering this site, you confirm that you are 18 years of age or older and understand the content warning.</p>
+        <div class="age-gate__actions">
+          <button type="button" class="action action--primary" id="ageEnter">I AM 18 OR OLDER <span aria-hidden="true">↗</span></button>
+          <button type="button" class="action action--ghost" id="ageLeave">LEAVE</button>
+        </div>
+        <div class="age-gate__footer">NANHER HEW 文 / AUTHORIZATION REQUIRED</div>
       </div>
-      <span class="microfoot">IDENTITY // NANHER HEW 文 &nbsp; · &nbsp; CONTENT AUTHORIZATION</span>
     </div>
   </div>
 
-  <!-- One entry per browser session, also skippable without audio. -->
   <div class="intro-screen" id="introScreen" role="dialog" aria-modal="true" aria-labelledby="introTitle" hidden>
-    <div class="intro-screen__top"><span>NH // PERSONAL OPERATING ENVIRONMENT</span><span id="introStatus">CONNECTION / STANDBY</span></div>
-    <div class="intro-screen__body">
-      <div class="intro-screen__copy">
-        <p class="overline"><span class="signal-dot"></span> SYSTEM NODE 001 — IDENTITY CONFIRMED</p>
-        <h2 id="introTitle">ENTER THE<br><span>CONSCIOUSNESS.</span></h2>
-        <p class="intro-lede">You are not opening a portfolio. You are accessing a mind.</p>
-        <div class="boot-terminal" aria-live="polite" aria-atomic="true">
-          <span><i>01</i> IDENTITY: NANHER HEW <b>VERIFIED</b></span>
-          <span><i>02</i> NEURAL INTERFACE <b id="bootInterface">READY</b></span>
-          <span><i>03</i> MEMORY FRAGMENTS <b id="bootMemory">AVAILABLE</b></span>
-          <div class="boot-progress"><span id="bootProgress"></span></div>
+    <div class="intro-screen__frame monitor-card">
+      <div class="monitor-card__grid"></div>
+      <div class="monitor-card__header">
+        <span>NEURAL ARCHIVE / INITIALIZATION</span>
+        <span id="introModeLabel">STANDBY</span>
+      </div>
+      <div class="intro-layout">
+        <div class="intro-copy">
+          <p class="system-kicker"><span class="sig-dot"></span> CLASSIFIED PERSONAL FILE / NH-01</p>
+          <h2 id="introTitle">ENTER THE <em>CONSCIOUSNESS</em></h2>
+          <p class="intro-copy__lede">Not a portfolio. Not a profile. A monitored access point into the visual mind of Nanher Hew.</p>
+          <div class="boot-block" aria-live="polite">
+            <div><span>IDENTITY</span><b>NANHER HEW / VERIFIED</b></div>
+            <div><span>CONNECTION</span><b id="bootStatus">NEURAL LINK READY</b></div>
+            <div><span>MEMORY FRAGMENTS</span><b>ARCHIVED / AVAILABLE</b></div>
+            <div><span>AUDIO ENVIRONMENT</span><b>AMBIENT / OPTIONAL</b></div>
+            <div class="boot-line"><span id="bootBar"></span></div>
+          </div>
+          <div class="intro-actions">
+            <button type="button" class="action action--primary action--large" id="enterConsciousness">[ ENTER CONSCIOUSNESS ] <span aria-hidden="true">↗</span></button>
+            <button type="button" class="action action--quiet" id="skipIntro">SKIP INTRO</button>
+          </div>
         </div>
-        <div class="intro-actions">
-          <button class="action action--red action--large" id="enterConsciousness" type="button">[ ENTER CONSCIOUSNESS ] <span aria-hidden="true">↗</span></button>
-          <button class="text-control" id="skipIntro" type="button">SKIP INITIALIZATION / →</button>
+        <div class="intro-visual" aria-hidden="true">
+          <div class="mind-panel">
+            <div class="mind-panel__circle"></div>
+            <div class="mind-panel__circle mind-panel__circle--two"></div>
+            <div class="mind-panel__cross"></div>
+            <div class="mind-panel__core">文</div>
+            <span class="mind-panel__tag one">MEMORY CORE</span>
+            <span class="mind-panel__tag two">MIND FILE</span>
+            <span class="mind-panel__tag three">SYSTEM ACTIVE</span>
+          </div>
+          <div class="intro-technical">
+            <span>SUBJECT // NANHER HEW</span>
+            <span>STATUS // STABLE</span>
+            <span>FIELD // DIGITAL ARTIST</span>
+          </div>
         </div>
       </div>
-      <div class="intro-screen__visual" aria-hidden="true">
-        <div class="mind-diagram"><div class="mind-diagram__orbit mind-diagram__orbit--one"></div><div class="mind-diagram__orbit mind-diagram__orbit--two"></div><div class="mind-diagram__orbit mind-diagram__orbit--three"></div><div class="mind-diagram__core">文</div><span class="mind-diagram__tick a"></span><span class="mind-diagram__tick b"></span><span class="mind-diagram__tick c"></span></div>
-        <span class="mind-id">CONSCIOUSNESS.EXE<br>LOCUS / 00—NH</span>
+      <div class="intro-footer">
+        <span>THE USER IS ACCESSING A MIND</span>
+        <span>SESSION / LOCAL STATIC BUILD</span>
       </div>
     </div>
-    <div class="intro-screen__bottom"><span>ESTABLISHING CONNECTION TO NANHER HEW</span><span>NO EXTERNAL PROCESS REQUIRED</span></div>
   </div>
 
   <div class="app-shell" id="appShell" aria-hidden="true">
-    <header class="system-bar">
-      <div class="system-bar__identity"><span class="system-bar__mark">文</span><div><strong>NANHER <b>HEW</b></strong><small>PERSONAL OPERATING SYSTEM / 01</small></div></div>
-      <div class="system-bar__center"><span class="signal-dot"></span><span>CONSCIOUSNESS LINK ACTIVE</span></div>
-      <div class="system-bar__tools"><span class="sys-version">NH.OS / V 1.0</span><button id="soundToggle" type="button" class="sound-toggle" aria-label="Mute sound" aria-pressed="true"><span class="sound-icon" aria-hidden="true">◖))</span><span id="soundLabel">SOUND ON</span></button></div>
-    </header>
+    <div class="monitor-shell">
+      <header class="topbar">
+        <div class="topbar__identity">
+          <span class="topbar__mark">文</span>
+          <div>
+            <strong>NANHER HEW</strong>
+            <small>CLASSIFIED NEURAL DOSSIER / NH-01</small>
+          </div>
+        </div>
+        <div class="topbar__status">
+          <span class="sig-dot"></span>
+          <span>CONSCIOUSNESS LINK ACTIVE</span>
+        </div>
+        <div class="topbar__actions">
+          <button type="button" class="tiny-button" id="motionToggle">MOTION INPUT</button>
+          <button type="button" class="tiny-button" id="soundToggle" aria-pressed="false">AMBIENT OFF</button>
+        </div>
+      </header>
 
-    <div class="console-layout">
-      <aside class="module-rail" aria-label="Main modules">
-        <div class="module-rail__head"><span>DIRECTORY //</span><span>06 MODULES</span></div>
-        <nav id="moduleNavigation" class="module-nav" aria-label="Main navigation">
-          <a href="#overview" data-navigate="overview" class="module-nav__link is-active" aria-current="page"><span class="module-nav__number">01</span><span class="module-nav__name">OVERVIEW</span><span class="module-nav__arrow" aria-hidden="true">↗</span></a>
-          <a href="#work" data-navigate="work" class="module-nav__link"><span class="module-nav__number">02</span><span class="module-nav__name">RECENT WORKS</span><span class="module-nav__arrow" aria-hidden="true">↗</span></a>
-          <a href="#archive" data-navigate="archive" class="module-nav__link"><span class="module-nav__number">03</span><span class="module-nav__name">ARCHIVE</span><span class="module-nav__arrow" aria-hidden="true">↗</span></a>
-          <a href="#identity" data-navigate="identity" class="module-nav__link"><span class="module-nav__number">04</span><span class="module-nav__name">IDENTITY</span><span class="module-nav__arrow" aria-hidden="true">↗</span></a>
-          <a href="#commissions" data-navigate="commissions" class="module-nav__link"><span class="module-nav__number">05</span><span class="module-nav__name">COMMISSIONS</span><span class="module-nav__arrow" aria-hidden="true">↗</span></a>
-          <a href="#contact" data-navigate="contact" class="module-nav__link"><span class="module-nav__number">06</span><span class="module-nav__name">CONTACT</span><span class="module-nav__arrow" aria-hidden="true">↗</span></a>
-        </nav>
-        <div class="module-rail__bottom"><span class="tiny-cross">✳</span><div><strong>EXPLORE THE UNKNOWN</strong><small>SELECT A MODULE TO ACCESS</small></div></div>
-        <div class="module-rail__index">NH_001<br>文</div>
-      </aside>
+      <div class="main-layout">
+        <aside class="left-nav" aria-label="Main navigation">
+          <div class="left-nav__title">ACCESS NODES</div>
+          <nav class="module-nav" id="moduleNav">
+            <button type="button" class="module-nav__item is-active" data-module-target="overview"><span>01</span><strong>OVERVIEW</strong><small>PRIMARY ENTRY</small></button>
+            <button type="button" class="module-nav__item" data-module-target="works"><span>02</span><strong>RECENT WORKS</strong><small>VISUAL RECORDS</small></button>
+            <button type="button" class="module-nav__item" data-module-target="archive"><span>03</span><strong>ARCHIVE</strong><small>MEMORY BANK</small></button>
+            <button type="button" class="module-nav__item" data-module-target="identity"><span>04</span><strong>IDENTITY</strong><small>PERSONAL FILE</small></button>
+            <button type="button" class="module-nav__item" data-module-target="commissions"><span>05</span><strong>COMMISSIONS</strong><small>SERVICE CATALOG</small></button>
+            <button type="button" class="module-nav__item" data-module-target="contact"><span>06</span><strong>CONTACT</strong><small>EXTERNAL LINKS</small></button>
+          </nav>
+          <a class="left-nav__discord action action--primary action--compact" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>REQUEST A COMMISSION <span aria-hidden="true">↗</span></a>
+          <div class="left-nav__meta">
+            <span>PROFILE STATUS</span>
+            <strong>INDEPENDENT / AVAILABLE</strong>
+          </div>
+        </aside>
 
-      <main class="module-viewport" id="mainContent" tabindex="-1">
-        <!-- Overview / hero with optional original image compositing. -->
-        <section class="module module--overview" data-module="overview" id="overview" aria-labelledby="overviewTitle">
-          <div class="module-topline"><span>01 / PERSONAL SYSTEM</span><span>ENTRY POINT // HOME</span></div>
-          <div class="overview-stage">
-            <div class="overview-stage__copy">
-              <p class="section-kicker"><span class="kicker-line"></span> THE ARTIST BEHIND THE SIGNAL</p>
-              <h1 id="overviewTitle">NANHER<span>HEW<span class="title-period">.</span></span></h1>
-              <p class="overview-role">DIGITAL ARTIST <span>//</span> CHARACTER DESIGNER</p>
-              <p class="overview-intro">Furry characters, bara illustration, character design and digital artwork. A personal universe built one image at a time.</p>
-              <button class="action action--outline" type="button" data-go="work">EXPLORE THE ARCHIVE <span aria-hidden="true">↗</span></button>
+        <main class="content-stage" id="mainContent">
+          <section class="module is-active" id="overview" data-module="overview" aria-labelledby="overviewTitle">
+            <div class="module-hud">
+              <span>01 / PRIMARY ENTRY</span>
+              <span>MONITORED VISUALIZATION</span>
             </div>
-            <div class="hero-media" id="heroMedia" aria-label="Original Nanher Hew hero illustration, when provided">
-              <div class="hero-media__raster" data-hero-layer="back"></div><div class="hero-media__portrait" data-hero-layer="front"></div>
-              <div class="hero-media__fallback" id="heroFallback" aria-hidden="true"><span class="hero-media__glyph">文</span><span class="hero-media__circuit"></span></div>
-              <div class="hero-media__caption"><span>VISUAL ID // NH</span><span>ARTWORK: <b id="heroAssetStatus">AWAITING SOURCE</b></span></div>
+            <div class="hero-screen monitor-card">
+              <div class="monitor-card__grid"></div>
+              <div class="hero-screen__image-layer hero-parallax" id="heroParallax">
+                <div class="hero-screen__image hero-parallax__back" style="background-image:url('arts/hero.PNG')"></div>
+                <div class="hero-screen__image hero-parallax__front" style="background-image:url('arts/hero.PNG')"></div>
+              </div>
+              <div class="hero-screen__overlay"></div>
+              <div class="hero-screen__content">
+                <div class="hero-screen__headline">
+                  <p class="system-kicker"><span class="sig-dot"></span> CONFIDENTIAL SUBJECT / DIGITAL ARTIST</p>
+                  <h1 id="overviewTitle">NANHER <em>HEW</em></h1>
+                  <p class="hero-screen__lede">We are looking through the monitor of a hidden system: the consciousness, artwork and identity archive of Nanher Hew.</p>
+                </div>
+                <div class="hero-screen__controls">
+                  <button type="button" class="action action--primary" data-module-jump="works">OPEN VISUAL RECORDS <span aria-hidden="true">↗</span></button>
+                  <button type="button" class="action action--ghost" data-module-jump="identity">READ IDENTITY FILE</button>
+                </div>
+              </div>
+              <div class="hero-screen__data">
+                <div class="data-chip"><span>ARTIST TYPE</span><strong>FURRY / BARA / DESIGN</strong></div>
+                <div class="data-chip"><span>CONNECTION</span><strong>STABLE</strong></div>
+                <div class="data-chip"><span>LOCATION</span><strong>MEXICO</strong></div>
+                <div class="data-chip"><span>STATUS</span><strong>INDEPENDENT</strong></div>
+              </div>
             </div>
-            <button type="button" id="motionPermission" class="motion-permission" hidden>ENABLE DEVICE MOTION ↗</button>
+
+            <div class="overview-grid">
+              <article class="panel-card monitor-card">
+                <div class="monitor-card__header">
+                  <span>SUBJECT DOSSIER</span>
+                  <span>TEXT / LIVE</span>
+                </div>
+                <div class="panel-card__body">
+                  <h2>ENTER THE CONSCIOUSNESS</h2>
+                  <p>This interface interprets Nanher Hew as a monitored mental archive — a dark, cinematic operating environment with original artwork at the center.</p>
+                  <p>The composition is built to feel like a hidden file, not a conventional landing page.</p>
+                </div>
+              </article>
+              <article class="panel-card monitor-card">
+                <div class="monitor-card__header">
+                  <span>MISSION PARAMETERS</span>
+                  <span>VISUAL INDEX</span>
+                </div>
+                <div class="panel-card__stats">
+                  <div><span>RECENT WORKS</span><strong>04</strong></div>
+                  <div><span>ARCHIVE FRAGMENTS</span><strong>10</strong></div>
+                  <div><span>COMMISSION TIERS</span><strong>05</strong></div>
+                  <div><span>COMM LINK</span><strong>DISCORD</strong></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="module" id="works" data-module="works" aria-labelledby="worksTitle" hidden>
+            <div class="module-hud">
+              <span>02 / VISUAL RECORDS</span>
+              <span>RECENT WORKS</span>
+            </div>
+            <div class="module-heading">
+              <p class="system-kicker"><span class="sig-dot"></span> SELECTED MEMORY FRAGMENTS</p>
+              <h2 id="worksTitle">RECENT <em>WORKS</em></h2>
+              <p>A curated selection of the latest visual records. Select a tile to inspect the memory fragment.</p>
+            </div>
+            <div class="art-grid art-grid--feature" id="recentWorks"></div>
+          </section>
+
+          <section class="module" id="archive" data-module="archive" aria-labelledby="archiveTitle" hidden>
+            <div class="module-hud">
+              <span>03 / MEMORY BANK</span>
+              <span>CATEGORIZED ARCHIVE</span>
+            </div>
+            <div class="module-heading">
+              <p class="system-kicker"><span class="sig-dot"></span> FILED RECORDS / FILTERABLE INDEX</p>
+              <h2 id="archiveTitle">THE <em>ARCHIVE</em></h2>
+              <p>Original categories preserved from the prior version, now presented as a classified memory browser.</p>
+            </div>
+            <div class="archive-toolbar monitor-card">
+              <div class="archive-toolbar__tabs" role="tablist" aria-label="Archive categories">
+                <button type="button" class="archive-tab is-active" data-filter="all" role="tab" aria-selected="true">ALL</button>
+                <button type="button" class="archive-tab" data-filter="characters" role="tab" aria-selected="false">CHARACTERS</button>
+                <button type="button" class="archive-tab" data-filter="bara" role="tab" aria-selected="false">BARA</button>
+                <button type="button" class="archive-tab" data-filter="commissions" role="tab" aria-selected="false">COMMISSIONS</button>
+                <button type="button" class="archive-tab" data-filter="wips" role="tab" aria-selected="false">WIPS</button>
+              </div>
+              <div class="archive-toolbar__meta">
+                <span id="archiveSummary">ALL / 10 RECORDS</span>
+                <span>CLICK TO EXPAND</span>
+              </div>
+            </div>
+            <div class="art-grid art-grid--archive" id="archiveGrid"></div>
+          </section>
+
+          <section class="module" id="identity" data-module="identity" aria-labelledby="identityTitle" hidden>
+            <div class="module-hud">
+              <span>04 / PERSONAL FILE</span>
+              <span>IDENTITY DOSSIER</span>
+            </div>
+            <div class="identity-grid">
+              <article class="identity-core monitor-card">
+                <div class="monitor-card__header">
+                  <span>IDENTITY CORE</span>
+                  <span>SUBJECT / NH</span>
+                </div>
+                <div class="identity-core__symbol">文</div>
+                <div class="identity-core__tags">
+                  <span>BASED / MEXICO</span>
+                  <span>ACTIVE / 2024</span>
+                  <span>STATUS / INDEPENDENT</span>
+                </div>
+              </article>
+              <article class="identity-copy monitor-card">
+                <div class="monitor-card__header">
+                  <span>PROFILE SUMMARY</span>
+                  <span>TEXT FILE</span>
+                </div>
+                <p class="system-kicker"><span class="sig-dot"></span> WHO AM I?</p>
+                <h2 id="identityTitle">YOUR CONFIDENT <em>HIMBO ARTIST</em></h2>
+                <p>I'm Nanher Hew, a digital artist focused on furry character design, bara illustration and visual storytelling.</p>
+                <p>I like expressive characters, strong silhouettes, unusual designs and artwork that feels personal.</p>
+                <div class="identity-copy__meta">
+                  <div><span>FOCUS</span><strong>CHARACTER DESIGN</strong></div>
+                  <div><span>MEDIUM</span><strong>DIGITAL ILLUSTRATION</strong></div>
+                  <div><span>SPECIALTY</span><strong>FURRY / BARA</strong></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="module" id="commissions" data-module="commissions" aria-labelledby="commissionsTitle" hidden>
+            <div class="module-hud">
+              <span>05 / SERVICE CATALOG</span>
+              <span>DIRECT COMMISSION ACCESS</span>
+            </div>
+            <div class="module-heading">
+              <p class="system-kicker"><span class="sig-dot"></span> COMMISSION CATALOG / NO INTERNAL FORM</p>
+              <h2 id="commissionsTitle">REQUEST A <em>COMMISSION</em></h2>
+              <p>Prices and service structure retained from the original site. Contact is now direct and simple: Discord only.</p>
+            </div>
+            <div class="commission-grid">
+              <div class="commission-table monitor-card">
+                <div class="monitor-card__header">
+                  <span>SERVICE INDEX</span>
+                  <span>USD</span>
+                </div>
+                <div class="commission-row"><span class="commission-row__code">01</span><div><strong>SKETCH</strong><small>Sketch only</small></div><b>$15</b></div>
+                <div class="commission-row"><span class="commission-row__code">02</span><div><strong>HEADSHOT</strong><small>Head and shoulders, fully rendered</small></div><b>$20</b></div>
+                <div class="commission-row"><span class="commission-row__code">03</span><div><strong>BUST</strong><small>Upper body, fully rendered</small></div><b>$25</b></div>
+                <div class="commission-row"><span class="commission-row__code">04</span><div><strong>HALF BODY</strong><small>Waist-up, fully rendered</small></div><b>$35</b></div>
+                <div class="commission-row"><span class="commission-row__code">05</span><div><strong>FULL BODY</strong><small>Full character, fully rendered</small></div><b>$45</b></div>
+              </div>
+              <div class="commission-side">
+                <article class="monitor-card commission-addon-card">
+                  <div class="monitor-card__header">
+                    <span>ADD-ONS</span>
+                    <span>OPTIONAL</span>
+                  </div>
+                  <div class="addon-row"><span>EXTRA CHARACTER</span><b>+$25</b></div>
+                  <div class="addon-row"><span>COMPLEX BACKGROUND</span><b>+$15</b></div>
+                  <div class="addon-row"><span>COMMERCIAL USE</span><b>+50%</b></div>
+                </article>
+                <article class="monitor-card commission-cta-card">
+                  <div class="monitor-card__header">
+                    <span>CONTACT PROTOCOL</span>
+                    <span>DISCORD</span>
+                  </div>
+                  <h3>DIRECT CONTACT ONLY</h3>
+                  <p>No embedded forms, no internal tracker, no extra steps. If you want to commission Nanher Hew, jump straight to Discord.</p>
+                  <a class="action action--primary action--wide" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>REQUEST A COMMISSION — CONTACT VIA DISCORD <span aria-hidden="true">↗</span></a>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="module" id="contact" data-module="contact" aria-labelledby="contactTitle" hidden>
+            <div class="module-hud">
+              <span>06 / EXTERNAL CHANNELS</span>
+              <span>COMMUNICATION LINKS</span>
+            </div>
+            <div class="contact-grid">
+              <article class="contact-copy monitor-card">
+                <div class="monitor-card__header">
+                  <span>OUTBOUND COMMUNICATION</span>
+                  <span>LIVE LINKS</span>
+                </div>
+                <p class="system-kicker"><span class="sig-dot"></span> HAVE A PROJECT IN MIND?</p>
+                <h2 id="contactTitle">SAY <em>HELLO</em></h2>
+                <p>For commissions, collaborations or general inquiries, use the channels below. Discord is the main point of contact.</p>
+                <a class="action action--primary action--wide" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>CONTACT VIA DISCORD <span aria-hidden="true">↗</span></a>
+              </article>
+              <article class="contact-links monitor-card">
+                <div class="monitor-card__header">
+                  <span>ACTIVE LINKS</span>
+                  <span>SOCIAL CHANNELS</span>
+                </div>
+                <a href="https://www.instagram.com/nanherhew/" target="_blank" rel="noopener noreferrer" data-external-sfx><span>01</span><strong>INSTAGRAM</strong><b>↗</b></a>
+                <a href="https://x.com/NanherHew" target="_blank" rel="noopener noreferrer" data-external-sfx><span>02</span><strong>TWITTER / X</strong><b>↗</b></a>
+                <a href="https://bsky.app/profile/nanherhew.bsky.social" target="_blank" rel="noopener noreferrer" data-external-sfx><span>03</span><strong>BLUESKY</strong><b>↗</b></a>
+                <a href="https://ko-fi.com/nanherhew" target="_blank" rel="noopener noreferrer" data-external-sfx><span>04</span><strong>KO-FI</strong><b>↗</b></a>
+              </article>
+            </div>
+          </section>
+        </main>
+
+        <aside class="right-telemetry">
+          <div class="right-telemetry__head">
+            <span>MONITOR FEED</span>
+            <span class="sig-dot"></span>
           </div>
-          <div class="overview-footer"><span>FIELD / FURRY · BARA · VISUAL STORYTELLING</span><span>USE DIRECTORY TO EXPLORE <b>↗</b></span></div>
-        </section>
-
-        <section class="module" data-module="work" id="work" aria-labelledby="workTitle" hidden>
-          <div class="module-topline"><span>02 / VISUAL MEMORY</span><span>FEATURED ART // 004</span></div>
-          <div class="module-heading"><p class="section-kicker"><span class="kicker-line"></span> SELECTED TRANSMISSIONS</p><h2 id="workTitle">RECENT <em>WORKS.</em></h2><p>Character illustration, furry artwork and personal pieces — selected from the original portfolio.</p></div>
-          <div class="art-grid art-grid--featured" id="recentWorks">
-            <button type="button" class="art-tile art-tile--large" data-art-path="arts/01.jpg" data-art-title="CHARACTER" data-art-detail="RECENT WORK / 01"><span class="art-tile__visual"></span><span class="art-tile__meta"><span>01 / CHARACTER</span><span>VIEW MEMORY ↗</span></span></button>
-            <button type="button" class="art-tile" data-art-path="arts/02.jpg" data-art-title="FURRY" data-art-detail="RECENT WORK / 02"><span class="art-tile__visual"></span><span class="art-tile__meta"><span>02 / FURRY</span><span>VIEW MEMORY ↗</span></span></button>
-            <button type="button" class="art-tile" data-art-path="arts/03.jpg" data-art-title="BARA" data-art-detail="RECENT WORK / 03"><span class="art-tile__visual"></span><span class="art-tile__meta"><span>03 / BARA</span><span>VIEW MEMORY ↗</span></span></button>
-            <button type="button" class="art-tile" data-art-path="arts/04.jpg" data-art-title="ILLUSTRATION" data-art-detail="RECENT WORK / 04"><span class="art-tile__visual"></span><span class="art-tile__meta"><span>04 / ILLUSTRATION</span><span>VIEW MEMORY ↗</span></span></button>
+          <div class="telemetry-circle" aria-hidden="true">
+            <span></span><span></span><span></span><b>文</b>
           </div>
-        </section>
-
-        <section class="module" data-module="archive" id="archive" aria-labelledby="archiveTitle" hidden>
-          <div class="module-topline"><span>03 / MEMORY BANK</span><span>FILE CLASSIFICATION</span></div>
-          <div class="module-heading"><p class="section-kicker"><span class="kicker-line"></span> FRAGMENTS OF THE MIND</p><h2 id="archiveTitle">THE <em>ARCHIVE.</em></h2><p>Browse the original categories. Select a fragment to expand its visual record.</p></div>
-          <div class="archive-tabs" role="tablist" aria-label="Artwork categories">
-            <button type="button" class="archive-tab is-active" id="filter-all" role="tab" aria-selected="true" aria-controls="archiveGrid" data-filter="all">01 / ALL</button>
-            <button type="button" class="archive-tab" id="filter-characters" role="tab" aria-selected="false" aria-controls="archiveGrid" data-filter="characters">02 / CHARACTERS</button>
-            <button type="button" class="archive-tab" id="filter-bara" role="tab" aria-selected="false" aria-controls="archiveGrid" data-filter="bara">03 / BARA</button>
-            <button type="button" class="archive-tab" id="filter-commissions" role="tab" aria-selected="false" aria-controls="archiveGrid" data-filter="commissions">04 / COMMISSIONS</button>
-            <button type="button" class="archive-tab" id="filter-wips" role="tab" aria-selected="false" aria-controls="archiveGrid" data-filter="wips">05 / WIPS</button>
+          <div class="telemetry-block">
+            <span>ACTIVE MODULE</span>
+            <strong id="telemetryModule">01 / OVERVIEW</strong>
           </div>
-          <div class="archive-summary"><span id="archiveSummary">ALL / 04 RECORDS</span><span>RECORDS / ORIGINAL SOURCE REFERENCES</span></div>
-          <div class="art-grid art-grid--archive" id="archiveGrid" role="tabpanel" aria-labelledby="filter-all"></div>
-        </section>
-
-        <section class="module" data-module="identity" id="identity" aria-labelledby="identityTitle" hidden>
-          <div class="module-topline"><span>04 / IDENTITY FILE</span><span>PERSONAL RECORD</span></div>
-          <div class="identity-layout"><div class="identity-emblem" aria-hidden="true"><span>文</span><small>ID / NANHER_HEW</small><small>ORIGIN / MX</small></div><div class="identity-copy"><p class="section-kicker"><span class="kicker-line"></span> WHO AM I?</p><h2 id="identityTitle">YOUR CONFIDENT<br><em>HIMBO ARTIST.</em></h2><p>I'm Nanher Hew, a digital artist focused on furry character design, bara illustration and visual storytelling.</p><p>I like expressive characters, strong silhouettes, unusual designs and artwork that feels personal.</p><div class="identity-details"><div><span>BASED</span><strong>MEXICO</strong></div><div><span>ACTIVE</span><strong>2024</strong></div><div><span>STATUS</span><strong>INDEPENDENT</strong></div></div><button class="action action--outline" type="button" data-go="contact">ESTABLISH CONTACT <span aria-hidden="true">↗</span></button></div></div>
-        </section>
-
-        <section class="module" data-module="commissions" id="commissions" aria-labelledby="commissionsTitle" hidden>
-          <div class="module-topline"><span>05 / CREATIVE SERVICES</span><span>COMMISSION CATALOGUE</span></div>
-          <div class="module-heading"><p class="section-kicker"><span class="kicker-line"></span> COMMISSION DATABASE / DIRECT CONTACT</p><h2 id="commissionsTitle">MAKE SOMETHING <em>AWESOME.</em></h2><p>Illustration services and add-ons, with prices retained from the original portfolio. Contact happens directly through Discord — no forms.</p></div>
-          <div class="commission-catalogue" aria-label="Commission prices">
-            <div class="catalogue-head"><span>PACKAGE / DESCRIPTION</span><span>ORIGINAL PRICE</span></div>
-            <div class="catalogue-item"><span class="catalogue-item__code">01</span><div><strong>SKETCH</strong><small>Sketch only</small></div><b>$15</b></div>
-            <div class="catalogue-item"><span class="catalogue-item__code">02</span><div><strong>HEADSHOT</strong><small>Head and shoulders, fully rendered</small></div><b>$20</b></div>
-            <div class="catalogue-item"><span class="catalogue-item__code">03</span><div><strong>BUST</strong><small>Upper body, fully rendered</small></div><b>$25</b></div>
-            <div class="catalogue-item"><span class="catalogue-item__code">04</span><div><strong>HALF BODY</strong><small>Waist-up, fully rendered</small></div><b>$35</b></div>
-            <div class="catalogue-item"><span class="catalogue-item__code">05</span><div><strong>FULL BODY</strong><small>Full character, fully rendered</small></div><b>$45</b></div>
+          <div class="telemetry-block">
+            <span>VISUAL MODE</span>
+            <strong>MONITOR / CLASSIFIED</strong>
           </div>
-          <div class="extras-panel"><span>OPTIONAL ADD-ONS //</span><div><span>EXTRA CHARACTER <b>+$25</b></span><span>COMPLEX BACKGROUND <b>+$15</b></span><span>COMMERCIAL USE <b>+50%</b></span></div></div>
-          <div class="commission-cta"><div><span>READY TO CREATE?</span><small>YOU WILL BE REDIRECTED TO NANHER HEW'S EXISTING DISCORD INVITE.</small></div><a class="action action--red" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>REQUEST A COMMISSION — CONTACT VIA DISCORD <span aria-hidden="true">↗</span></a></div>
-        </section>
+          <div class="telemetry-block">
+            <span>AUDIO</span>
+            <strong id="telemetryAudio">MUTED</strong>
+          </div>
+          <div class="telemetry-note">THE USER IS NOT VISITING A PORTFOLIO.<br>THE USER IS ACCESSING A MIND.</div>
+        </aside>
+      </div>
 
-        <section class="module" data-module="contact" id="contact" aria-labelledby="contactTitle" hidden>
-          <div class="module-topline"><span>06 / EXTERNAL CONNECTIONS</span><span>OUTBOUND FREQUENCIES</span></div>
-          <div class="contact-layout"><div><p class="section-kicker"><span class="kicker-line"></span> HAVE A PROJECT IN MIND?</p><h2 id="contactTitle">SAY<br><em>HELLO.</em></h2><p>For commissions, collaborations or general inquiries, access the channels below.</p><a class="action action--red" href="https://discord.gg/bzENFbeE" target="_blank" rel="noopener noreferrer" data-external-sfx>CONTACT VIA DISCORD <span aria-hidden="true">↗</span></a></div><div class="contact-list"><div class="contact-list__title">ACTIVE CHANNELS // EXTERNAL LINKS</div><a href="https://www.instagram.com/nanherhew/" target="_blank" rel="noopener noreferrer" data-external-sfx><span>01</span><strong>INSTAGRAM</strong><b>↗</b></a><a href="https://x.com/NanherHew" target="_blank" rel="noopener noreferrer" data-external-sfx><span>02</span><strong>TWITTER / X</strong><b>↗</b></a><a href="https://bsky.app/profile/nanherhew.bsky.social" target="_blank" rel="noopener noreferrer" data-external-sfx><span>03</span><strong>BLUESKY</strong><b>↗</b></a><a href="https://ko-fi.com/nanherhew" target="_blank" rel="noopener noreferrer" data-external-sfx><span>04</span><strong>KO-FI</strong><b>↗</b></a></div></div>
-        </section>
-      </main>
-
-      <aside class="telemetry" aria-label="System information">
-        <div class="telemetry__top"><span>NODE / NH-01</span><span class="signal-dot"></span></div>
-        <div class="telemetry__display" aria-hidden="true"><div class="telemetry__rings"><span></span><span></span><span></span><b>文</b></div><span class="telemetry__axis">IDENTITY TRANSMISSION<br>VISUAL MEMORY ACTIVE</span></div>
-        <div class="telemetry__readout"><span>CONNECTION STATE</span><strong>STABLE <i class="signal-dot"></i></strong></div>
-        <div class="telemetry__readout"><span>SELECTED MODULE</span><strong id="telemetryModule">01 / OVERVIEW</strong></div>
-        <div class="telemetry__readout"><span>INTERFACE</span><strong>ONLINE / LOCAL</strong></div>
-        <div class="telemetry__coordinates"><span>◢</span><p>THE USER IS NOT VISITING A PORTFOLIO.<br>THE USER IS ACCESSING A MIND.</p></div>
-      </aside>
+      <footer class="bottombar">
+        <span>© NANHER HEW 文 / DIGITAL ART</span>
+        <span>PATH <b id="currentPath">/OVERVIEW</b></span>
+        <span>1-6 NAVIGATION / ESC CLOSES VIEWER</span>
+      </footer>
     </div>
-
-    <footer class="system-footer"><span>© NANHER HEW 文 <span class="footer-separator">/</span> DIGITAL ART</span><span>ACTIVE PATH <b id="currentPath">/OVERVIEW</b></span><span class="system-footer__hint">ESC TO CLOSE OVERLAYS &nbsp; / &nbsp; 01—06 TO NAVIGATE</span></footer>
   </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle" hidden>
-    <div class="lightbox__top"><span>MEMORY VIEWER // NH.OS</span><button type="button" id="lightboxClose" aria-label="Close image viewer">CLOSE [ESC] ×</button></div>
-    <div class="lightbox__body"><button type="button" class="lightbox__step" id="lightboxPrev" aria-label="Previous artwork">←</button><div class="lightbox__art" id="lightboxArt"></div><button type="button" class="lightbox__step" id="lightboxNext" aria-label="Next artwork">→</button></div>
-    <div class="lightbox__bottom"><div><small id="lightboxDetail">ARTWORK</small><h3 id="lightboxTitle">MEMORY FRAGMENT</h3></div><span id="lightboxCounter">01 / 04</span></div>
+    <div class="lightbox__frame monitor-card">
+      <div class="monitor-card__header">
+        <span>MEMORY VIEWER</span>
+        <button type="button" id="lightboxClose">CLOSE [ESC]</button>
+      </div>
+      <div class="lightbox__body">
+        <button type="button" class="lightbox__step" id="lightboxPrev" aria-label="Previous artwork">←</button>
+        <div class="lightbox__art" id="lightboxArt"></div>
+        <button type="button" class="lightbox__step" id="lightboxNext" aria-label="Next artwork">→</button>
+      </div>
+      <div class="lightbox__meta">
+        <div>
+          <small id="lightboxDetail">ARTWORK</small>
+          <h3 id="lightboxTitle">MEMORY FRAGMENT</h3>
+        </div>
+        <span id="lightboxCounter">01 / 01</span>
+      </div>
+    </div>
   </div>
 
   <div class="cursor-reticle" id="cursorReticle" aria-hidden="true"><span></span></div>
