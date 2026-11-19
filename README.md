@@ -1,6 +1,6 @@
 # Nanher Hew — The contained consciousness
 
-Sitio estático para GitHub Pages. El archivo mental organiza la experiencia: identidad (Core), ilustraciones (Memory Bank), el directorio de pensamientos, procesos WIP, asociaciones, conexiones externas, encargos y documentos del sistema.
+Sitio estático para GitHub Pages. El visitante establece una conexión mediante una pantalla de acceso clasificado y una declaración de mayoría de edad. El archivo mental organiza el resto de la experiencia: identidad (Core), ilustraciones (Memory Bank), el directorio de pensamientos, procesos WIP, asociaciones, conexiones externas, encargos y documentos del sistema.
 
 ## Publicar
 
@@ -8,9 +8,9 @@ Cuando quieras publicarlo, copia el contenido de esta carpeta a la raíz del rep
 
 ## Archivos
 
-- `index.html`: interfaz y directorio del sistema, registros de arte, procesos WIP, asociaciones, protocolo de comisiones, conexiones y preferencias de privacidad.
-- `style.css`: diseño adaptable, estructura de directorio para escritorio y móvil, estados de foco y soporte para movimiento reducido.
-- `script.js`: búsqueda local por archivo/categoría/atribución, filtros, índice de asociaciones, visor accesible, declaración 18+, privacidad, estimador, traza de sesión, audio opcional y movimiento voluntario.
+- `index.html`: pantalla de conexión, aviso de acceso 18+, directorio del sistema, registros de arte, procesos WIP, asociaciones, protocolo de comisiones, conexiones y preferencias de privacidad.
+- `style.css`: diseño adaptable con CRT y textura analógica sutil, transiciones de interferencia, estructura de directorio para escritorio y móvil, estados de foco y soporte para movimiento reducido.
+- `script.js`: búsqueda local por archivo/categoría/atribución, filtros, índice de asociaciones, visor accesible, autorización 18+ revocable durante la sesión, privacidad, estimador, traza de sesión, audio opcional y movimiento voluntario.
 - `legal.html`: privacidad, cookies, términos del sitio y términos de comisiones con campos pendientes visibles.
 - `arts/`: ilustraciones y audio originales. Las vistas previas optimizadas están en `arts/thumbs/`; el visor conserva los archivos completos.
 
@@ -21,6 +21,7 @@ Completa todos los campos `[DATO PENDIENTE...]` en `legal.html`. Confirma moneda
 ## Privacidad y funcionamiento
 
 - La declaración de edad se guarda en `sessionStorage` durante la sesión actual.
+- La declaración puede revisarse desde Documentos del sistema y revocarse para volver a bloquear el archivo durante esa sesión.
 - La elección esencial de privacidad se guarda en `localStorage`.
 - Las preferencias opcionales pueden recordar el filtro del archivo y el nivel de audio; búsqueda y recorrido no se envían a un servidor.
 - Analítica y Marketing figuran como categorías inactivas; el sitio no carga proveedores de esas categorías.

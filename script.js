@@ -64,6 +64,8 @@
     monitorOpen: false,
     directoryOpen: false,
     mobileDirectory: false,
+    ageGateOrigin: null,
+    interferenceHandler: null,
     motionHandler: null
   };
 
@@ -102,6 +104,7 @@
     setFilterButtons();
     setupCookieChoices();
     setupAgeGate();
+    setupAccessSequence();
     setupLightbox();
     setWorkView('gallery');
     setupArchiveSearch();
@@ -128,18 +131,83 @@
       document.body.classList.remove('state-locked');
       if (location.hash === '#cookie-settings') openCookieSettings();
       else showCookieNotice();
-    } else {
-      dialog.showModal();
     }
+    dialog.addEventListener('cancel', (event) => {
+      if (!state.ageAccepted) {
+        event.preventDefault();
+        announce('Access remains restricted until the age notice is accepted or declined.');
+      }
+    });
     $('ageEnter').addEventListener('click', () => {
       storage.set('nh-age-declared-v1', 'yes', 'session');
       state.ageAccepted = true;
       document.body.classList.remove('state-locked');
+      $('accessSequence').hidden = true;
       dialog.close();
+      const focusTarget = state.ageGateOrigin === $('beginAccess')
+        ? document.querySelector('.intro__links a')
+        : state.ageGateOrigin;
+      state.ageGateOrigin = null;
+      window.requestAnimationFrame(() => focusTarget && focusTarget.focus({preventScroll:true}));
       if (location.hash === '#cookie-settings') openCookieSettings();
       else showCookieNotice();
       announce('Age declaration recorded for this browser session. Your age was not verified.');
+      setTrace('ACCESS CONTROL / SESSION AUTHORIZED');
+      triggerInterference('fracture');
     });
+    $('reviewAccessNotice').addEventListener('click', () => {
+      if (!dialog.open) openAgeGate($('reviewAccessNotice'));
+    });
+    $('revokeAccess').addEventListener('click', revokeSessionAccess);
+  }
+
+  function setupAccessSequence() {
+    const sequence = $('accessSequence');
+    sequence.hidden = state.ageAccepted;
+    $('beginAccess').addEventListener('click', () => {
+      if (sequence.classList.contains('is-transitioning')) return;
+      sequence.classList.add('is-transitioning');
+      $('beginAccess').setAttribute('aria-busy', 'true');
+      setTrace('ACCESS CONTROL / CONNECTION REVIEW');
+      announce('Connection review started. The adult access notice will open next.');
+      triggerInterference('cut', () => {
+        sequence.hidden = true;
+        openAgeGate($('beginAccess'));
+      });
+    });
+  }
+
+  function revokeSessionAccess() {
+    storage.remove('nh-age-declared-v1', 'session');
+    state.ageAccepted = false;
+    if (state.audioPlaying) stopAudio();
+    if ($('lightbox').open) $('lightbox').close();
+    if (state.motionHandler) {
+      window.removeEventListener('deviceorientation', state.motionHandler);
+      state.motionHandler = null;
+      $('heroPortrait').style.transform = '';
+      $('motionToggle').setAttribute('aria-pressed', 'false');
+    }
+    state.directoryOpen = false;
+    $('systemDirectory').hidden = true;
+    $('directoryToggle').setAttribute('aria-expanded', 'false');
+    $('directoryToggle').setAttribute('aria-label', 'Open system directory');
+    $('directoryToggle').querySelector('span').textContent = '+';
+    state.monitorOpen = false;
+    $('studioMonitor').hidden = true;
+    $('monitorToggle').setAttribute('aria-expanded', 'false');
+    $('monitorToggle').setAttribute('aria-label', 'Open system trace');
+    $('monitorToggle').querySelector('span').textContent = '+';
+    $('accessSequence').hidden = true;
+    document.body.classList.add('state-locked');
+    openAgeGate($('revokeAccess'));
+    announce('Session access revoked. The restricted access notice is open.');
+  }
+
+  function openAgeGate(origin) {
+    state.ageGateOrigin = origin || null;
+    $('ageGate').showModal();
+    $('ageEnter').focus({preventScroll:true});
   }
 
   function showCookieNotice() {
@@ -376,7 +444,10 @@
     $('viewDescription').textContent = showMap
       ? 'Choose a piece, then follow the category thread.'
       : 'Browse each piece at your own pace.';
-    if (showMap) setTrace('ASSOCIATION INDEX / CATEGORY THREADS');
+    if (showMap) {
+      setTrace('ASSOCIATION INDEX / CATEGORY THREADS');
+      triggerInterference('tracking');
+    }
     else setTrace('MEMORY BANK / VISUAL RECORDS');
     setActiveRoute(showMap ? 'association-index' : 'memory-bank');
   }
@@ -431,6 +502,7 @@
     updateLightbox();
     $('lightbox').showModal();
     $('lightboxClose').focus({preventScroll:true});
+    triggerInterference('minor');
   }
 
   function updateLightbox() {
@@ -465,6 +537,7 @@
     });
     announce('Following the ' + categoryLabels[item.category] + ' thread with ' + $('workCount').textContent + '.');
     setTrace('ASSOCIATION INDEX / FOLLOWED ' + categoryLabels[item.category].toUpperCase() + ' THREAD');
+    triggerInterference('fracture');
   }
 
   function stepLightbox(direction) {
@@ -480,7 +553,7 @@
     } else if ($('lightbox').open && event.key === 'ArrowRight') {
       event.preventDefault();
       stepLightbox(1);
-    } else if (event.key === 'Escape' && !$('lightbox').open) {
+    } else if (event.key === 'Escape' && !$('lightbox').open && !$('ageGate').open && !$('cookieDialog').open) {
       if (state.mobileDirectory && state.directoryOpen) setDirectory(false);
       if (state.monitorOpen) setMonitor(false);
     }
@@ -566,6 +639,30 @@
   function setTrace(message) {
     const trace = $('systemTrace');
     if (trace) trace.textContent = message;
+  }
+
+  function triggerInterference(level, after) {
+    const layer = $('signalInterference');
+    if (state.interferenceHandler) {
+      layer.removeEventListener('animationend', state.interferenceHandler);
+      state.interferenceHandler = null;
+    }
+    if (reduceMotion) {
+      if (after) after();
+      return;
+    }
+    layer.dataset.level = level;
+    layer.classList.remove('is-active');
+    void layer.offsetWidth;
+    const finish = (event) => {
+      if (event.target !== layer) return;
+      layer.classList.remove('is-active');
+      state.interferenceHandler = null;
+      if (after) after();
+    };
+    state.interferenceHandler = finish;
+    layer.addEventListener('animationend', finish);
+    layer.classList.add('is-active');
   }
 
   function setupSectionTracking() {

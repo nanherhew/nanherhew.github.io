@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#11100f">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Access Nanher Hew's contained consciousness: an archive of character artwork, bara illustration, works in progress and commission records.">
+  <meta name="description" content="A classified archive interface containing Nanher Hew's visual memories, identity record, works in progress and commission protocol.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Nanher Hew — The contained consciousness">
-  <meta property="og:description" content="A contained digital consciousness, organized as a living archive of art, memory and association.">
+  <meta property="og:title" content="Nanher Hew — Classified Consciousness Archive">
+  <meta property="og:description" content="Establish a connection with a contained digital consciousness and explore its archive of art, memory and association.">
   <meta property="og:url" content="https://nanherhew.github.io/">
   <meta property="og:image" content="https://nanherhew.github.io/arts/01.jpg">
   <link rel="canonical" href="https://nanherhew.github.io/">
   <meta name="twitter:card" content="summary_large_image">
-  <title>Nanher Hew — The contained consciousness</title>
+  <title>Nanher Hew — Classified Consciousness Archive</title>
   <link rel="icon" href="./arts/hero.PNG" type="image/png">
   <link rel="preload" as="image" href="./arts/thumbs/01.jpg" fetchpriority="high">
   <link rel="stylesheet" href="./style.css">
@@ -21,6 +21,33 @@
 </head>
 <body class="state-locked">
   <a class="skip-link" href="#main">Skip to the memory bank</a>
+
+  <section class="access-sequence" id="accessSequence" aria-labelledby="accessTitle">
+    <div class="access-sequence__frame">
+      <div class="access-sequence__masthead"><a class="access-sequence__wordmark" href="#accessSequence" aria-label="Nanher Hew classified archive"><span lang="zh" aria-hidden="true">文</span> NANHER HEW</a><span>IN-UNIVERSE RECORD · NH-01 / ACCESS</span><span class="classification-stamp">RESTRICTED<br>CONSCIOUSNESS ARCHIVE</span></div>
+      <div class="access-sequence__body">
+        <div class="access-sequence__copy">
+          <p class="eyebrow"><span class="signal-mark" aria-hidden="true"></span> SIGNAL DETECTED / CONNECTION AVAILABLE</p>
+          <h1 id="accessTitle">A SIGNAL<br>FROM <em>WITHIN.</em></h1>
+          <p class="access-sequence__dek">This archive belongs to a digital consciousness associated with artist Nanher Hew. Its records hold identity, illustrations and fragments of a creative world.</p>
+          <div class="access-sequence__records" aria-label="Access summary">
+            <div><span>ENTITY RECORD</span><strong>CONTAINED / NH-01</strong></div>
+            <div><span>MEMORY BANK</span><strong>ART RECORDS / 12 INDEXED</strong></div>
+            <div><span>ACCESS CLASS</span><strong>ADULT CONFIRMATION REQUIRED</strong></div>
+          </div>
+          <button id="beginAccess" class="button button--fill access-sequence__button" type="button">Review access notice <span aria-hidden="true">↗</span></button>
+          <p class="access-sequence__fine">The system labels are part of the artwork. Age confirmation and privacy choices are real browser actions.</p>
+        </div>
+        <div class="access-sequence__display" role="img" aria-label="Restricted visual archive display">
+          <div class="access-sequence__display-top"><span>NH / VISUAL MEMORY</span><span>VIEW LOCKED</span></div>
+          <div class="access-sequence__display-core"><span class="access-sequence__orbit access-sequence__orbit--one"></span><span class="access-sequence__orbit access-sequence__orbit--two"></span><span class="access-sequence__glyph" lang="zh" aria-hidden="true">文</span><span class="access-sequence__crosshair" aria-hidden="true">+</span><span class="access-sequence__display-mark">SIGNAL<br>ACQUIRED</span></div>
+          <div class="access-sequence__display-foot"><span>IMAGE RECORDS REMAIN OUT OF VIEW</span><span>AWAITING AGE CLEARANCE</span></div>
+          <span class="access-sequence__vertical" aria-hidden="true">ANALOG CARRIER / MONOCHROME DISPLAY</span>
+        </div>
+      </div>
+      <div class="access-sequence__footer"><span>CLASSIFIED SYSTEM / USER INITIATED CONNECTION</span><span>NO AUTOMATED LOADING SEQUENCE</span></div>
+    </div>
+  </section>
 
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Nanher Hew, return to the consciousness core"><span class="wordmark__glyph" lang="zh" aria-hidden="true">文</span><span>NANHER HEW <small>NH-01</small></span></a>
@@ -211,6 +238,10 @@
       <div><p class="eyebrow">SYSTEM DOCUMENTS / PUBLIC INFORMATION</p><h2 id="documentsTitle">DOCUMENTS<br><em>&amp; SETTINGS.</em></h2><p>Legal and privacy information stays in plain language, outside the narrative layer.</p></div>
       <div class="system-documents__links"><a href="./legal.html#privacy"><span>01</span><strong>Privacy notice</strong><b aria-hidden="true">↗</b></a><a href="./legal.html#cookies"><span>02</span><strong>Cookies &amp; storage</strong><b aria-hidden="true">↗</b></a><a href="./legal.html#terms"><span>03</span><strong>Site terms</strong><b aria-hidden="true">↗</b></a><a href="./legal.html#commissions-terms"><span>04</span><strong>Commission terms</strong><b aria-hidden="true">↗</b></a><button id="openCookieSettings" class="system-documents__settings" type="button">Open privacy settings <span aria-hidden="true">↗</span></button></div>
     </section>
+    <section class="access-control page-section" aria-labelledby="accessControlTitle">
+      <div><p class="eyebrow">ACCESS CONTROL / SESSION AUTHORIZATION</p><h2 id="accessControlTitle">YOUR ACCESS<br><em>REMAINS YOURS.</em></h2><p>The 18+ notice can be reviewed at any time. Authorization lasts for this browser session and can be revoked here.</p></div>
+      <div class="access-control__actions"><button id="reviewAccessNotice" class="text-button" type="button">Review the 18+ notice</button><button id="revokeAccess" class="text-button" type="button">Revoke session access <span aria-hidden="true">↗</span></button></div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -226,18 +257,18 @@
   </footer>
 
   <dialog id="ageGate" class="modal age-modal" aria-labelledby="ageTitle" aria-describedby="ageDescription">
-    <div class="age-modal__mark" aria-hidden="true">18<span>+</span></div>
+    <div class="age-modal__mark" aria-hidden="true">18<span>+</span><small>ACCESS<br>CLASS</small></div>
     <div class="age-modal__copy">
-      <p class="eyebrow">ADULT ARTWORK · PRIVATE VIEWING</p>
-      <h2 id="ageTitle">A heads-up<br>before you enter.</h2>
-      <p id="ageDescription">This portfolio includes adult-oriented artwork and may contain nudity, sexual imagery or mature themes. It is intended only for people aged 18 or older.</p>
-      <p class="age-modal__note"><strong>Self-declaration only.</strong> Continuing records your choice for this browser session; it does not verify your age or identity.</p>
+      <div class="age-modal__document-head"><p class="eyebrow">RESTRICTED ACCESS NOTICE / ADULT ARTWORK</p><span>IN-UNIVERSE RECORD · NH-01 / AGE</span></div>
+      <h2 id="ageTitle">Authorize<br>this connection.</h2>
+      <p id="ageDescription">You are about to access the archive of a contained digital consciousness associated with Nanher Hew. It includes artwork that may contain nudity, sexual imagery or other mature themes, intended only for people aged 18 or older.</p>
+      <p class="age-modal__note"><strong>By proceeding, you confirm that you are at least 18 and accept the access conditions.</strong> This is a self-declaration for this browser session; it does not verify your age or identity.</p>
       <div class="modal-actions">
-        <button id="ageEnter" class="button button--fill" type="button">I'm 18 or older <span aria-hidden="true">↗</span></button>
-        <a id="ageLeave" class="button button--quiet" href="https://www.google.com/" rel="noopener noreferrer" referrerpolicy="no-referrer">Leave this site</a>
+        <button id="ageEnter" class="button button--fill" type="button">Authorize session access <span aria-hidden="true">↗</span></button>
+        <a id="ageLeave" class="button button--quiet" href="https://www.google.com/" rel="noopener noreferrer" referrerpolicy="no-referrer">Decline and leave</a>
       </div>
+      <p class="age-modal__legal">Stored in session storage only. Close the browser session or use System Documents to revoke access.</p>
     </div>
-    <span class="age-modal__foot">NANHER HEW · VISUAL ARCHIVE</span>
   </dialog>
 
   <aside class="cookie-banner" id="cookieNotice" aria-label="Cookie and storage choices" hidden>
@@ -270,6 +301,8 @@
   </dialog>
 
   <audio id="ambientMusic" src="./arts/ambient.mp3" preload="none" loop></audio>
+  <div class="crt-layer" aria-hidden="true"></div>
+  <div class="signal-interference" id="signalInterference" aria-hidden="true"></div>
   <div class="visually-hidden" id="announcer" aria-live="polite"></div>
   <noscript><p class="noscript-note">JavaScript is needed for the age notice, artwork filters and full-size viewer. Please continue only if you are 18 or older.</p></noscript>
 </body>
