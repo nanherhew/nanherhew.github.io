@@ -1,507 +1,606 @@
-/* NANHER HEW 文 — V7. Single-page portfolio; no Supabase, forms, build tools, or backend. */
-(() => {
+﻿(() => {
   'use strict';
+
   const $ = (id) => document.getElementById(id);
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const touchDevice = window.matchMedia('(pointer: coarse)').matches;
+  const queryAll = (selector) => Array.from(document.querySelectorAll(selector));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const storage = {
-    get(key) { try { return sessionStorage.getItem(key); } catch { return null; } },
-    set(key, value) { try { sessionStorage.setItem(key, String(value)); } catch { /* Private session. */ } }
-  };
-  const els = {
-    boot: $('bootScreen'), bootBar: $('bootBar'), bootPercent: $('bootPercent'),
-    bootMessage: $('bootMessage'), bootTrack: $('bootTrack'), bootSubstatus: $('bootSubstatus'),
-    age: $('ageGate'), ageEnter: $('ageEnter'), ageLeave: $('ageLeave'),
-    navToggle: $('navToggle'), feedToggle: $('feedToggle'), navClose: $('navClose'), feedClose: $('feedClose'),
-    nodes: $('accessNodes'), feed: $('monitorFeed'), navLinks: [...document.querySelectorAll('[data-nav]')],
-    recent: $('recentWorks'), archive: $('archiveGrid'), archiveSummary: $('archiveSummary'),
-    archiveTabs: [...document.querySelectorAll('.archive-tab')],
-    heroPortrait: $('heroPortrait'), optionalImages: [...document.querySelectorAll('.optional-image')],
-    monitorTime: $('sessionTime'), pulseBpm: $('pulseBpm'), motion: $('motionToggle'),
-    lightbox: $('lightbox'), lightboxArt: $('lightboxArt'), lightboxTitle: $('lightboxTitle'),
-    lightboxDetail: $('lightboxDetail'), lightboxCounter: $('lightboxCounter'),
-    lightboxClose: $('lightboxClose'), lightboxPrev: $('lightboxPrev'), lightboxNext: $('lightboxNext'),
-    sound: $('soundToggle'), music: $('ambientMusic'), volume: $('musicVolume'),
-    volumeValue: $('musicVolumeValue'), volumeToggle: $('musicVolumeToggle'), cursor: $('cursorReticle'), announcer: $('announcer')
+    get(key, areaName) {
+      try { const area = areaName === 'session' ? window.sessionStorage : window.localStorage; return area.getItem(key); } catch { return null; }
+    },
+    set(key, value, areaName) {
+      try { const area = areaName === 'session' ? window.sessionStorage : window.localStorage; area.setItem(key, value); return true; } catch { return false; }
+    },
+    remove(key, areaName) {
+      try { const area = areaName === 'session' ? window.sessionStorage : window.localStorage; area.removeItem(key); } catch { /* Storage can be disabled. */ }
+    }
   };
 
-  // Original portfolio filenames, titles, category groupings, and client attributions.
-  const artwork = {
-    recent: [
-      ['arts/01.jpg', 'CHARACTER', 'RECENT WORK / 01', 'characters'],
-      ['arts/02.jpg', 'FURRY', 'RECENT WORK / 02', 'commissions'],
-      ['arts/03.jpg', 'BARA', 'RECENT WORK / 03', 'bara'],
-      ['arts/04.jpg', 'ILLUSTRATION', 'RECENT WORK / 04', 'characters']
-    ],
-    archive: [
-      ['arts/05.jpg', 'ARCHIVE / 05', 'ARTWORK', 'characters'],
-      ['arts/06.jpg', 'ARCHIVE / 06', 'ARTWORK', 'characters'],
-      ['arts/07.jpg', 'ARCHIVE / 07', 'ARTWORK', 'bara'],
-      ['arts/08.jpg', 'ARCHIVE / 08', 'ARTWORK', 'bara'],
-      ['arts/02.jpg', 'COMMISSION / 01', 'FOR @BJOERN90', 'commissions'],
-      ['arts/03.jpg', 'COMMISSION / 02', 'FOR @OUTDOOWPUMPKIN9', 'commissions'],
-      ['arts/wip01.jpg', 'WIP / 01', 'WORK IN PROGRESS', 'wips'],
-      ['arts/wip02.jpg', 'WIP / 02', 'WORK IN PROGRESS', 'wips']
-    ]
+  const work = [
+    {src:'./arts/01.jpg', thumb:'./arts/thumbs/01.jpg', point:[7,20], title:'Portrait', detail:'Selected work · 01', category:'characters', featured:true, alt:'Portrait illustration by Nanher Hew, with a deep blue background'},
+    {src:'./arts/02.jpg', thumb:'./arts/thumbs/02.jpg', point:[34,15], title:'Furry character', detail:'Selected work · 02', category:'commissions', featured:true, alt:'Furry character illustration by Nanher Hew'},
+    {src:'./arts/03.jpg', thumb:'./arts/thumbs/03.jpg', point:[65,20], title:'Bara character', detail:'Selected work · 03', category:'bara', featured:true, alt:'Bara character illustration by Nanher Hew'},
+    {src:'./arts/04.jpg', thumb:'./arts/thumbs/04.jpg', point:[91,20], title:'Character study', detail:'Selected work · 04', category:'characters', featured:true, alt:'Character illustration by Nanher Hew'},
+    {src:'./arts/05.jpg', thumb:'./arts/thumbs/05.jpg', point:[16,53], title:'Archive drawing', detail:'Artwork · 05', category:'characters', alt:'Character artwork from Nanher Hew’s archive, piece 05'},
+    {src:'./arts/06.jpg', thumb:'./arts/thumbs/06.jpg', point:[42,60], title:'Archive drawing', detail:'Artwork · 06', category:'characters', alt:'Character artwork from Nanher Hew’s archive, piece 06'},
+    {src:'./arts/07.jpg', thumb:'./arts/thumbs/07.jpg', point:[72,52], title:'Archive drawing', detail:'Artwork · 07', category:'bara', alt:'Bara artwork from Nanher Hew’s archive, piece 07'},
+    {src:'./arts/08.jpg', thumb:'./arts/thumbs/08.jpg', point:[93,68], title:'Archive drawing', detail:'Artwork · 08', category:'bara', alt:'Bara artwork from Nanher Hew’s archive, piece 08'},
+    {src:'./arts/02.jpg', thumb:'./arts/thumbs/02.jpg', point:[26,85], title:'Commission for @bjoern90', detail:'Client commission · 01', category:'commissions', alt:'Commission artwork by Nanher Hew for @bjoern90'},
+    {src:'./arts/03.jpg', thumb:'./arts/thumbs/03.jpg', point:[62,85], title:'Commission for @outdoowpumpkin9', detail:'Client commission · 02', category:'commissions', alt:'Commission artwork by Nanher Hew for @outdoowpumpkin9'},
+    {src:'./arts/wip01.jpg', thumb:'./arts/thumbs/wip01.jpg', point:[49,35], title:'Work in progress', detail:'In progress · 01', category:'wips', alt:'Work in progress from Nanher Hew’s archive, piece 01'},
+    {src:'./arts/wip02.jpg', thumb:'./arts/thumbs/wip02.jpg', point:[83,87], title:'Work in progress', detail:'In progress · 02', category:'wips', alt:'Work in progress from Nanher Hew’s archive, piece 02'}
+  ];
+  const categoryLabels = {
+    characters:'character',
+    bara:'bara',
+    commissions:'commission',
+    wips:'work-in-progress'
+  };
+  const categoryColors = {
+    characters:'#e54b3c',
+    bara:'#f29c58',
+    commissions:'#cfb7a0',
+    wips:'#91a4b9'
   };
 
-  const storedVolume = storage.get('nhVolume');
-  const parsedVolume = storedVolume === null ? 18 : Number(storedVolume);
-  const initialVolume = Number.isFinite(parsedVolume) ? Math.max(0, Math.min(100, Math.round(parsedVolume))) : 18;
   const state = {
-    volume: initialVolume, audioWanted: storage.get('nhAudioPreference') !== 'off',
-    verified: storage.get('nhAgeVerifiedV7') === 'true',
-    unlocked: false, navOpen: false, feedOpen: false, filter: 'all',
-    activeSection: 'overview', list: [], lightboxIndex: 0, lightboxOrigin: null,
-    playing: false, audioSource: 'off', audioToken: 0, orientation: false,
-    sessionStart: Number(storage.get('nhSessionStart')) || 0
+    ageAccepted: false,
+    consent: readConsent(),
+    filter: 'all',
+    visibleWorks: [],
+    view: 'gallery',
+    lightboxIndex: 0,
+    lightboxOrigin: null,
+    audioPlaying: false,
+    audioToken: 0,
+    audioContext: null,
+    audioMaster: null,
+    drones: [],
+    shimmerTimer: null,
+    audioVolume: 18,
+    sessionStarted: Date.now(),
+    monitorOpen: false,
+    motionHandler: null
   };
-  const synth = createSynth();
+
+  function readConsent() {
+    const raw = storage.get('nh-cookie-choice-v1');
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.version === 1 && typeof parsed.preferences === 'boolean') {
+        return {
+          essential: true,
+          preferences: parsed.preferences,
+          analytics: parsed.analytics === true,
+          marketing: parsed.marketing === true,
+          version: 1,
+          savedAt: parsed.savedAt || ''
+        };
+      }
+    } catch { /* Treat malformed data as no choice. */ }
+    return null;
+  }
+
+  function hasPreferences() {
+    return Boolean(state.consent && state.consent.preferences);
+  }
 
   function init() {
-    if (touchDevice) document.body.classList.add('touch-device');
-    else setupCursor();
-    if (!state.sessionStart || !Number.isFinite(state.sessionStart) || state.sessionStart > Date.now()) {
-      state.sessionStart = Date.now();
-      storage.set('nhSessionStart', state.sessionStart);
-    }
-    setInterval(updateSessionClock, 1000);
-    updateSessionClock();
-    if (els.heroPortrait) {
-      const onHeroReady = () => {
-        if (els.heroPortrait.naturalWidth > 0) document.getElementById('overview').classList.add('has-portrait');
-      };
-      els.heroPortrait.addEventListener('load', onHeroReady);
-      els.heroPortrait.addEventListener('error', () => { els.heroPortrait.hidden = true; });
-      if (els.heroPortrait.complete && els.heroPortrait.naturalWidth > 0) onHeroReady();
-    }
-    prepareOptionalImages();
-    renderTiles(els.recent, artwork.recent);
-    renderArchive();
-    setupControls();
+    const savedFilter = hasPreferences() ? storage.get('nh-gallery-filter') : null;
+    const validFilters = ['all','characters','bara','commissions','wips'];
+    if (savedFilter && validFilters.includes(savedFilter)) state.filter = savedFilter;
+    const savedVolume = hasPreferences() ? Number(storage.get('nh-audio-level')) : 18;
+    state.audioVolume = Number.isFinite(savedVolume) ? Math.max(0, Math.min(100, savedVolume)) : 18;
+
+    renderGallery();
+    setFilterButtons();
+    setupCookieChoices();
+    setupAgeGate();
     setupLightbox();
-    setupIntersectionTracking();
-    setupParallax();
+    setWorkView('gallery');
+    setupCommissionEstimate();
+    setupMonitor();
     setupAudio();
-    syncAudio();
-    bootSequence();
-  }
+    setupMotion();
+    updateSessionTime();
+    window.setInterval(updateSessionTime, 1000);
 
-  function bootSequence() {
-    const steps = reducedMotion
-      ? [[0, 70, 'ALMOST DONE'], [190, 100, 'ACCESS READY']]
-      : [[70, 7, 'CONNECTING'], [250, 19, 'LOCATING MEMORY'], [450, 38, 'DECRYPTING VISUALS'],
-        [660, 54, 'SCANNING IDENTITY'], [870, 70, 'ALMOST DONE'], [1150, 87, 'SYNCING'], [1400, 100, 'ACCESS READY']];
-    steps.forEach(([delay, value, message]) => {
-      setTimeout(() => {
-        els.bootBar.style.width = `${value}%`;
-        els.bootPercent.textContent = `${String(value).padStart(2, '0')}%`;
-        els.bootTrack.setAttribute('aria-valuenow', String(value));
-        els.bootMessage.textContent = message;
-        els.bootSubstatus.textContent = value === 70 ? '70% / ALMOST DONE..' : value === 100 ? 'NEURAL ARCHIVE READY' : 'CHECKING MEMORY FRAGMENTS...';
-      }, delay);
-    });
-    setTimeout(() => {
-      els.boot.hidden = true;
-      if (state.verified) unlock();
-      else showGate();
-    }, reducedMotion ? 360 : 1720);
-  }
-
-  function showGate() {
-    els.age.hidden = false;
-    els.ageEnter.focus({preventScroll: true});
-  }
-  function unlock() {
-    state.unlocked = true;
-    els.age.hidden = true;
-    document.body.classList.remove('state-locked');
-    // On a revisit, a browser may block autoplay. Start on the next visitor gesture.
-    if (state.audioWanted && !state.playing) armAudioForNextInteraction();
-    const target = decodeURIComponent(location.hash.slice(1));
-    if (target && document.getElementById(target)) {
-      requestAnimationFrame(() => document.getElementById(target).scrollIntoView({behavior:'instant'}));
+    if (state.consent) {
+      $('cookieNotice').hidden = true;
     }
+    document.addEventListener('keydown', handleGlobalKeys);
   }
 
-  function setupControls() {
-    els.ageEnter.addEventListener('click', () => {
-      storage.set('nhAgeVerifiedV7', 'true');
-      state.verified = true;
-      unlock();
-      startAudio(); // only after a direct user action
-      playUi('enter');
+  function setupAgeGate() {
+    const dialog = $('ageGate');
+    state.ageAccepted = storage.get('nh-age-declared-v1', 'session') === 'yes';
+    if (state.ageAccepted) {
+      document.body.classList.remove('state-locked');
+      if (location.hash === '#cookie-settings') openCookieSettings();
+      else showCookieNotice();
+    } else {
+      dialog.showModal();
+    }
+    $('ageEnter').addEventListener('click', () => {
+      storage.set('nh-age-declared-v1', 'yes', 'session');
+      state.ageAccepted = true;
+      document.body.classList.remove('state-locked');
+      dialog.close();
+      if (location.hash === '#cookie-settings') openCookieSettings();
+      else showCookieNotice();
+      announce('Age declaration recorded for this browser session. Your age was not verified.');
     });
-    els.ageLeave.addEventListener('click', () => { window.location.href = 'https://www.google.com'; });
+  }
 
-    els.navToggle.addEventListener('click', () => setWindow('nodes', !state.navOpen));
-    els.feedToggle.addEventListener('click', () => setWindow('feed', !state.feedOpen));
-    els.navClose.addEventListener('click', () => setWindow('nodes', false));
-    els.feedClose.addEventListener('click', () => setWindow('feed', false));
-    // Deliberately no outside-click listener. A node selection NEVER closes the floating menu.
-    els.navLinks.forEach((link) => link.addEventListener('click', () => {
-      playUi('select');
-      setActiveSection(link.dataset.nav);
-    }));
-    document.querySelectorAll('[data-quicklink]').forEach((link) => link.addEventListener('click', () => {
-      setWindow('nodes', true); // expose the node list after a hero quick action
-      playUi('select');
-    }));
-    els.archiveTabs.forEach((tab) => tab.addEventListener('click', () => {
-      state.filter = tab.dataset.filter || 'all';
-      els.archiveTabs.forEach((item) => {
-        const active = item === tab;
-        item.classList.toggle('is-active', active);
-        item.setAttribute('aria-selected', String(active));
+  function showCookieNotice() {
+    if (!state.consent) $('cookieNotice').hidden = false;
+  }
+
+  function setupCookieChoices() {
+    $('cookieAccept').addEventListener('click', () => saveConsent({preferences:true, analytics:true, marketing:true}));
+    $('cookieReject').addEventListener('click', () => saveConsent({preferences:false, analytics:false, marketing:false}));
+    $('cookieRejectAll').addEventListener('click', () => saveConsent({preferences:false, analytics:false, marketing:false}));
+    $('cookieConfigure').addEventListener('click', openCookieSettings);
+    $('openCookieSettings').addEventListener('click', openCookieSettings);
+    $('cookieClose').addEventListener('click', () => $('cookieDialog').close());
+    $('cookieSave').addEventListener('click', () => {
+      saveConsent({
+        preferences:$('prefPreferences').checked,
+        analytics:$('prefAnalytics').checked,
+        marketing:$('prefMarketing').checked
       });
-      renderArchive();
-      playUi('tab');
-    }));
-    els.sound.addEventListener('click', () => state.playing || state.audioWanted ? stopAudio() : startAudio());
-    els.volumeToggle?.addEventListener('click', () => state.playing || state.audioWanted ? stopAudio() : startAudio());
-    els.motion.addEventListener('click', enableMotion);
-    document.addEventListener('keydown', (event) => {
-      if (event.target.closest?.('input,textarea,select,[contenteditable]')) return;
-      if (event.key === 'Escape') {
-        if (!els.lightbox.hidden) closeLightbox();
-        else if (state.feedOpen) setWindow('feed', false);
-        else if (state.navOpen) setWindow('nodes', false);
-        return;
-      }
-      if (!els.lightbox.hidden) {
-        if (event.key === 'ArrowLeft') stepLightbox(-1);
-        if (event.key === 'ArrowRight') stepLightbox(1);
-        return;
-      }
-      if (!state.unlocked) return;
-      if (event.key.toLowerCase() === 'n') setWindow('nodes', !state.navOpen);
-      const ids = ['overview', 'works', 'archive', 'identity', 'commissions', 'contact'];
-      const index = Number(event.key) - 1;
-      if (index >= 0 && index < 6 && ids[index]) {
-        document.getElementById(ids[index]).scrollIntoView({behavior: reducedMotion ? 'instant':'smooth'});
-        setActiveSection(ids[index]);
-      }
     });
-    document.querySelectorAll('[data-external-sfx]').forEach((link) => link.addEventListener('click', () => playUi('confirm')));
-  }
-
-  function setWindow(which, open) {
-    const nav = which === 'nodes';
-    const target = nav ? els.nodes : els.feed;
-    const toggle = nav ? els.navToggle : els.feedToggle;
-    if (nav) state.navOpen = open;
-    else state.feedOpen = open;
-    target.hidden = !open;
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.textContent = nav ? `[ ${open ? '−' : '+'} ] ACCESS NODES` : `[ ${open ? '−' : '+'} ] MIND MONITOR`;
-    if (open) playUi('open');
-  }
-  function setActiveSection(id) {
-    if (!id || !document.getElementById(id)) return;
-    state.activeSection = id;
-    els.navLinks.forEach((link) => link.classList.toggle('is-active', link.dataset.nav === id));
-    announce(`Viewing ${id}`);
-  }
-  function setupIntersectionTracking() {
-    if (!('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
-      if (visible[0]) setActiveSection(visible[0].target.id);
-    }, {rootMargin:'-15% 0px -55% 0px', threshold:[0,0.15,0.35,0.6]});
-    document.querySelectorAll('[data-section]').forEach((element) => observer.observe(element));
-  }
-
-  function updateSessionClock() {
-    if (!els.monitorTime) return;
-    const seconds = Math.max(0, Math.floor((Date.now() - state.sessionStart) / 1000));
-    const hh = String(Math.floor(seconds / 3600)).padStart(2, '0');
-    const mm = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-    const ss = String(seconds % 60).padStart(2, '0');
-    els.monitorTime.textContent = `${hh}:${mm}:${ss}`;
-  }
-
-  function prepareOptionalImages() {
-    els.optionalImages.forEach((frame) => {
-      const img = frame.querySelector('.optional-image__asset');
-      if (!img) return;
-      const success = () => { if (img.naturalWidth > 0) frame.classList.add('has-image'); };
-      const failure = () => { frame.classList.remove('has-image'); img.hidden = true; };
-      img.addEventListener('load', success);
-      img.addEventListener('error', failure);
-      if (img.complete) { if (img.naturalWidth) success(); else failure(); }
+    $('cookieDialog').addEventListener('close', () => {
+      if (!state.consent) showCookieNotice();
     });
   }
 
-  function renderTiles(container, data) {
-    if (!container) return;
-    container.replaceChildren(...data.map((item, index) => {
+  function openCookieSettings() {
+    const dialog = $('cookieDialog');
+    $('prefPreferences').checked = Boolean(state.consent && state.consent.preferences);
+    $('prefAnalytics').checked = Boolean(state.consent && state.consent.analytics);
+    $('prefMarketing').checked = Boolean(state.consent && state.consent.marketing);
+    dialog.showModal();
+  }
+
+  function saveConsent(choice) {
+    state.consent = {
+      essential:true,
+      preferences:Boolean(choice.preferences),
+      analytics:Boolean(choice.analytics),
+      marketing:Boolean(choice.marketing),
+      version:1,
+      savedAt:new Date().toISOString()
+    };
+    storage.set('nh-cookie-choice-v1', JSON.stringify(state.consent));
+    $('cookieNotice').hidden = true;
+    if (state.consent.preferences) {
+      storage.set('nh-gallery-filter', state.filter);
+      storage.set('nh-audio-level', String(state.audioVolume));
+    } else {
+      storage.remove('nh-gallery-filter');
+      storage.remove('nh-audio-level');
+    }
+    if ($('cookieDialog').open) $('cookieDialog').close();
+    announce('Privacy choices saved.');
+  }
+
+  function renderGallery() {
+    const grid = $('artGrid');
+    if (!grid) return;
+    state.visibleWorks = state.filter === 'all' ? work.slice() : work.filter((item) => item.category === state.filter);
+    grid.replaceChildren();
+    state.visibleWorks.forEach((item, index) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'art-tile';
-      button.setAttribute('aria-label', `Open ${item[1]}, ${item[2]}`);
-      const visual = document.createElement('span');
-      visual.className = 'art-tile__visual';
-      visual.style.backgroundImage = `url("${item[0]}")`;
+      button.className = 'art-card' + (item.featured ? ' art-card--featured' : '');
+      button.setAttribute('aria-label', 'Open ' + item.title + ', ' + item.detail);
+
+      const image = document.createElement('img');
+      image.src = item.thumb || item.src;
+      image.alt = item.alt;
+      image.loading = index < 3 ? 'eager' : 'lazy';
+      image.decoding = 'async';
+
+      const caption = document.createElement('span');
+      caption.className = 'art-card__caption';
+      const title = document.createElement('span');
+      title.className = 'art-card__title';
+      title.textContent = item.title;
       const meta = document.createElement('span');
-      meta.className = 'art-tile__meta';
-      const label = document.createElement('span');
-      label.textContent = item[1];
-      const detail = document.createElement('span');
-      detail.textContent = `${item[2]} ↗`;
-      meta.append(label, detail);
-      button.append(visual, meta);
-      button.addEventListener('click', () => openLightbox(data, index, button));
-      return button;
-    }));
-  }
-  function renderArchive() {
-    const list = state.filter === 'all' ? artwork.archive : artwork.archive.filter((item) => item[3] === state.filter);
-    renderTiles(els.archive, list);
-    els.archiveSummary.textContent = `${state.filter.toUpperCase()} / ${String(list.length).padStart(2, '0')} RECORDS`;
-  }
-  function setupLightbox() {
-    els.lightboxClose.addEventListener('click', closeLightbox);
-    els.lightboxPrev.addEventListener('click', () => stepLightbox(-1));
-    els.lightboxNext.addEventListener('click', () => stepLightbox(1));
-    els.lightbox.addEventListener('click', (event) => { if (event.target === els.lightbox) closeLightbox(); });
-  }
-  function openLightbox(list, index, button) {
-    state.list = list;
-    state.lightboxIndex = index;
-    state.lightboxOrigin = button;
-    updateLightbox();
-    els.lightbox.hidden = false;
-    document.body.classList.add('lightbox-open');
-    els.lightboxClose.focus({preventScroll: true});
-    playUi('open');
-  }
-  function closeLightbox() {
-    if (els.lightbox.hidden) return;
-    els.lightbox.hidden = true;
-    document.body.classList.remove('lightbox-open');
-    state.lightboxOrigin?.focus({preventScroll: true});
-    playUi('close');
-  }
-  function stepLightbox(direction) {
-    if (!state.list.length) return;
-    state.lightboxIndex = (state.lightboxIndex + direction + state.list.length) % state.list.length;
-    updateLightbox();
-    playUi('tab');
-  }
-  function updateLightbox() {
-    const item = state.list[state.lightboxIndex];
-    if (!item) return;
-    const image = new Image();
-    image.src = item[0];
-    image.alt = item[1];
-    els.lightboxArt.replaceChildren(image);
-    els.lightboxTitle.textContent = item[1];
-    els.lightboxDetail.textContent = item[2];
-    els.lightboxCounter.textContent = `${String(state.lightboxIndex + 1).padStart(2,'0')} / ${String(state.list.length).padStart(2,'0')}`;
+      meta.className = 'art-card__meta';
+      meta.textContent = item.detail;
+      caption.append(title, meta);
+      button.append(image, caption);
+      button.addEventListener('click', () => openLightbox(index, button));
+      grid.append(button);
+    });
+    renderMemoryMap();
+    $('workCount').textContent = state.visibleWorks.length + (state.visibleWorks.length === 1 ? ' piece' : ' pieces');
   }
 
-  function setupCursor() {
-    let scheduled = false, x = 0, y = 0;
-    document.addEventListener('pointermove', (event) => {
-      x = event.clientX; y = event.clientY;
-      if (scheduled) return;
-      scheduled = true;
-      requestAnimationFrame(() => {
-        scheduled = false;
-        document.body.classList.add('cursor-ready');
-        els.cursor.style.left = `${x}px`;
-        els.cursor.style.top = `${y}px`;
-      });
-    }, {passive: true});
-    document.addEventListener('pointerleave', () => document.body.classList.remove('cursor-ready'));
-  }
-  function setupParallax() {
-    // Only the lightweight background glyph shifts; the full-size artwork never re-renders on pointer movement.
-    if (touchDevice || reducedMotion) return;
-    const glyph = document.querySelector('.hero-section__symbol');
-    if (!glyph) return;
-    let queued = false, x = 0, y = 0;
-    document.addEventListener('pointermove', (event) => {
-      if (window.scrollY > window.innerHeight) return;
-      x = (event.clientX / window.innerWidth - .5) * 6;
-      y = (event.clientY / window.innerHeight - .5) * 5;
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        glyph.style.transform = `translate(${x.toFixed(2)}px,calc(-50% + ${y.toFixed(2)}px))`;
-      });
-    }, {passive: true});
-  }
-  async function enableMotion() {
-    if (!touchDevice || !('DeviceOrientationEvent' in window)) {els.motion.textContent = 'MOTION UNAVAILABLE';return;}
-    if (state.orientation) return;
-    try {
-      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        const permission = await DeviceOrientationEvent.requestPermission();
-        if (permission !== 'granted') throw new Error('Permission denied');
+  function renderMemoryMap() {
+    const svg = $('memoryMapLines');
+    const nodes = $('memoryMapNodes');
+    if (!svg || !nodes) return;
+    svg.replaceChildren();
+    nodes.replaceChildren();
+
+    const groups = new Map();
+    state.visibleWorks.forEach((item) => {
+      if (!groups.has(item.category)) groups.set(item.category, []);
+      groups.get(item.category).push(item);
+    });
+    const namespace = 'http://www.w3.org/2000/svg';
+    groups.forEach((items, category) => {
+      for (let index = 1; index < items.length; index += 1) {
+        const line = document.createElementNS(namespace, 'line');
+        line.setAttribute('x1', String(items[index - 1].point[0]));
+        line.setAttribute('y1', String(items[index - 1].point[1]));
+        line.setAttribute('x2', String(items[index].point[0]));
+        line.setAttribute('y2', String(items[index].point[1]));
+        line.classList.add('memory-map__line');
+        line.dataset.category = category;
+        line.style.setProperty('--thread-color', categoryColors[category]);
+        svg.append(line);
       }
-      state.orientation = true;
-      els.motion.textContent = 'MOTION INPUT ACTIVE';
-      const glyph = document.querySelector('.hero-section__symbol');
-      window.addEventListener('deviceorientation', (event) => {
-        if (reducedMotion || !glyph || window.scrollY > window.innerHeight) return;
-        const x = Math.max(-7, Math.min(7, (event.gamma || 0) * .24));
-        const y = Math.max(-7, Math.min(7, (event.beta || 0) * .16));
-        glyph.style.transform = `translate(${x}px,calc(-50% + ${y}px))`;
-      }, {passive: true});
-      playUi('confirm');
-    } catch { els.motion.textContent = 'MOTION INPUT BLOCKED'; }
+    });
+
+    state.visibleWorks.forEach((item, index) => {
+      const button = document.createElement('button');
+      const recordNumber = String(work.indexOf(item) + 1).padStart(2, '0');
+      button.type = 'button';
+      button.className = 'memory-node';
+      button.dataset.category = item.category;
+      button.style.left = item.point[0] + '%';
+      button.style.top = item.point[1] + '%';
+      button.setAttribute('aria-label', 'Open ' + item.title + ' in the ' + categoryLabels[item.category] + ' thread');
+
+      const image = document.createElement('img');
+      image.src = item.thumb || item.src;
+      image.alt = '';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      const label = document.createElement('span');
+      label.className = 'memory-node__label';
+      const number = document.createElement('span');
+      number.className = 'memory-node__index';
+      number.textContent = recordNumber;
+      label.append(number, document.createTextNode(' / ' + categoryLabels[item.category].toUpperCase()));
+      button.append(image, label);
+      button.addEventListener('click', () => openLightbox(index, button));
+      button.addEventListener('mouseenter', () => highlightThread(item.category, true));
+      button.addEventListener('mouseleave', () => highlightThread(item.category, false));
+      button.addEventListener('focus', () => highlightThread(item.category, true));
+      button.addEventListener('blur', () => highlightThread(item.category, false));
+      nodes.append(button);
+    });
+  }
+
+  function highlightThread(category, active) {
+    document.querySelectorAll('.memory-node[data-category="' + category + '"], .memory-map__line[data-category="' + category + '"]').forEach((element) => {
+      element.classList.toggle('is-thread-active', active);
+    });
+  }
+
+  function setWorkView(view) {
+    state.view = view === 'map' ? 'map' : 'gallery';
+    const showMap = state.view === 'map';
+    $('memoryMap').hidden = !showMap;
+    $('artGrid').hidden = showMap;
+    queryAll('[data-view]').forEach((button) => {
+      const active = button.dataset.view === state.view;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    $('viewDescription').textContent = showMap
+      ? 'Choose a piece, then follow the category thread.'
+      : 'Browse each piece at your own pace.';
+  }
+
+  function setFilterButtons() {
+    queryAll('[data-filter]').forEach((button) => {
+      const active = button.dataset.filter === state.filter;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+  }
+
+  function setupGalleryFilters() {
+    queryAll('[data-filter]').forEach((button) => button.addEventListener('click', () => {
+      state.filter = button.dataset.filter || 'all';
+      renderGallery();
+      setFilterButtons();
+      if (hasPreferences()) storage.set('nh-gallery-filter', state.filter);
+      announce('Showing ' + $('workCount').textContent + ' in ' + button.textContent.trim() + '.');
+    }));
+    $('surpriseButton').addEventListener('click', () => {
+      if (!state.visibleWorks.length) return;
+      const index = Math.floor(Math.random() * state.visibleWorks.length);
+      openLightbox(index, $('surpriseButton'));
+    });
+    queryAll('[data-view]').forEach((button) => button.addEventListener('click', () => setWorkView(button.dataset.view)));
+  }
+
+  function setupLightbox() {
+    const dialog = $('lightbox');
+    $('lightboxClose').addEventListener('click', () => dialog.close());
+    $('lightboxPrev').addEventListener('click', () => stepLightbox(-1));
+    $('lightboxNext').addEventListener('click', () => stepLightbox(1));
+    $('lightboxThread').addEventListener('click', followThread);
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      state.lightboxOrigin && state.lightboxOrigin.focus({preventScroll:true});
+      state.lightboxOrigin = null;
+    });
+    setupGalleryFilters();
+  }
+
+  function openLightbox(index, origin) {
+    if (!state.visibleWorks.length) return;
+    state.lightboxIndex = index;
+    state.lightboxOrigin = origin;
+    updateLightbox();
+    $('lightbox').showModal();
+    $('lightboxClose').focus({preventScroll:true});
+  }
+
+  function updateLightbox() {
+    const item = state.visibleWorks[state.lightboxIndex];
+    if (!item) return;
+    const image = $('lightboxImage');
+    image.src = item.src;
+    image.alt = item.alt;
+    $('lightboxTitle').textContent = item.title;
+    $('lightboxMeta').textContent = item.detail;
+    $('lightboxCounter').textContent = String(state.lightboxIndex + 1).padStart(2,'0') + ' / ' + String(state.visibleWorks.length).padStart(2,'0');
+    $('lightboxAnnouncement').textContent = item.title + ', ' + item.detail;
+    $('lightboxThread').textContent = 'Follow the ' + categoryLabels[item.category] + ' thread';
+  }
+
+  function followThread() {
+    const item = state.visibleWorks[state.lightboxIndex];
+    if (!item) return;
+    state.lightboxOrigin = null;
+    $('lightbox').close();
+    state.filter = item.category;
+    renderGallery();
+    setFilterButtons();
+    setWorkView('gallery');
+    if (hasPreferences()) storage.set('nh-gallery-filter', state.filter);
+    window.requestAnimationFrame(() => {
+      const firstWork = $('artGrid').querySelector('button');
+      if (firstWork) firstWork.focus({preventScroll:true});
+      document.querySelector('.work-view-controls').scrollIntoView({behavior:reduceMotion ? 'instant' : 'smooth', block:'center'});
+    });
+    announce('Following the ' + categoryLabels[item.category] + ' thread with ' + $('workCount').textContent + '.');
+  }
+
+  function stepLightbox(direction) {
+    if (!state.visibleWorks.length) return;
+    state.lightboxIndex = (state.lightboxIndex + direction + state.visibleWorks.length) % state.visibleWorks.length;
+    updateLightbox();
+  }
+
+  function handleGlobalKeys(event) {
+    if (!$('lightbox').open) return;
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      stepLightbox(-1);
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      stepLightbox(1);
+    }
+  }
+
+  function setupCommissionEstimate() {
+    const type = $('commissionType');
+    const extras = $('extraCharacters');
+    const background = $('backgroundOption');
+    const commercial = $('commercialOption');
+    const render = () => {
+      const base = Number(type.value) || 0;
+      const count = Math.min(4, Math.max(0, Math.floor(Number(extras.value) || 0)));
+      extras.value = String(count);
+      const total = base + (count * 25) + (background.checked ? 15 : 0);
+      $('estimateTotal').querySelector('strong').textContent = '$' + total;
+      $('estimateNote').textContent = commercial.checked
+        ? 'Starting subtotal excludes the commercial-use add-on (+50%). The artist has not specified its calculation basis. Currency is unconfirmed.'
+        : 'Starting subtotal uses the listed figures only. Currency is unconfirmed; ask Nanher to confirm the final scope.';
+    };
+    [type,extras,background,commercial].forEach((control) => control.addEventListener('input', render));
+    [background,commercial].forEach((control) => control.addEventListener('change', render));
+    render();
+  }
+
+  function setupMonitor() {
+    $('monitorToggle').addEventListener('click', () => setMonitor(!state.monitorOpen));
+    $('monitorClose').addEventListener('click', () => setMonitor(false));
+    document.addEventListener('pointerdown', (event) => {
+      if (!state.monitorOpen) return;
+      if (!$('studioMonitor').contains(event.target) && !$('monitorToggle').contains(event.target)) setMonitor(false);
+    });
+  }
+
+  function setMonitor(open) {
+    state.monitorOpen = open;
+    $('studioMonitor').hidden = !open;
+    $('monitorToggle').setAttribute('aria-expanded', String(open));
+    $('monitorToggle').querySelector('span').textContent = open ? '−' : '+';
+    if (open) $('monitorClose').focus({preventScroll:true});
+    else $('monitorToggle').focus({preventScroll:true});
+  }
+
+  function updateSessionTime() {
+    const elapsed = Math.max(0, Math.floor((Date.now() - state.sessionStarted) / 1000));
+    const hours = Math.floor(elapsed / 3600);
+    const minutes = Math.floor((elapsed % 3600) / 60);
+    const seconds = elapsed % 60;
+    const format = (value) => String(value).padStart(2,'0');
+    $('sessionTime').textContent = format(hours) + ':' + format(minutes) + ':' + format(seconds);
   }
 
   function setupAudio() {
-    els.music.loop = true;
-    els.music.preload = 'none';
-    applyVolume(state.volume, false);
-    els.volume?.addEventListener('input', () => applyVolume(els.volume.value));
-    els.music.addEventListener('error', () => {
-      if (state.playing && state.audioSource === 'loading') void fallback(state.audioToken);
+    const music = $('ambientMusic');
+    $('musicVolume').value = String(state.audioVolume);
+    $('musicVolumeValue').textContent = state.audioVolume + '%';
+    music.volume = state.audioVolume / 100;
+    $('musicVolume').addEventListener('input', (event) => {
+      applyAudioLevel(event.currentTarget.value);
+      $('musicVolumeValue').textContent = state.audioVolume + '%';
+    });
+    $('soundToggle').addEventListener('click', () => {
+      if (state.audioPlaying) stopAudio();
+      else startAudio();
+    });
+    music.addEventListener('error', () => {
+      if (state.audioPlaying && state.audioToken) startSynth(state.audioToken);
     });
   }
-  function applyVolume(raw, persist = true) {
-    const candidate = Number(raw);
-    const value = Number.isFinite(candidate) ? Math.max(0, Math.min(100, Math.round(candidate))) : 18;
-    state.volume = value;
-    els.music.volume = value / 100;
-    synth.setVolume(value / 100);
-    if (els.volume) els.volume.value = String(value);
-    if (els.volumeValue) els.volumeValue.textContent = `${value}%`;
-    if (persist) storage.set('nhVolume', value);
-  }
 
-  // On subsequent page loads, autoplay may be forbidden until the first gesture.
-  // The first interaction starts audio automatically unless the visitor explicitly mutes it.
-  let cancelGestureStart = null;
-  function armAudioForNextInteraction() {
-    if (cancelGestureStart || !state.audioWanted || state.playing) return;
-    const handle = (event) => {
-      if (event.type === 'keydown' && !['Enter',' ','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)) return;
-      if (event.target?.closest?.('#soundToggle')) return;
-      disarmAudioGesture();
-      if (state.unlocked && state.audioWanted && !state.playing) startAudio();
-    };
-    const options = {capture: true};
-    window.addEventListener('pointerdown', handle, options);
-    window.addEventListener('keydown', handle, options);
-    cancelGestureStart = () => {
-      window.removeEventListener('pointerdown', handle, true);
-      window.removeEventListener('keydown', handle, true);
-    };
-  }
-  function disarmAudioGesture() {
-    cancelGestureStart?.();
-    cancelGestureStart = null;
-  }
   function startAudio() {
-    if (state.playing) return;
-    disarmAudioGesture();
-    state.audioWanted = true;
-    storage.set('nhAudioPreference', 'on');
-    state.playing = true;
-    state.audioSource = 'loading';
+    if (state.audioPlaying) return;
+    const music = $('ambientMusic');
+    state.audioPlaying = true;
     const token = ++state.audioToken;
     syncAudio();
-    // Audio playback begins in the visitor's gesture, never unsolicited on first access.
-    void synth.init();
-    const playRequest = els.music.play();
-    Promise.resolve(playRequest).then(() => {
-      if (!state.playing || token !== state.audioToken) { els.music.pause(); return; }
-      synth.stopAmbient();
-      state.audioSource = 'file';
-      syncAudio();
-    }).catch(() => void fallback(token));
-  }
-  async function fallback(token) {
-    await synth.init();
-    if (!state.playing || token !== state.audioToken) return;
-    els.music.pause();
-    synth.startAmbient();
-    state.audioSource = 'procedural';
-    syncAudio();
-  }
-  function stopAudio() {
-    disarmAudioGesture();
-    state.audioWanted = false;
-    storage.set('nhAudioPreference', 'off');
-    state.playing = false;
-    state.audioSource = 'off';
-    state.audioToken++;
-    els.music.pause();
-    synth.stopAmbient();
-    syncAudio();
-  }
-  function syncAudio() {
-    els.sound.textContent = !state.playing ? (state.audioWanted ? 'AUDIO READY' : 'AUDIO OFF') : state.audioSource === 'file' ? 'MUSIC ON' : 'AMBIENT ON';
-    els.sound.setAttribute('aria-pressed', String(state.playing));
-    if (els.volumeToggle) {
-      els.volumeToggle.textContent = (state.playing || state.audioWanted) ? 'MUTE AUDIO' : 'ENABLE AUDIO';
-      els.volumeToggle.setAttribute('aria-pressed', String(state.playing));
-    }
-  }
-  function playUi(kind) { if (state.playing && synth.ctx) synth.ui(kind); }
-  function announce(text) { els.announcer.textContent = text; }
-
-  function createSynth() {
-    let ctx = null, master = null, drones = [], shimmerTimer = null, volumeLevel = .18;
-    function pulse(frequency, duration = .12, volume = .028) {
-      if (!ctx || !master) return;
-      const start = ctx.currentTime, osc = ctx.createOscillator(), gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(frequency, start);
-      gain.gain.setValueAtTime(.0001, start);
-      gain.gain.exponentialRampToValueAtTime(volume, start + .015);
-      gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
-      osc.connect(gain).connect(master);
-      osc.start(start); osc.stop(start + duration + .03);
-    }
-    return {
-      get ctx() { return ctx; },
-      setVolume(level) {
-        volumeLevel = Number.isFinite(level) ? Math.max(0, Math.min(1, level)) : .18;
-        if (master && ctx) master.gain.setTargetAtTime(volumeLevel * .75, ctx.currentTime, .025);
-      },
-      async init() {
-        try {
-          if (!ctx) {
-            const Ctor = window.AudioContext || window.webkitAudioContext;
-            if (!Ctor) return;
-            ctx = new Ctor();
-            master = ctx.createGain();
-            master.gain.value = volumeLevel * .75;
-            master.connect(ctx.destination);
-          }
-          if (ctx.state === 'suspended') await ctx.resume();
-        } catch { /* Optional sound. */ }
-      },
-      ui(kind) {
-        const tones = {enter:220, select:310, tab:360, open:260, close:190, confirm:460};
-        pulse(tones[kind] || 280, kind === 'enter' ? .3 : .11, kind === 'enter' ? .06 : .023);
-      },
-      startAmbient() {
-        if (!ctx || drones.length) return;
-        drones = [73.42,110,164.81].map((frequency,index) => {
-          const osc = ctx.createOscillator(), gain = ctx.createGain();
-          osc.type = index === 1 ? 'sine' : 'triangle';
-          osc.frequency.value = frequency;
-          gain.gain.value = .009;
-          osc.connect(gain).connect(master);
-          osc.start(); return {osc,gain};
-        });
-        shimmerTimer = setInterval(() => {
-          if (drones.length) pulse([293.66,349.23,392,440,523.25][Math.floor(Math.random()*5)], 1.5, .006);
-        },5700);
-      },
-      stopAmbient() {
-        if (shimmerTimer) {clearInterval(shimmerTimer); shimmerTimer = null;}
-        drones.forEach(({osc,gain}) => {try {osc.stop();osc.disconnect();gain.disconnect();}catch{}});
-        drones=[];
+    const request = music.play();
+    Promise.resolve(request).then(() => {
+      if (!state.audioPlaying || token !== state.audioToken) {
+        music.pause();
+        return;
       }
-    };
+      stopSynth();
+    }).catch(() => startSynth(token));
   }
+
+  function stopAudio() {
+    state.audioPlaying = false;
+    state.audioToken += 1;
+    $('ambientMusic').pause();
+    stopSynth();
+    syncAudio();
+  }
+
+  function syncAudio() {
+    const button = $('soundToggle');
+    button.setAttribute('aria-pressed', String(state.audioPlaying));
+    button.setAttribute('aria-label', state.audioPlaying ? 'Turn ambient audio off' : 'Turn ambient audio on');
+    button.querySelector('.sound-state').textContent = state.audioPlaying ? 'on' : 'off';
+  }
+
+  function applyAudioLevel(raw) {
+    const value = Math.max(0, Math.min(100, Math.round(Number(raw) || 0)));
+    state.audioVolume = value;
+    $('ambientMusic').volume = value / 100;
+    if (state.audioMaster && state.audioContext) {
+      state.audioMaster.gain.setTargetAtTime(value / 100 * 0.08, state.audioContext.currentTime, 0.04);
+    }
+    if (hasPreferences()) storage.set('nh-audio-level', String(value));
+  }
+
+  function startSynth(token) {
+    initAudioContext().then(() => {
+      if (!state.audioPlaying || token !== state.audioToken || !state.audioContext || state.drones.length) return;
+      state.drones = [73.42,110,164.81].map((frequency,index) => {
+        const oscillator = state.audioContext.createOscillator();
+        const gain = state.audioContext.createGain();
+        oscillator.type = index === 1 ? 'sine' : 'triangle';
+        oscillator.frequency.value = frequency;
+        gain.gain.value = state.audioVolume / 100 * 0.008;
+        oscillator.connect(gain).connect(state.audioMaster);
+        oscillator.start();
+        return {oscillator,gain};
+      });
+      state.shimmerTimer = window.setInterval(() => {
+        if (state.audioPlaying && state.audioContext) playSoftTone([293.66,349.23,392,440,523.25][Math.floor(Math.random()*5)]);
+      }, 5700);
+    });
+  }
+
+  async function initAudioContext() {
+    try {
+      if (!state.audioContext) {
+        const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextConstructor) return;
+        state.audioContext = new AudioContextConstructor();
+        state.audioMaster = state.audioContext.createGain();
+        state.audioMaster.gain.value = state.audioVolume / 100 * 0.08;
+        state.audioMaster.connect(state.audioContext.destination);
+      }
+      if (state.audioContext.state === 'suspended') await state.audioContext.resume();
+    } catch { /* Audio is optional and begins only after an explicit click. */ }
+  }
+
+  function playSoftTone(frequency) {
+    if (!state.audioContext || !state.audioMaster) return;
+    const now = state.audioContext.currentTime;
+    const oscillator = state.audioContext.createOscillator();
+    const gain = state.audioContext.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(frequency, now);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.004, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
+    oscillator.connect(gain).connect(state.audioMaster);
+    oscillator.start(now);
+    oscillator.stop(now + 1.15);
+  }
+
+  function stopSynth() {
+    if (state.shimmerTimer) {
+      window.clearInterval(state.shimmerTimer);
+      state.shimmerTimer = null;
+    }
+    state.drones.forEach(({oscillator,gain}) => {
+      try { oscillator.stop(); oscillator.disconnect(); gain.disconnect(); } catch { /* Already stopped. */ }
+    });
+    state.drones = [];
+  }
+
+  function setupMotion() {
+    $('motionToggle').addEventListener('click', async () => {
+      if (state.motionHandler) {
+        window.removeEventListener('deviceorientation', state.motionHandler);
+        state.motionHandler = null;
+        $('motionToggle').setAttribute('aria-pressed','false');
+        $('motionToggle').textContent = 'Try a gentle tilt effect';
+        $('heroPortrait').style.transform = '';
+        return;
+      }
+      if (!('DeviceOrientationEvent' in window)) {
+        $('motionToggle').textContent = 'Motion input is unavailable here';
+        return;
+      }
+      try {
+        if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+          const permission = await window.DeviceOrientationEvent.requestPermission();
+          if (permission !== 'granted') throw new Error('Motion permission declined');
+        }
+        if (reduceMotion) {
+          $('motionToggle').textContent = 'Motion is off because reduced motion is enabled';
+          return;
+        }
+        state.motionHandler = (event) => {
+          const x = Math.max(-5, Math.min(5, (event.gamma || 0) * 0.15));
+          const y = Math.max(-4, Math.min(4, (event.beta || 0) * 0.12));
+          $('heroPortrait').style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
+        };
+        window.addEventListener('deviceorientation', state.motionHandler, {passive:true});
+        $('motionToggle').setAttribute('aria-pressed','true');
+        $('motionToggle').textContent = 'Turn off the tilt effect';
+      } catch {
+        $('motionToggle').textContent = 'Motion permission was not granted';
+      }
+    });
+  }
+
+  function announce(message) {
+    $('announcer').textContent = message;
+  }
+
   init();
 })();

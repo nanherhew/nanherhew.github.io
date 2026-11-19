@@ -1,70 +1,33 @@
-# Nanher Hew — ENTER THE CONSCIOUSNESS / V8
+# Nanher Hew — reemplazo del portafolio
 
-Sitio estático, sin compilación ni backend. Diseñado para publicarse en GitHub Pages.
+Sitio estático para GitHub Pages. Usa HTML, CSS y JavaScript sin paso de compilación, framework, formularios, analítica ni píxeles de marketing.
 
-## Instalación
+## Publicar
 
-1. Sustituye en tu repositorio los archivos `index.html`, `style.css` y `script.js` por los incluidos en este ZIP.
-2. **Conserva** tu carpeta original `arts/` con sus imágenes, sin sobrescribirla. El ZIP no trae dibujos originales porque ya están en tu repositorio.
-3. Publica como siempre desde GitHub Pages. El proyecto utiliza rutas relativas (`./arts/...`), compatibles con repositorios publicados bajo subrutas.
-4. Si modificaste la página y parece no cambiar, recarga sin caché (Ctrl+Shift+R).
+Cuando quieras publicarlo, copia el contenido de esta carpeta a la raíz del repositorio de GitHub Pages y conserva la carpeta `arts/`. Este paquete no modifica el sitio en línea.
 
-## Archivos de arte existentes (conservar nombres y mayúsculas)
+## Archivos
 
-- `arts/age-banner.jpg` — advertencia 18+.
-- `arts/hero.PNG` — personaje en portada (idealmente con transparencia).
-- `arts/01.jpg` a `arts/04.jpg` — Recent Works.
-- `arts/05.jpg` a `arts/08.jpg` — Archive.
-- `arts/02.jpg`, `arts/03.jpg` — Commission artworks catalogados en Archive (con nombres originales de clientes).
-- `arts/wip01.jpg`, `arts/wip02.jpg` — trabajos en progreso.
+- `index.html`: portafolio, galería, mapa de conexiones por categorías, visor accesible, avisos de edad y privacidad, estimador de comisiones.
+- `style.css`: diseño adaptable y soporte para movimiento reducido.
+- `script.js`: filtros, visor con teclado, declaración 18+, preferencias, estimador, monitor de sesión, audio opcional y movimiento.
+- `legal.html`: aviso de privacidad y términos con campos pendientes visibles.
+- `arts/`: ilustraciones y audio originales. Las vistas previas optimizadas están en `arts/thumbs/`; el visor conserva los archivos completos.
 
-## Nuevas imágenes opcionales — reemplazo automático
+## Antes de publicar
 
-Añade los siguientes archivos a `arts/` cuando tengas las ilustraciones listas:
+Completa todos los campos `[DATO PENDIENTE...]` en `legal.html`. Confirma moneda, configuración de alojamiento, contacto y domicilio para privacidad/ARCO, y las condiciones faltantes de comisiones. Revisa que las obras y atribuciones de clientes puedan mostrarse públicamente. La puerta 18+ es una declaración, no verifica la edad. El estimador no crea encargos ni acepta pagos.
 
-- **`arts/identity.png`** — reemplaza el símbolo 文 del módulo **Identity**.
-- **`arts/commission-sample.png`** — reemplaza el símbolo de muestra en el catálogo de **Commissions**.
+## Privacidad y funcionamiento
 
-No hace falta editar HTML/CSS/JS: el sitio comprueba si existen y, cuando cargan, oculta el símbolo y muestra la nueva imagen. Conserva la extensión `.png` y las minúsculas. Si aún no existen, el símbolo sigue visible.
+- La declaración de edad se guarda en `sessionStorage` durante la sesión actual.
+- La elección esencial de privacidad se guarda en `localStorage`.
+- El filtro de galería y nivel de audio solo se recuerdan si la visita activa Preferencias.
+- Analítica y Marketing figuran como categorías inactivas; el sitio no carga proveedores de esas categorías.
+- El audio nunca inicia automáticamente. El movimiento del dispositivo solo se activa después de una acción expresa.
+- Los enlaces sociales salen del sitio solo después de que la visita los selecciona.
+- El mapa conecta únicamente obras con la misma categoría existente; desde una pieza se puede abrir ese hilo para ver las obras relacionadas.
 
-## Música de fondo
+## Ilustraciones
 
-**Audio activado por defecto:** la página intenta comenzar a reproducir música cuando el visitante pulsa **I AM 18+ / ENTER CONSCIOUSNESS**. Los navegadores bloquean el sonido automático antes de una interacción explícita. Si el visitante ya había confirmado su edad en esa sesión y recarga la página, aparecerá `AUDIO READY` y se activará con su siguiente interacción.
-
-- **MP3 opcional:** coloca tu propia pista autorizada en `arts/ambient.mp3`, que se reproducirá en bucle.
-- **Sin MP3:** se utiliza el ambiente original generado con Web Audio API.
-- **Volumen inicial:** 18%, editable de 0 a 100% desde **MIND MONITOR → AUDIO / MASTER LEVEL**.
-- **Persistencia:** el volumen y el estado de encendido/apagado se conservan en `sessionStorage` durante la sesión.
-- **Silenciar:** el control global de audio o el botón **MUTE AUDIO** dentro del monitor; cualquiera puede reactivar el sonido.
-- **Ambas fuentes:** el deslizador controla el MP3 y también el ambiente sintético. Nunca se mezclan simultáneamente como dos fondos independientes.
-- Si incluyes música de otra persona, respeta los permisos y créditos exigidos por su licencia.
-
-## Cambios principales de V7
-
-- Una sola página con desplazamiento y seis apartados: **Overview, Recent Works, Archive, Identity, Commissions y Contact**.
-- Home con título gigante, resplandor naranja en HEW, icono 文 al fondo, personaje `hero.PNG` delante del texto, descripción rápida y botones de salto.
-- Ventana flotante ACCESS NODES. Seleccionar un nodo desplaza a la sección **sin cerrar el menú**.
-- Ventana MIND MONITOR: dibujo vectorial de cerebro, señal de estado, pulso simulado de 74 BPM, temporizador real de sesión y año original de actividad artística (2024). **El BPM es una animación decorativa, no un dato biométrico real**.
-- Filtros y lightbox, cursor blanco de cruz en desktop, imagen adaptable y navegación apta para móviles.
-- Enlace Discord oficial actualizado: https://discord.gg/KxpdYMte
-- Paleta negro `#000000`, rojo `#FF0032` y resplandor naranja solo en HEW.
-- Eliminación de Supabase, formularios de comisiones y Commission Status (no hay código ni dependencias residuales).
-
-## Verificaciones realizadas
-
-- Sintaxis JavaScript (`node --check`).
-- Pruebas automatizadas en Chromium con HTML, CSS y JS cargados localmente mediante Playwright en ocho anchos: 320, 360, 390, 430, 768, 1024, 1440 y 1920 px.
-- Advertencia +18, navegación con ventana persistente, galería Archive/WIPS, apertura/cierre de lightbox, monitor retráctil, y ausencia de desbordamientos horizontales y errores de ejecución en esos escenarios.
-- Los originales **no** estaban incluidos aquí; debes comprobar visualmente cómo queda `hero.PNG` y la carga real de `arts/` una vez publicado. También debes verificar tu MP3 y los sensores móviles en un dispositivo real.
-
-## Mantenimiento
-
-Sitio en tres archivos: estructura HTML, estilos CSS y controladores JS. No necesita Node.js, npm, Supabase, frameworks ni bases de datos en producción. El contenido de las comisiones mantiene los nombres y precios del archivo original ($15, $20, $25, $35, $45; extras +$25, +$15 y +50%).
-
-## Cambios de V8
-
-- Slider de volumen real dentro de MIND MONITOR, con lectura porcentual y diseño rojo `#FF0032`.
-- Música habilitada por defecto tras el acceso del visitante.
-- Control MUTE / ENABLE AUDIO integrado en la misma ventana móvil y desktop.
-- Comprobación de sintaxis y pruebas automatizadas del acceso, audio, volumen, persistencia, mute y reanudación en 320, 390, 768 y 1440 píxeles, más prueba de una visita posterior con volumen guardado.
-- El MP3 real y las ilustraciones no se incluyen: conserva tu carpeta `arts/` del repositorio.
+Se conservaron los archivos de arte que usa la página publicada. La galería contiene 12 registros, incluidos los dos ejemplos de comisión y dos trabajos en proceso originales.
