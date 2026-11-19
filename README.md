@@ -9,8 +9,8 @@ Cuando quieras publicarlo, copia el contenido de esta carpeta a la raíz del rep
 ## Archivos
 
 - `index.html`: pantalla de conexión, aviso de acceso 18+, directorio del sistema, registros de arte, procesos WIP, asociaciones, protocolo de comisiones, conexiones y preferencias de privacidad.
-- `style.css`: diseño adaptable con CRT y textura analógica sutil, transiciones de interferencia, estructura de directorio para escritorio y móvil, estados de foco y soporte para movimiento reducido.
-- `script.js`: búsqueda local por archivo/categoría/atribución, filtros, índice de asociaciones, visor accesible, autorización 18+ revocable durante la sesión, privacidad, estimador, traza de sesión, audio opcional y movimiento voluntario.
+- `style.css`: HUD cyberpunk, capas CRT, iluminación neón, barridos, retículas, marcos de archivo, interferencias por niveles, adaptación móvil, estados de foco y movimiento reducido.
+- `script.js`: búsqueda local por archivo/categoría/atribución, filtros, índice de asociaciones, visor accesible, autorización 18+ revocable durante la sesión, privacidad, estimador, traza de sesión, audio opcional, movimiento voluntario y retícula decorativa para puntero fino.
 - `legal.html`: privacidad, cookies, términos del sitio y términos de comisiones con campos pendientes visibles.
 - `arts/`: ilustraciones y audio originales. Las vistas previas optimizadas están en `arts/thumbs/`; el visor conserva los archivos completos.
 
@@ -26,6 +26,7 @@ Completa todos los campos `[DATO PENDIENTE...]` en `legal.html`. Confirma moneda
 - Las preferencias opcionales pueden recordar el filtro del archivo y el nivel de audio; búsqueda y recorrido no se envían a un servidor.
 - Analítica y Marketing figuran como categorías inactivas; el sitio no carga proveedores de esas categorías.
 - El audio nunca inicia automáticamente. El movimiento del dispositivo solo se activa después de una acción expresa.
+- Las interferencias son transiciones visuales breves asociadas a acciones del archivo; no simulan errores permanentes ni bloquean controles.
 - La traza describe el área o registro abierto y el tiempo de esta visita en el navegador; no mide la actividad del artista ni envía datos.
 
 ## Archivo

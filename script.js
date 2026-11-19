@@ -66,6 +66,8 @@
     mobileDirectory: false,
     ageGateOrigin: null,
     interferenceHandler: null,
+    cursorFrame: 0,
+    cursorPoint: null,
     motionHandler: null
   };
 
@@ -114,6 +116,7 @@
     setupMonitor();
     setupAudio();
     setupMotion();
+    setupCursorReticle();
     updateSessionTime();
     window.setInterval(updateSessionTime, 1000);
 
@@ -126,6 +129,7 @@
 
   function setupAgeGate() {
     const dialog = $('ageGate');
+    dialog.hidden = true;
     state.ageAccepted = storage.get('nh-age-declared-v1', 'session') === 'yes';
     if (state.ageAccepted) {
       document.body.classList.remove('state-locked');
@@ -144,6 +148,7 @@
       document.body.classList.remove('state-locked');
       $('accessSequence').hidden = true;
       dialog.close();
+      dialog.hidden = true;
       const focusTarget = state.ageGateOrigin === $('beginAccess')
         ? document.querySelector('.intro__links a')
         : state.ageGateOrigin;
@@ -191,12 +196,12 @@
     state.directoryOpen = false;
     $('systemDirectory').hidden = true;
     $('directoryToggle').setAttribute('aria-expanded', 'false');
-    $('directoryToggle').setAttribute('aria-label', 'Open system directory');
+    $('directoryToggle').setAttribute('aria-label', 'Open access nodes');
     $('directoryToggle').querySelector('span').textContent = '+';
     state.monitorOpen = false;
     $('studioMonitor').hidden = true;
     $('monitorToggle').setAttribute('aria-expanded', 'false');
-    $('monitorToggle').setAttribute('aria-label', 'Open system trace');
+    $('monitorToggle').setAttribute('aria-label', 'Open mind monitor');
     $('monitorToggle').querySelector('span').textContent = '+';
     $('accessSequence').hidden = true;
     document.body.classList.add('state-locked');
@@ -206,6 +211,7 @@
 
   function openAgeGate(origin) {
     state.ageGateOrigin = origin || null;
+    $('ageGate').hidden = false;
     $('ageGate').showModal();
     $('ageEnter').focus({preventScroll:true});
   }
@@ -594,10 +600,10 @@
     const media = window.matchMedia('(max-width: 720px)');
     const syncMode = () => {
       state.mobileDirectory = media.matches;
-      state.directoryOpen = !state.mobileDirectory;
+      state.directoryOpen = false;
       directory.hidden = !state.directoryOpen;
       toggle.setAttribute('aria-expanded', String(state.directoryOpen));
-      toggle.setAttribute('aria-label', state.directoryOpen ? 'Close system directory' : 'Open system directory');
+      toggle.setAttribute('aria-label', state.directoryOpen ? 'Close access nodes' : 'Open access nodes');
       toggle.querySelector('span').textContent = state.directoryOpen ? '−' : '+';
     };
     syncMode();
@@ -621,7 +627,7 @@
     state.directoryOpen = Boolean(open);
     $('systemDirectory').hidden = !state.directoryOpen;
     $('directoryToggle').setAttribute('aria-expanded', String(state.directoryOpen));
-    $('directoryToggle').setAttribute('aria-label', state.directoryOpen ? 'Close system directory' : 'Open system directory');
+    $('directoryToggle').setAttribute('aria-label', state.directoryOpen ? 'Close access nodes' : 'Open access nodes');
     $('directoryToggle').querySelector('span').textContent = state.directoryOpen ? '−' : '+';
     if (state.directoryOpen) $('directoryClose').focus({preventScroll:true});
     else $('directoryToggle').focus({preventScroll:true});
@@ -665,6 +671,22 @@
     layer.classList.add('is-active');
   }
 
+  function setupCursorReticle() {
+    const reticle = $('cursorReticle');
+    if (reduceMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    document.body.classList.add('cursor-ready');
+    window.addEventListener('pointermove', (event) => {
+      state.cursorPoint = {x:event.clientX, y:event.clientY};
+      if (state.cursorFrame) return;
+      state.cursorFrame = window.requestAnimationFrame(() => {
+        reticle.style.transform = 'translate3d(' + state.cursorPoint.x + 'px,' + state.cursorPoint.y + 'px,0) translate(-50%,-50%)';
+        state.cursorFrame = 0;
+      });
+    }, {passive:true});
+    document.addEventListener('pointerleave', () => reticle.classList.add('is-outside'));
+    document.addEventListener('pointerenter', () => reticle.classList.remove('is-outside'));
+  }
+
   function setupSectionTracking() {
     const sections = queryAll('[data-section]');
     if (!('IntersectionObserver' in window)) return;
@@ -695,6 +717,7 @@
     $('studioMonitor').hidden = !open;
     $('monitorToggle').setAttribute('aria-expanded', String(open));
     $('monitorToggle').querySelector('span').textContent = open ? '−' : '+';
+    $('monitorToggle').setAttribute('aria-label', open ? 'Close mind monitor' : 'Open mind monitor');
     if (open) $('monitorClose').focus({preventScroll:true});
     else $('monitorToggle').focus({preventScroll:true});
   }

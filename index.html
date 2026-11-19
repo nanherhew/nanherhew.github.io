@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#11100f">
+  <meta name="theme-color" content="#030307">
   <meta name="color-scheme" content="dark">
   <meta name="description" content="A classified archive interface containing Nanher Hew's visual memories, identity record, works in progress and commission protocol.">
   <meta property="og:type" content="website">
@@ -15,7 +15,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>Nanher Hew — Classified Consciousness Archive</title>
   <link rel="icon" href="./arts/hero.PNG" type="image/png">
-  <link rel="preload" as="image" href="./arts/thumbs/01.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="./arts/hero.PNG" fetchpriority="high">
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
 </head>
@@ -24,10 +24,10 @@
 
   <section class="access-sequence" id="accessSequence" aria-labelledby="accessTitle">
     <div class="access-sequence__frame">
-      <div class="access-sequence__masthead"><a class="access-sequence__wordmark" href="#accessSequence" aria-label="Nanher Hew classified archive"><span lang="zh" aria-hidden="true">文</span> NANHER HEW</a><span>IN-UNIVERSE RECORD · NH-01 / ACCESS</span><span class="classification-stamp">RESTRICTED<br>CONSCIOUSNESS ARCHIVE</span></div>
+          <div class="access-sequence__masthead"><a class="access-sequence__wordmark" href="#accessSequence" aria-label="Nanher Hew classified archive"><span lang="zh" aria-hidden="true">文</span> NANHER HEW</a><span>NH.OS // MIND ARCHIVE · CONNECTION 001</span><span class="classification-stamp">RESTRICTED<br>CONSCIOUSNESS ARCHIVE</span></div>
       <div class="access-sequence__body">
         <div class="access-sequence__copy">
-          <p class="eyebrow"><span class="signal-mark" aria-hidden="true"></span> SIGNAL DETECTED / CONNECTION AVAILABLE</p>
+          <p class="eyebrow"><span class="signal-mark" aria-hidden="true"></span> SIGNAL DETECTED / CARRIER FOUND</p>
           <h1 id="accessTitle">A SIGNAL<br>FROM <em>WITHIN.</em></h1>
           <p class="access-sequence__dek">This archive belongs to a digital consciousness associated with artist Nanher Hew. Its records hold identity, illustrations and fragments of a creative world.</p>
           <div class="access-sequence__records" aria-label="Access summary">
@@ -45,22 +45,22 @@
           <span class="access-sequence__vertical" aria-hidden="true">ANALOG CARRIER / MONOCHROME DISPLAY</span>
         </div>
       </div>
-      <div class="access-sequence__footer"><span>CLASSIFIED SYSTEM / USER INITIATED CONNECTION</span><span>NO AUTOMATED LOADING SEQUENCE</span></div>
+      <div class="access-sequence__footer"><span>CLASSIFIED SYSTEM / USER INITIATED CONNECTION</span><span>NO SIMULATED LOADING METRICS</span></div>
     </div>
   </section>
 
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Nanher Hew, return to the consciousness core"><span class="wordmark__glyph" lang="zh" aria-hidden="true">文</span><span>NANHER HEW <small>NH-01</small></span></a>
-    <div class="system-presence"><span class="system-presence__dot" aria-hidden="true"></span><span>CONSCIOUSNESS / CONTAINED</span><strong id="systemTrace">CORE PRESENT · ACCESS OPEN</strong></div>
+    <div class="system-presence"><span class="system-presence__dot" aria-hidden="true"></span><span>MIND ARCHIVE / LINKED</span><strong id="systemTrace">CORE PRESENT · ACCESS OPEN</strong></div>
     <div class="header-actions">
-      <button id="directoryToggle" class="icon-button" type="button" aria-expanded="false" aria-controls="systemDirectory" aria-label="Open system directory">Directory <span aria-hidden="true">+</span></button>
-      <button id="monitorToggle" class="icon-button" type="button" aria-expanded="false" aria-controls="studioMonitor" aria-label="Open system trace">Trace <span aria-hidden="true">+</span></button>
-      <button id="soundToggle" class="icon-button" type="button" aria-pressed="false" aria-label="Turn ambient audio on">Sound <span class="sound-state">off</span></button>
+      <button id="directoryToggle" class="icon-button" type="button" aria-expanded="false" aria-controls="systemDirectory" aria-label="Open access nodes">[<span aria-hidden="true">+</span>] Access Nodes</button>
+      <button id="monitorToggle" class="icon-button" type="button" aria-expanded="false" aria-controls="studioMonitor" aria-label="Open mind monitor">[<span aria-hidden="true">+</span>] Mind Monitor</button>
+      <button id="soundToggle" class="icon-button" type="button" aria-pressed="false" aria-label="Turn ambient audio on">Audio <span class="sound-state">off</span></button>
     </div>
   </header>
 
   <aside class="system-directory" id="systemDirectory" aria-label="System directory" hidden>
-    <div class="system-directory__header"><div><p class="eyebrow">NH-01 / ROOT</p><strong>Memory structure</strong></div><button id="directoryClose" class="text-button" type="button" aria-label="Close system directory">Close ×</button></div>
+    <div class="system-directory__header"><div><p class="eyebrow">NH.OS / ACCESS NODES</p><strong>Mind address index</strong></div><button id="directoryClose" class="text-button" type="button" aria-label="Close access nodes">×</button></div>
     <nav class="system-directory__nav" aria-label="Explore the contained consciousness">
       <a href="#top" data-route="top"><span>CORE</span><small>Identity record</small></a>
       <a href="#memory-bank" data-route="memory-bank"><span>MEMORY BANK</span><small><b id="directoryWorkCount">12</b> artwork records</small></a>
@@ -71,23 +71,25 @@
       <a href="#commission-protocol" data-route="commission-protocol"><span>COMMISSION PROTOCOL</span><small>Artist services</small></a>
       <a href="#system-documents" data-route="system-documents"><span>SYSTEM DOCUMENTS</span><small>Privacy &amp; terms</small></a>
     </nav>
-    <p class="system-directory__foot">The labels reflect records present in this archive.</p>
+    <p class="system-directory__foot">SELECT A NODE TO SCAN ITS MEMORY REGION.</p>
   </aside>
 
   <aside class="studio-monitor" id="studioMonitor" hidden aria-labelledby="monitorTitle">
-    <div class="studio-monitor__top"><p class="eyebrow" id="monitorTitle">System trace</p><button id="monitorClose" class="text-button" type="button" aria-label="Close system trace">Close ×</button></div>
+    <div class="studio-monitor__top"><p class="eyebrow" id="monitorTitle">MIND MONITOR / SITE SIGNAL</p><button id="monitorClose" class="text-button" type="button" aria-label="Close mind monitor">×</button></div>
+    <div class="monitor-waveform" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p class="monitor-waveform__label">UI SIGNAL / VISUAL DECORATION</p>
     <div class="monitor-readout"><span>THIS VISIT / LOCAL TIMER</span><strong id="sessionTime">00:00</strong></div>
     <div class="monitor-readout"><span>IDENTITY RECORD</span><strong>NANHER HEW · 2024</strong></div>
     <div class="monitor-volume"><div><label for="musicVolume">AMBIENT LEVEL</label><output id="musicVolumeValue" for="musicVolume">18%</output></div><input id="musicVolume" type="range" min="0" max="100" step="1" value="18" aria-label="Ambient audio volume"></div>
-    <p>The trace reflects actions inside this page. It does not measure the artist or send activity data elsewhere.</p>
+    <p>The route and local timer reflect this visit only. The signal is visual decoration; nothing measures the artist or sends activity data elsewhere.</p>
     <button id="motionToggle" class="text-button" type="button" aria-pressed="false">Try a gentle tilt effect</button>
   </aside>
 
   <main id="main">
     <section class="intro" id="top" aria-labelledby="introTitle" data-section="top">
       <div class="intro__art">
-        <img id="heroPortrait" src="./arts/thumbs/01.jpg" alt="Portrait illustration by Nanher Hew, with a deep blue background" fetchpriority="high" decoding="async">
-        <div class="intro__art-index"><span>01</span><span>SELECTED WORK</span><span class="signal-mark" aria-hidden="true"></span></div>
+        <img id="heroPortrait" src="./arts/hero.PNG" alt="Original character illustration by Nanher Hew, a broad smiling figure raising one arm" fetchpriority="high" decoding="async">
+        <div class="intro__art-index"><span>文</span><span>CORE IMAGE / IDENTITY RECORD</span><span class="signal-mark" aria-hidden="true"></span></div>
         <span class="intro__art-note" aria-hidden="true">文</span>
       </div>
       <div class="intro__copy">
@@ -303,6 +305,7 @@
   <audio id="ambientMusic" src="./arts/ambient.mp3" preload="none" loop></audio>
   <div class="crt-layer" aria-hidden="true"></div>
   <div class="signal-interference" id="signalInterference" aria-hidden="true"></div>
+  <div class="cursor-reticle" id="cursorReticle" aria-hidden="true"><span></span></div>
   <div class="visually-hidden" id="announcer" aria-live="polite"></div>
   <noscript><p class="noscript-note">JavaScript is needed for the age notice, artwork filters and full-size viewer. Please continue only if you are 18 or older.</p></noscript>
 </body>
