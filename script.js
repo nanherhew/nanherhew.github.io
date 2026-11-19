@@ -17,18 +17,18 @@
   };
 
   const work = [
-    {src:'./arts/01.jpg', thumb:'./arts/thumbs/01.jpg', point:[7,20], title:'Portrait', detail:'Selected work · 01', category:'characters', featured:true, alt:'Portrait illustration by Nanher Hew, with a deep blue background'},
-    {src:'./arts/02.jpg', thumb:'./arts/thumbs/02.jpg', point:[34,15], title:'Furry character', detail:'Selected work · 02', category:'commissions', featured:true, alt:'Furry character illustration by Nanher Hew'},
-    {src:'./arts/03.jpg', thumb:'./arts/thumbs/03.jpg', point:[65,20], title:'Bara character', detail:'Selected work · 03', category:'bara', featured:true, alt:'Bara character illustration by Nanher Hew'},
-    {src:'./arts/04.jpg', thumb:'./arts/thumbs/04.jpg', point:[91,20], title:'Character study', detail:'Selected work · 04', category:'characters', featured:true, alt:'Character illustration by Nanher Hew'},
-    {src:'./arts/05.jpg', thumb:'./arts/thumbs/05.jpg', point:[16,53], title:'Archive drawing', detail:'Artwork · 05', category:'characters', alt:'Character artwork from Nanher Hew’s archive, piece 05'},
-    {src:'./arts/06.jpg', thumb:'./arts/thumbs/06.jpg', point:[42,60], title:'Archive drawing', detail:'Artwork · 06', category:'characters', alt:'Character artwork from Nanher Hew’s archive, piece 06'},
-    {src:'./arts/07.jpg', thumb:'./arts/thumbs/07.jpg', point:[72,52], title:'Archive drawing', detail:'Artwork · 07', category:'bara', alt:'Bara artwork from Nanher Hew’s archive, piece 07'},
-    {src:'./arts/08.jpg', thumb:'./arts/thumbs/08.jpg', point:[93,68], title:'Archive drawing', detail:'Artwork · 08', category:'bara', alt:'Bara artwork from Nanher Hew’s archive, piece 08'},
-    {src:'./arts/02.jpg', thumb:'./arts/thumbs/02.jpg', point:[26,85], title:'Commission for @bjoern90', detail:'Client commission · 01', category:'commissions', alt:'Commission artwork by Nanher Hew for @bjoern90'},
-    {src:'./arts/03.jpg', thumb:'./arts/thumbs/03.jpg', point:[62,85], title:'Commission for @outdoowpumpkin9', detail:'Client commission · 02', category:'commissions', alt:'Commission artwork by Nanher Hew for @outdoowpumpkin9'},
-    {src:'./arts/wip01.jpg', thumb:'./arts/thumbs/wip01.jpg', point:[49,35], title:'Work in progress', detail:'In progress · 01', category:'wips', alt:'Work in progress from Nanher Hew’s archive, piece 01'},
-    {src:'./arts/wip02.jpg', thumb:'./arts/thumbs/wip02.jpg', point:[83,87], title:'Work in progress', detail:'In progress · 02', category:'wips', alt:'Work in progress from Nanher Hew’s archive, piece 02'}
+    {fileId:'01.jpg', src:'./arts/01.jpg', thumb:'./arts/thumbs/01.jpg', point:[7,20], title:'Portrait', detail:'Selected work · 01', category:'characters', featured:true, alt:'Portrait illustration by Nanher Hew, with a deep blue background'},
+    {fileId:'02.jpg', src:'./arts/02.jpg', thumb:'./arts/thumbs/02.jpg', point:[34,15], title:'Furry character', detail:'Selected work · 02', category:'commissions', featured:true, alt:'Furry character illustration by Nanher Hew'},
+    {fileId:'03.jpg', src:'./arts/03.jpg', thumb:'./arts/thumbs/03.jpg', point:[65,20], title:'Bara character', detail:'Selected work · 03', category:'bara', featured:true, alt:'Bara character illustration by Nanher Hew'},
+    {fileId:'04.jpg', src:'./arts/04.jpg', thumb:'./arts/thumbs/04.jpg', point:[91,20], title:'Character study', detail:'Selected work · 04', category:'characters', featured:true, alt:'Character illustration by Nanher Hew'},
+    {fileId:'05.jpg', src:'./arts/05.jpg', thumb:'./arts/thumbs/05.jpg', point:[16,53], title:'Archive drawing', detail:'Artwork · 05', category:'characters', alt:'Character artwork from Nanher Hew’s archive, piece 05'},
+    {fileId:'06.jpg', src:'./arts/06.jpg', thumb:'./arts/thumbs/06.jpg', point:[42,60], title:'Archive drawing', detail:'Artwork · 06', category:'characters', alt:'Character artwork from Nanher Hew’s archive, piece 06'},
+    {fileId:'07.jpg', src:'./arts/07.jpg', thumb:'./arts/thumbs/07.jpg', point:[72,52], title:'Archive drawing', detail:'Artwork · 07', category:'bara', alt:'Bara artwork from Nanher Hew’s archive, piece 07'},
+    {fileId:'08.jpg', src:'./arts/08.jpg', thumb:'./arts/thumbs/08.jpg', point:[93,68], title:'Archive drawing', detail:'Artwork · 08', category:'bara', alt:'Bara artwork from Nanher Hew’s archive, piece 08'},
+    {fileId:'02.jpg', src:'./arts/02.jpg', thumb:'./arts/thumbs/02.jpg', point:[26,85], title:'Commission for @bjoern90', detail:'Client commission · 01', category:'commissions', alt:'Commission artwork by Nanher Hew for @bjoern90'},
+    {fileId:'03.jpg', src:'./arts/03.jpg', thumb:'./arts/thumbs/03.jpg', point:[62,85], title:'Commission for @outdoowpumpkin9', detail:'Client commission · 02', category:'commissions', alt:'Commission artwork by Nanher Hew for @outdoowpumpkin9'},
+    {fileId:'wip01.jpg', src:'./arts/wip01.jpg', thumb:'./arts/thumbs/wip01.jpg', point:[49,35], title:'Work in progress', detail:'In progress · 01', category:'wips', alt:'Work in progress from Nanher Hew’s archive, piece 01'},
+    {fileId:'wip02.jpg', src:'./arts/wip02.jpg', thumb:'./arts/thumbs/wip02.jpg', point:[83,87], title:'Work in progress', detail:'In progress · 02', category:'wips', alt:'Work in progress from Nanher Hew’s archive, piece 02'}
   ];
   const categoryLabels = {
     characters:'character',
@@ -47,9 +47,11 @@
     ageAccepted: false,
     consent: readConsent(),
     filter: 'all',
+    searchQuery: '',
     visibleWorks: [],
     view: 'gallery',
     lightboxIndex: 0,
+    lightboxItems: [],
     lightboxOrigin: null,
     audioPlaying: false,
     audioToken: 0,
@@ -60,6 +62,8 @@
     audioVolume: 18,
     sessionStarted: Date.now(),
     monitorOpen: false,
+    directoryOpen: false,
+    mobileDirectory: false,
     motionHandler: null
   };
 
@@ -94,11 +98,15 @@
     state.audioVolume = Number.isFinite(savedVolume) ? Math.max(0, Math.min(100, savedVolume)) : 18;
 
     renderGallery();
+    renderProcesses();
     setFilterButtons();
     setupCookieChoices();
     setupAgeGate();
     setupLightbox();
     setWorkView('gallery');
+    setupArchiveSearch();
+    setupDirectory();
+    setupSectionTracking();
     setupCommissionEstimate();
     setupMonitor();
     setupAudio();
@@ -109,6 +117,7 @@
     if (state.consent) {
       $('cookieNotice').hidden = true;
     }
+    setTrace('CORE PRESENT · ACCESS OPEN');
     document.addEventListener('keydown', handleGlobalKeys);
   }
 
@@ -143,6 +152,7 @@
     $('cookieRejectAll').addEventListener('click', () => saveConsent({preferences:false, analytics:false, marketing:false}));
     $('cookieConfigure').addEventListener('click', openCookieSettings);
     $('openCookieSettings').addEventListener('click', openCookieSettings);
+    $('openCookieSettingsFooter').addEventListener('click', openCookieSettings);
     $('cookieClose').addEventListener('click', () => $('cookieDialog').close());
     $('cookieSave').addEventListener('click', () => {
       saveConsent({
@@ -189,7 +199,12 @@
   function renderGallery() {
     const grid = $('artGrid');
     if (!grid) return;
-    state.visibleWorks = state.filter === 'all' ? work.slice() : work.filter((item) => item.category === state.filter);
+    const query = normalizeText(state.searchQuery).trim().split(/\s+/).filter(Boolean);
+    state.visibleWorks = work.filter((item) => {
+      if (state.filter !== 'all' && item.category !== state.filter) return false;
+      const record = normalizeText([item.fileId, item.title, item.detail, item.category, item.alt].join(' '));
+      return query.every((term) => record.includes(term));
+    });
     grid.replaceChildren();
     state.visibleWorks.forEach((item, index) => {
       const button = document.createElement('button');
@@ -210,14 +225,78 @@
       title.textContent = item.title;
       const meta = document.createElement('span');
       meta.className = 'art-card__meta';
-      meta.textContent = item.detail;
+      meta.textContent = item.fileId + ' · ' + item.detail;
       caption.append(title, meta);
       button.append(image, caption);
-      button.addEventListener('click', () => openLightbox(index, button));
+      button.addEventListener('click', () => { setTrace('MEMORY BANK / OPEN ' + item.fileId.toUpperCase()); openLightbox(index, button); });
       grid.append(button);
     });
+    if (!state.visibleWorks.length) {
+      const empty = document.createElement('p');
+      empty.className = 'archive-empty';
+      empty.textContent = state.searchQuery ? 'No records match this search in the selected category.' : 'No records are filed under this category.';
+      grid.append(empty);
+    }
     renderMemoryMap();
     $('workCount').textContent = state.visibleWorks.length + (state.visibleWorks.length === 1 ? ' piece' : ' pieces');
+    $('directoryWorkCount').textContent = String(work.length).padStart(2, '0');
+    if (state.searchQuery) setTrace('MEMORY BANK / SEARCH · ' + state.visibleWorks.length + ' MATCHES');
+  }
+
+  function normalizeText(value) {
+    return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function setupArchiveSearch() {
+    const input = $('archiveSearch');
+    input.addEventListener('input', () => {
+      state.searchQuery = input.value;
+      renderGallery();
+      announce(state.visibleWorks.length + (state.visibleWorks.length === 1 ? ' matching record.' : ' matching records.'));
+    });
+    $('clearArchiveSearch').addEventListener('click', () => {
+      input.value = '';
+      state.searchQuery = '';
+      renderGallery();
+      input.focus();
+      setTrace('MEMORY BANK / SEARCH CLEARED');
+      announce('Record search cleared.');
+    });
+  }
+
+  function renderProcesses() {
+    const container = $('processRecords');
+    if (!container) return;
+    const processWorks = work.filter((item) => item.category === 'wips');
+    $('directoryProcessCount').textContent = String(processWorks.length).padStart(2, '0');
+    container.replaceChildren();
+    processWorks.forEach((item, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'process-record';
+      button.setAttribute('aria-label', 'Open ' + item.fileId + ', work in progress archive record');
+      const image = document.createElement('img');
+      image.src = item.thumb || item.src;
+      image.alt = '';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      const details = document.createElement('span');
+      details.className = 'process-record__details';
+      const filename = document.createElement('strong');
+      filename.textContent = item.fileId;
+      const stateLabel = document.createElement('small');
+      stateLabel.textContent = 'ARCHIVE LABEL / WORK IN PROGRESS';
+      details.append(filename, stateLabel);
+      const arrow = document.createElement('span');
+      arrow.className = 'process-record__open';
+      arrow.textContent = 'OPEN ↗';
+      button.append(image, details, arrow);
+      button.addEventListener('click', () => {
+        setTrace('ACTIVE PROCESSES / OPEN ' + item.fileId.toUpperCase());
+        openLightbox(index, button, processWorks);
+      });
+      container.append(button);
+    });
   }
 
   function renderMemoryMap() {
@@ -269,7 +348,7 @@
       number.textContent = recordNumber;
       label.append(number, document.createTextNode(' / ' + categoryLabels[item.category].toUpperCase()));
       button.append(image, label);
-      button.addEventListener('click', () => openLightbox(index, button));
+      button.addEventListener('click', () => { setTrace('ASSOCIATION INDEX / OPEN ' + item.fileId.toUpperCase()); openLightbox(index, button); });
       button.addEventListener('mouseenter', () => highlightThread(item.category, true));
       button.addEventListener('mouseleave', () => highlightThread(item.category, false));
       button.addEventListener('focus', () => highlightThread(item.category, true));
@@ -297,6 +376,9 @@
     $('viewDescription').textContent = showMap
       ? 'Choose a piece, then follow the category thread.'
       : 'Browse each piece at your own pace.';
+    if (showMap) setTrace('ASSOCIATION INDEX / CATEGORY THREADS');
+    else setTrace('MEMORY BANK / VISUAL RECORDS');
+    setActiveRoute(showMap ? 'association-index' : 'memory-bank');
   }
 
   function setFilterButtons() {
@@ -313,6 +395,7 @@
       renderGallery();
       setFilterButtons();
       if (hasPreferences()) storage.set('nh-gallery-filter', state.filter);
+      setTrace('MEMORY BANK / ' + button.textContent.trim().toUpperCase() + ' · ' + state.visibleWorks.length + ' RECORDS');
       announce('Showing ' + $('workCount').textContent + ' in ' + button.textContent.trim() + '.');
     }));
     $('surpriseButton').addEventListener('click', () => {
@@ -339,8 +422,10 @@
     setupGalleryFilters();
   }
 
-  function openLightbox(index, origin) {
-    if (!state.visibleWorks.length) return;
+  function openLightbox(index, origin, items) {
+    const records = items || state.visibleWorks;
+    if (!records.length) return;
+    state.lightboxItems = records;
     state.lightboxIndex = index;
     state.lightboxOrigin = origin;
     updateLightbox();
@@ -349,24 +434,26 @@
   }
 
   function updateLightbox() {
-    const item = state.visibleWorks[state.lightboxIndex];
+    const item = state.lightboxItems[state.lightboxIndex];
     if (!item) return;
     const image = $('lightboxImage');
     image.src = item.src;
     image.alt = item.alt;
     $('lightboxTitle').textContent = item.title;
-    $('lightboxMeta').textContent = item.detail;
-    $('lightboxCounter').textContent = String(state.lightboxIndex + 1).padStart(2,'0') + ' / ' + String(state.visibleWorks.length).padStart(2,'0');
+    $('lightboxMeta').textContent = item.fileId + ' · ' + item.detail;
+    $('lightboxCounter').textContent = String(state.lightboxIndex + 1).padStart(2,'0') + ' / ' + String(state.lightboxItems.length).padStart(2,'0');
     $('lightboxAnnouncement').textContent = item.title + ', ' + item.detail;
     $('lightboxThread').textContent = 'Follow the ' + categoryLabels[item.category] + ' thread';
   }
 
   function followThread() {
-    const item = state.visibleWorks[state.lightboxIndex];
+    const item = state.lightboxItems[state.lightboxIndex];
     if (!item) return;
     state.lightboxOrigin = null;
     $('lightbox').close();
     state.filter = item.category;
+    state.searchQuery = '';
+    $('archiveSearch').value = '';
     renderGallery();
     setFilterButtons();
     setWorkView('gallery');
@@ -377,22 +464,25 @@
       document.querySelector('.work-view-controls').scrollIntoView({behavior:reduceMotion ? 'instant' : 'smooth', block:'center'});
     });
     announce('Following the ' + categoryLabels[item.category] + ' thread with ' + $('workCount').textContent + '.');
+    setTrace('ASSOCIATION INDEX / FOLLOWED ' + categoryLabels[item.category].toUpperCase() + ' THREAD');
   }
 
   function stepLightbox(direction) {
-    if (!state.visibleWorks.length) return;
-    state.lightboxIndex = (state.lightboxIndex + direction + state.visibleWorks.length) % state.visibleWorks.length;
+    if (!state.lightboxItems.length) return;
+    state.lightboxIndex = (state.lightboxIndex + direction + state.lightboxItems.length) % state.lightboxItems.length;
     updateLightbox();
   }
 
   function handleGlobalKeys(event) {
-    if (!$('lightbox').open) return;
-    if (event.key === 'ArrowLeft') {
+    if ($('lightbox').open && event.key === 'ArrowLeft') {
       event.preventDefault();
       stepLightbox(-1);
-    } else if (event.key === 'ArrowRight') {
+    } else if ($('lightbox').open && event.key === 'ArrowRight') {
       event.preventDefault();
       stepLightbox(1);
+    } else if (event.key === 'Escape' && !$('lightbox').open) {
+      if (state.mobileDirectory && state.directoryOpen) setDirectory(false);
+      if (state.monitorOpen) setMonitor(false);
     }
   }
 
@@ -423,6 +513,84 @@
       if (!state.monitorOpen) return;
       if (!$('studioMonitor').contains(event.target) && !$('monitorToggle').contains(event.target)) setMonitor(false);
     });
+  }
+
+  function setupDirectory() {
+    const directory = $('systemDirectory');
+    const toggle = $('directoryToggle');
+    const media = window.matchMedia('(max-width: 720px)');
+    const syncMode = () => {
+      state.mobileDirectory = media.matches;
+      state.directoryOpen = !state.mobileDirectory;
+      directory.hidden = !state.directoryOpen;
+      toggle.setAttribute('aria-expanded', String(state.directoryOpen));
+      toggle.setAttribute('aria-label', state.directoryOpen ? 'Close system directory' : 'Open system directory');
+      toggle.querySelector('span').textContent = state.directoryOpen ? '−' : '+';
+    };
+    syncMode();
+    media.addEventListener('change', syncMode);
+    toggle.addEventListener('click', () => setDirectory(!state.directoryOpen));
+    $('directoryClose').addEventListener('click', () => setDirectory(false));
+    queryAll('.system-directory__nav a').forEach((link) => link.addEventListener('click', () => {
+      const route = link.dataset.route;
+      if (route === 'association-index') setWorkView('map');
+      else if (route === 'memory-bank') setWorkView('gallery');
+      setActiveRoute(route);
+      setTrace('DIRECTORY / ' + route.toUpperCase());
+      if (state.mobileDirectory) setDirectory(false);
+    }));
+    document.addEventListener('pointerdown', (event) => {
+      if (state.mobileDirectory && state.directoryOpen && !directory.contains(event.target) && !toggle.contains(event.target)) setDirectory(false);
+    });
+  }
+
+  function setDirectory(open) {
+    state.directoryOpen = Boolean(open);
+    $('systemDirectory').hidden = !state.directoryOpen;
+    $('directoryToggle').setAttribute('aria-expanded', String(state.directoryOpen));
+    $('directoryToggle').setAttribute('aria-label', state.directoryOpen ? 'Close system directory' : 'Open system directory');
+    $('directoryToggle').querySelector('span').textContent = state.directoryOpen ? '−' : '+';
+    if (state.directoryOpen) $('directoryClose').focus({preventScroll:true});
+    else $('directoryToggle').focus({preventScroll:true});
+  }
+
+  function setActiveRoute(route) {
+    queryAll('.system-directory__nav a').forEach((link) => {
+      const active = link.dataset.route === route;
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function setTrace(message) {
+    const trace = $('systemTrace');
+    if (trace) trace.textContent = message;
+  }
+
+  function setupSectionTracking() {
+    const sections = queryAll('[data-section]');
+    if (!('IntersectionObserver' in window)) return;
+    const routeNames = {
+      top:'CORE / IDENTITY RECORD',
+      'memory-bank':'MEMORY BANK',
+      'identity-record':'CORE / IDENTITY RECORD',
+      'thought-archive':'THOUGHT ARCHIVE / EMPTY',
+      'active-processes':'ACTIVE PROCESSES / ARCHIVED WIP',
+      'commission-protocol':'COMMISSION PROTOCOL',
+      'external-connections':'EXTERNAL CONNECTIONS',
+      'system-documents':'SYSTEM DOCUMENTS'
+    };
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      let route = visible.target.dataset.section;
+      if (route === 'identity-record') route = 'top';
+      if (route === 'memory-bank' && state.view === 'map') route = 'association-index';
+      setActiveRoute(route);
+      setTrace(routeNames[visible.target.dataset.section] || 'CORE PRESENT · ACCESS OPEN');
+    }, {rootMargin:'-22% 0px -58% 0px', threshold:[0,.1,.25,.5]});
+    sections.forEach((section) => observer.observe(section));
   }
 
   function setMonitor(open) {
