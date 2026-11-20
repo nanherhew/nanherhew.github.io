@@ -6,11 +6,13 @@ Sitio estático para GitHub Pages. El visitante establece una conexión mediante
 
 Cuando quieras publicarlo, copia el contenido de esta carpeta a la raíz del repositorio de GitHub Pages y conserva `arts/`. Este paquete no modifica el sitio en línea.
 
+El sitio espera `favicon.png` en esta misma raíz. Súbelo junto con los archivos del sitio para que aparezca en la pestaña del navegador.
+
 ## Archivos
 
-- `index.html`: pantalla de conexión, aviso de acceso 18+, directorio del sistema, registros de arte, procesos WIP, asociaciones, protocolo de comisiones, conexiones y preferencias de privacidad.
-- `style.css`: HUD cyberpunk, capas CRT, iluminación neón, barridos, retículas, marcos de archivo, interferencias por niveles, adaptación móvil, estados de foco y movimiento reducido.
-- `script.js`: búsqueda local por archivo/categoría/atribución, filtros, índice de asociaciones, visor accesible, autorización 18+ revocable durante la sesión, privacidad, estimador, traza de sesión, audio opcional, movimiento voluntario y retícula decorativa para puntero fino.
+- `index.html`: secuencia de entrada de tres fases inspirada en el boceto, aviso de acceso 18+, ventanas HUD, módulo de voz opcional, directorio del sistema, ilustraciones, procesos WIP, asociaciones, encargos, conexiones y preferencias de privacidad.
+- `style.css`: sistema visual cyberpunk negro/naranja/rojo/cian, capas CRT, barridos, marcos de archivo, tipografía editorial, ventanas flotantes, interferencias por niveles, adaptación móvil, estados de foco y movimiento reducido.
+- `script.js`: entrada con clic o tecla, búsqueda y filtros locales, visor accesible, autorización 18+ revocable durante la sesión, privacidad, estimador, traza de visita, audio opcional, movimiento voluntario, voz sintetizada al pulsar y una ruta secreta desde el símbolo 文 hacia una obra aleatoria.
 - `legal.html`: privacidad, cookies, términos del sitio y términos de comisiones con campos pendientes visibles.
 - `arts/`: ilustraciones y audio originales. Las vistas previas optimizadas están en `arts/thumbs/`; el visor conserva los archivos completos.
 
@@ -26,6 +28,8 @@ Completa todos los campos `[DATO PENDIENTE...]` en `legal.html`. Confirma moneda
 - Las preferencias opcionales pueden recordar el filtro del archivo y el nivel de audio; búsqueda y recorrido no se envían a un servidor.
 - Analítica y Marketing figuran como categorías inactivas; el sitio no carga proveedores de esas categorías.
 - El audio nunca inicia automáticamente. El movimiento del dispositivo solo se activa después de una acción expresa.
+- La voz de introducción solo se reproduce tras pulsar Play; utiliza la síntesis de voz disponible en el navegador y puede detenerse desde el mismo control.
+- Tocar el símbolo 文 cinco veces seguidas activa un eco visual y abre una obra aleatoria del archivo existente.
 - Las interferencias son transiciones visuales breves asociadas a acciones del archivo; no simulan errores permanentes ni bloquean controles.
 - La traza describe el área o registro abierto y el tiempo de esta visita en el navegador; no mide la actividad del artista ni envía datos.
 

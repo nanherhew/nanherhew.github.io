@@ -14,7 +14,7 @@
   <link rel="canonical" href="https://nanherhew.github.io/">
   <meta name="twitter:card" content="summary_large_image">
   <title>Nanher Hew — Classified Consciousness Archive</title>
-  <link rel="icon" href="./arts/hero.PNG" type="image/png">
+  <link rel="icon" href="./favicon.png" type="image/png">
   <link rel="preload" as="image" href="./arts/hero.PNG" fetchpriority="high">
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
@@ -22,30 +22,33 @@
 <body class="state-locked">
   <a class="skip-link" href="#main">Skip to the memory bank</a>
 
-  <section class="access-sequence" id="accessSequence" aria-labelledby="accessTitle">
+  <section class="access-sequence" id="accessSequence" aria-labelledby="accessTitle" data-stage="wake">
     <div class="access-sequence__frame">
-          <div class="access-sequence__masthead"><a class="access-sequence__wordmark" href="#accessSequence" aria-label="Nanher Hew classified archive"><span lang="zh" aria-hidden="true">文</span> NANHER HEW</a><span>NH.OS // MIND ARCHIVE · CONNECTION 001</span><span class="classification-stamp">RESTRICTED<br>CONSCIOUSNESS ARCHIVE</span></div>
+      <div class="access-sequence__masthead"><a class="access-sequence__wordmark" href="#accessSequence" aria-label="Nanher Hew classified archive"><span lang="zh" aria-hidden="true">文</span> NANHER HEW</a><span>NH.OS // MIND ARCHIVE · CONNECTION 001</span><span class="classification-stamp">RESTRICTED<br>CONSCIOUSNESS ARCHIVE</span></div>
       <div class="access-sequence__body">
-        <div class="access-sequence__copy">
-          <p class="eyebrow"><span class="signal-mark" aria-hidden="true"></span> SIGNAL DETECTED / CARRIER FOUND</p>
-          <h1 id="accessTitle">A SIGNAL<br>FROM <em>WITHIN.</em></h1>
-          <p class="access-sequence__dek">This archive belongs to a digital consciousness associated with artist Nanher Hew. Its records hold identity, illustrations and fragments of a creative world.</p>
-          <div class="access-sequence__records" aria-label="Access summary">
-            <div><span>ENTITY RECORD</span><strong>CONTAINED / NH-01</strong></div>
-            <div><span>MEMORY BANK</span><strong>ART RECORDS / 12 INDEXED</strong></div>
-            <div><span>ACCESS CLASS</span><strong>ADULT CONFIRMATION REQUIRED</strong></div>
-          </div>
-          <button id="beginAccess" class="button button--fill access-sequence__button" type="button">Review access notice <span aria-hidden="true">↗</span></button>
-          <p class="access-sequence__fine">The system labels are part of the artwork. Age confirmation and privacy choices are real browser actions.</p>
+        <h1 id="accessTitle" class="visually-hidden">Nanher Hew mental archive access</h1>
+        <div class="access-sequence__wake" id="accessWake">
+          <p class="access-sequence__signal-label"><span class="signal-mark" aria-hidden="true"></span> SIGNAL DETECTED / CARRIER FOUND</p>
+          <button id="beginAccess" class="access-sequence__wake-button" type="button" aria-label="Wake the archive. Click or press any key.">
+            <span class="access-sequence__glyph-frame"><span lang="zh" aria-hidden="true">文</span><i aria-hidden="true"></i></span>
+            <span class="access-sequence__key-prompt">[ CLICK ANY KEY ]</span>
+            <span class="access-sequence__key-sub">TO INITIALIZE CONNECTION</span>
+          </button>
+          <div class="access-sequence__wake-foot"><span>LOCAL CARRIER / NH-01</span><span>WAITING FOR INPUT</span></div>
         </div>
-        <div class="access-sequence__display" role="img" aria-label="Restricted visual archive display">
-          <div class="access-sequence__display-top"><span>NH / VISUAL MEMORY</span><span>VIEW LOCKED</span></div>
-          <div class="access-sequence__display-core"><span class="access-sequence__orbit access-sequence__orbit--one"></span><span class="access-sequence__orbit access-sequence__orbit--two"></span><span class="access-sequence__glyph" lang="zh" aria-hidden="true">文</span><span class="access-sequence__crosshair" aria-hidden="true">+</span><span class="access-sequence__display-mark">SIGNAL<br>ACQUIRED</span></div>
-          <div class="access-sequence__display-foot"><span>IMAGE RECORDS REMAIN OUT OF VIEW</span><span>AWAITING AGE CLEARANCE</span></div>
-          <span class="access-sequence__vertical" aria-hidden="true">ANALOG CARRIER / MONOCHROME DISPLAY</span>
+        <div class="access-sequence__opening" id="accessOpening" hidden aria-live="polite">
+          <p class="access-sequence__stage-label">MEMORY BUS / HANDSHAKE</p>
+          <div class="access-sequence__gate-frame" aria-hidden="true"><span class="access-sequence__gate-glyph" lang="zh">文</span><div class="access-sequence__gate-copy"><strong>OPENING GATE</strong><span>NH-01 / IMAGE MEMORY SIGNAL FOUND</span><div class="access-sequence__gate-track"><i></i></div></div></div>
+          <p class="access-sequence__stage-foot">VISUAL INITIALIZATION ONLY · NO WAITING METRIC</p>
+        </div>
+        <div class="access-sequence__granted" id="accessGranted" hidden aria-live="polite">
+          <p class="access-sequence__stage-label"><span class="signal-mark" aria-hidden="true"></span> SYSTEM HANDSHAKE COMPLETE</p>
+          <h2>MIND ACCESS<br><em>GRANTED.</em></h2>
+          <p>The archive is ready. Review its adult-content notice before entering the visual memory bank.</p>
+          <button id="beginClearance" class="button button--fill" type="button">Review +18 access notice <span aria-hidden="true">↗</span></button>
         </div>
       </div>
-      <div class="access-sequence__footer"><span>CLASSIFIED SYSTEM / USER INITIATED CONNECTION</span><span>NO SIMULATED LOADING METRICS</span></div>
+      <div class="access-sequence__footer"><span>CLASSIFIED SYSTEM / USER-INITIATED CONNECTION</span><span>AGE CLEARANCE REQUIRED · NH-01</span></div>
     </div>
   </section>
 
@@ -100,8 +103,22 @@
           <a class="button button--fill" href="#memory-bank">Open memory bank <span aria-hidden="true">↘</span></a>
           <a class="text-link" href="#commission-protocol">Commission protocol <span aria-hidden="true">↗</span></a>
         </div>
+        <aside class="intro__voice-window" aria-label="Optional synthesized voice introduction">
+          <div class="intro__voice-window-head"><span>VOICE NODE / ORIENTATION</span><span>OPTIONAL</span></div>
+          <div class="intro__voice-window-body">
+            <span class="intro__voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="intro__voice-copy"><strong>HEAR THE ARCHIVE</strong><small>Browser-generated Spanish voice · on request</small></span>
+            <button id="voiceToggle" type="button" aria-pressed="false" aria-label="Play optional synthesized voice introduction"><b>PLAY</b><span aria-hidden="true">▶</span></button>
+          </div>
+          <p class="intro__voice-status" id="voiceStatus" aria-live="polite"></p>
+        </aside>
         <div class="intro__aside"><span>CONTAINED CONSCIOUSNESS / ARCHIVE ONLINE</span><span>EXPLORE THE DIRECTORY <b aria-hidden="true">↓</b></span></div>
       </div>
+      <aside class="intro__archive-window" aria-label="Archive index quick access">
+        <div class="intro__archive-window-head"><span>IMAGE MEMORY / INDEX</span><span class="intro__archive-live">OPEN</span></div>
+        <div class="intro__archive-window-count"><strong>12</strong><span>IMAGE RECORDS<br>IN THE MEMORY BANK</span></div>
+        <a href="#memory-bank">SCAN IMAGE BANK <span aria-hidden="true">↘</span></a>
+      </aside>
       <div class="intro__vertical" aria-hidden="true">CHARACTERS · MEMORY · FORM</div>
     </section>
 

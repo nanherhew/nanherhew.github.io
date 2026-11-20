@@ -107,6 +107,8 @@
     setupCookieChoices();
     setupAgeGate();
     setupAccessSequence();
+    setupVoiceIntroduction();
+    setupArchiveEasterEgg();
     setupLightbox();
     setWorkView('gallery');
     setupArchiveSearch();
@@ -143,11 +145,22 @@
       }
     });
     $('ageEnter').addEventListener('click', () => {
+      const ageEnter = $('ageEnter');
+      if (ageEnter.disabled) return;
+      if (state.ageAccepted) {
+        ageEnter.disabled = true;
+        if (dialog.open) dialog.close();
+        dialog.hidden = true;
+        state.ageGateOrigin = null;
+        return;
+      }
+      ageEnter.disabled = true;
       storage.set('nh-age-declared-v1', 'yes', 'session');
       state.ageAccepted = true;
       document.body.classList.remove('state-locked');
+      document.body.classList.add('archive-awake');
       $('accessSequence').hidden = true;
-      dialog.close();
+      if (dialog.open) dialog.close();
       dialog.hidden = true;
       const focusTarget = state.ageGateOrigin === $('beginAccess')
         ? document.querySelector('.intro__links a')
@@ -155,7 +168,6 @@
       state.ageGateOrigin = null;
       window.requestAnimationFrame(() => focusTarget && focusTarget.focus({preventScroll:true}));
       if (location.hash === '#cookie-settings') openCookieSettings();
-      else showCookieNotice();
       announce('Age declaration recorded for this browser session. Your age was not verified.');
       setTrace('ACCESS CONTROL / SESSION AUTHORIZED');
       triggerInterference('fracture');
@@ -169,15 +181,116 @@
   function setupAccessSequence() {
     const sequence = $('accessSequence');
     sequence.hidden = state.ageAccepted;
-    $('beginAccess').addEventListener('click', () => {
-      if (sequence.classList.contains('is-transitioning')) return;
-      sequence.classList.add('is-transitioning');
+    const wake = () => {
+      if (sequence.hidden || sequence.dataset.stage !== 'wake') return;
+      sequence.dataset.stage = 'opening';
+      $('accessOpening').hidden = false;
       $('beginAccess').setAttribute('aria-busy', 'true');
-      setTrace('ACCESS CONTROL / CONNECTION REVIEW');
-      announce('Connection review started. The adult access notice will open next.');
+      setTrace('NH.OS / MEMORY BUS HANDSHAKE');
+      announce('Signal acquired. Opening the memory gate.');
+      const revealClearance = () => {
+        if (sequence.hidden || sequence.dataset.stage !== 'opening') return;
+        $('accessOpening').hidden = true;
+        $('accessGranted').hidden = false;
+        sequence.dataset.stage = 'granted';
+        $('beginClearance').focus({preventScroll:true});
+        setTrace('MIND ARCHIVE / HANDSHAKE COMPLETE');
+        announce('Mind access granted. Review the restricted adult content notice to continue.');
+      };
+      if (reduceMotion) revealClearance();
+      else {
+        const opening = $('accessOpening');
+        const finishOpening = (event) => {
+          if (event.target !== opening) return;
+          opening.removeEventListener('animationend', finishOpening);
+          revealClearance();
+        };
+        opening.addEventListener('animationend', finishOpening);
+      }
+    };
+    $('beginAccess').addEventListener('click', wake);
+    document.addEventListener('keydown', (event) => {
+      if (sequence.hidden || sequence.dataset.stage !== 'wake' || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.target && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
+      if (event.key.length === 1 || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        wake();
+      }
+    });
+    $('beginClearance').addEventListener('click', () => {
+      if (sequence.dataset.stage !== 'granted') return;
+      setTrace('ACCESS CONTROL / CLEARANCE REVIEW');
+      announce('Opening the real adult access declaration.');
       triggerInterference('cut', () => {
         sequence.hidden = true;
-        openAgeGate($('beginAccess'));
+        openAgeGate($('beginClearance'));
+      });
+    });
+  }
+
+  function setupVoiceIntroduction() {
+    const button = $('voiceToggle');
+    const status = $('voiceStatus');
+    const speech = window.speechSynthesis;
+    if (!speech || !('SpeechSynthesisUtterance' in window)) {
+      button.disabled = true;
+      status.textContent = 'Speech synthesis is not available in this browser.';
+      return;
+    }
+    const setIdle = (message) => {
+      button.closest('.intro__voice-window').classList.remove('is-speaking');
+      button.setAttribute('aria-pressed', 'false');
+      button.setAttribute('aria-label', 'Play optional synthesized voice introduction');
+      button.querySelector('b').textContent = 'PLAY';
+      button.querySelector('span').textContent = '▶';
+      status.textContent = message || '';
+    };
+    button.addEventListener('click', () => {
+      if (speech.speaking || button.getAttribute('aria-pressed') === 'true') {
+        speech.cancel();
+        setIdle('Voice connection stopped.');
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance('Conexión aceptada. Estás recorriendo el archivo mental de Nanher Hew. Sus ilustraciones, personajes y trabajos en proceso están reunidos aquí como fragmentos de su universo creativo. Elige una memoria para abrirla.');
+      utterance.lang = 'es-MX';
+      utterance.rate = 0.9;
+      utterance.pitch = 0.82;
+      const spanishVoice = speech.getVoices().find((voice) => /^es-MX$/i.test(voice.lang))
+        || speech.getVoices().find((voice) => /^es(?:-|$)/i.test(voice.lang));
+      if (spanishVoice) utterance.voice = spanishVoice;
+      utterance.onend = () => setIdle('Voice note complete.');
+      utterance.onerror = () => setIdle('The browser could not play this voice note.');
+      button.setAttribute('aria-pressed', 'true');
+      button.setAttribute('aria-label', 'Stop synthesized voice introduction');
+      button.closest('.intro__voice-window').classList.add('is-speaking');
+      button.querySelector('b').textContent = 'STOP';
+      button.querySelector('span').textContent = '■';
+      status.textContent = 'Speaking. Press stop to end the voice note.';
+      speech.cancel();
+      speech.speak(utterance);
+    });
+    window.addEventListener('pagehide', () => speech.cancel(), {once:true});
+  }
+
+  function setupArchiveEasterEgg() {
+    queryAll('.wordmark__glyph').forEach((glyph) => {
+      let taps = 0;
+      let resetTimer = 0;
+      glyph.addEventListener('click', (event) => {
+        taps += 1;
+        if (resetTimer) window.clearTimeout(resetTimer);
+        if (taps < 5) {
+          resetTimer = window.setTimeout(() => { taps = 0; resetTimer = 0; }, 5000);
+          return;
+        }
+        event.preventDefault();
+        taps = 0;
+        if (resetTimer) window.clearTimeout(resetTimer);
+        resetTimer = 0;
+        const index = Math.floor(Math.random() * work.length);
+        setTrace('ANOMALY / MEMORY ECHO FOUND');
+        announce('Hidden route found. Opening a random image record from the existing memory bank.');
+        triggerInterference('fracture', () => openLightbox(index, glyph, work));
       });
     });
   }
@@ -185,6 +298,7 @@
   function revokeSessionAccess() {
     storage.remove('nh-age-declared-v1', 'session');
     state.ageAccepted = false;
+    document.body.classList.remove('archive-awake');
     if (state.audioPlaying) stopAudio();
     if ($('lightbox').open) $('lightbox').close();
     if (state.motionHandler) {
@@ -210,10 +324,16 @@
   }
 
   function openAgeGate(origin) {
+    const dialog = $('ageGate');
+    const isExplicitReview = origin === $('reviewAccessNotice');
+    if (state.ageAccepted && !isExplicitReview) return false;
+    if (dialog.open) return true;
     state.ageGateOrigin = origin || null;
-    $('ageGate').hidden = false;
-    $('ageGate').showModal();
+    dialog.hidden = false;
+    $('ageEnter').disabled = false;
+    dialog.showModal();
     $('ageEnter').focus({preventScroll:true});
+    return true;
   }
 
   function showCookieNotice() {
